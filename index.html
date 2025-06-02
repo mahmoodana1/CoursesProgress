@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slick Study Tracker</title>
+    <title>Slick Study Tracker - Local Profiles</title>
     <style>
         :root {
             /* Light Mode Default Palette (Calm & Modern) */
             --bg-main: #F7FAFC; /* Very Light Grayish Blue */
             --bg-surface: #FFFFFF; /* Card, Modal Backgrounds */
-            --bg-surface-hover: #F7FAFC;
+            --bg-surface-hover: #F0F4F8; /* Slightly darker hover for surfaces */
             --bg-input: #FFFFFF;
             --bg-button-primary: #4A90E2; /* Calm Blue */
             --bg-button-primary-hover: #357ABD;
@@ -93,10 +93,42 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* Layout & General Elements */
-        .app-container {
+        /* Login Screen Styles */
+        .login-screen {
+            display: flex; /* Hidden by default, shown by JS */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             width: 100%;
-            max-width: 720px; /* Slightly narrower for a slicker feel */
+            max-width: 400px;
+            padding: 30px;
+            background-color: var(--bg-surface);
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 6px 20px var(--shadow-strong-color);
+            text-align: center;
+            animation: fadeIn 0.5s var(--transition-theme) forwards;
+            transition: background-color var(--transition-theme), box-shadow var(--transition-theme);
+        }
+        .login-screen h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+        .login-screen p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+        .login-screen .input-field { margin-bottom: 20px; text-align: center; }
+        .login-screen .button { width: 100%; }
+
+        /* App Container (Main Content) */
+        .app-container {
+            display: none; /* Hidden by default, shown after "login" */
+            width: 100%;
+            max-width: 720px;
             margin: 0 auto;
             animation: fadeIn 0.5s var(--transition-theme) forwards;
         }
@@ -107,14 +139,21 @@
             margin-bottom: 30px;
             padding: 10px 0;
         }
+        .app-header-title-group { display: flex; flex-direction: column; }
         h1 {
-            font-size: 1.8rem; /* Adjusted size */
+            font-size: 1.8rem;
             font-weight: 600;
             color: var(--text-primary);
             margin: 0;
             letter-spacing: -0.5px;
         }
-        .theme-toggle-button {
+        .current-user-identifier {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+        .app-header-actions { display: flex; gap: 10px; }
+        .theme-toggle-button, .switch-user-button {
             background-color: var(--bg-surface);
             color: var(--text-secondary);
             border: 1px solid var(--border-primary);
@@ -124,46 +163,34 @@
             font-size: 1rem;
             transition: background-color var(--transition-theme), color var(--transition-theme), border-color var(--transition-theme), box-shadow var(--transition-interactive);
             box-shadow: 0 1px 3px var(--shadow-color);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .theme-toggle-button:hover {
+        .theme-toggle-button:hover, .switch-user-button:hover {
             background-color: var(--bg-surface-hover);
             border-color: var(--accent-primary);
             color: var(--accent-primary);
             box-shadow: 0 2px 5px var(--shadow-color);
         }
 
-        /* Form Elements (Inputs, Buttons) */
+        /* Form Elements (Inputs, Buttons) - Styles from previous version, ensure consistency */
         .input-field, .textarea-field {
-            width: 100%;
-            padding: 12px 16px;
-            font-family: var(--font-family);
-            font-size: 0.95rem;
-            font-weight: 400;
-            color: var(--text-primary);
-            background-color: var(--bg-input);
-            border: 1px solid var(--border-input);
+            width: 100%; padding: 12px 16px; font-family: var(--font-family); font-size: 0.95rem; font-weight: 400;
+            color: var(--text-primary); background-color: var(--bg-input); border: 1px solid var(--border-input);
             border-radius: var(--border-radius-md);
             transition: border-color var(--transition-interactive), box-shadow var(--transition-interactive), background-color var(--transition-theme), color var(--transition-theme);
         }
         .input-field::placeholder, .textarea-field::placeholder { color: var(--text-placeholder); font-weight: 300; }
         .input-field:focus, .textarea-field:focus {
-            outline: none;
-            border-color: var(--border-input-focus);
+            outline: none; border-color: var(--border-input-focus);
             box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 20%, transparent);
         }
         .button {
-            padding: 12px 20px;
-            font-family: var(--font-family);
-            font-size: 0.95rem;
-            font-weight: 500;
-            border-radius: var(--border-radius-md);
-            border: none;
-            cursor: pointer;
+            padding: 12px 20px; font-family: var(--font-family); font-size: 0.95rem; font-weight: 500;
+            border-radius: var(--border-radius-md); border: none; cursor: pointer;
             transition: background-color var(--transition-interactive), transform var(--transition-interactive), box-shadow var(--transition-interactive);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
             box-shadow: 0 1px 2px var(--shadow-color);
         }
         .button:hover { transform: translateY(-1px); box-shadow: 0 3px 5px var(--shadow-strong-color); }
@@ -177,154 +204,91 @@
         .button-danger:hover { background-color: color-mix(in srgb, var(--accent-danger) 85%, black); }
         .button-success { background-color: var(--accent-success); color: var(--text-button-primary); }
         .button-success:hover { background-color: color-mix(in srgb, var(--accent-success) 85%, black); }
-        .button-warning { background-color: var(--accent-secondary); color: var(--text-primary); } /* Yellow button text needs good contrast */
+        .button-warning { background-color: var(--accent-secondary); color: var(--text-primary); }
         .button-warning:hover { background-color: color-mix(in srgb, var(--accent-secondary) 85%, black); }
-        
         .button-small { padding: 8px 12px; font-size: 0.85rem; }
 
         /* Add Course Section */
         .add-course-form {
-            background-color: var(--bg-surface);
-            padding: 20px;
-            border-radius: var(--border-radius-lg);
-            box-shadow: 0 4px 12px var(--shadow-color);
-            margin-bottom: 30px;
-            display: grid;
-            gap: 15px;
+            background-color: var(--bg-surface); padding: 20px; border-radius: var(--border-radius-lg);
+            box-shadow: 0 4px 12px var(--shadow-color); margin-bottom: 30px; display: grid; gap: 15px;
             transition: background-color var(--transition-theme), box-shadow var(--transition-theme);
         }
         .add-course-form .form-group { display: flex; flex-direction: column; gap: 5px; }
         .add-course-form label { font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); }
 
-        /* Course Card */
+        /* Course Card, Details, Item Lists etc. - Using existing styles, verified for theme compatibility */
         .course-card {
-            background-color: var(--bg-surface);
-            margin-bottom: 20px;
-            border-radius: var(--border-radius-lg);
-            box-shadow: 0 4px 12px var(--shadow-color);
-            overflow: hidden;
+            background-color: var(--bg-surface); margin-bottom: 20px; border-radius: var(--border-radius-lg);
+            box-shadow: 0 4px 12px var(--shadow-color); overflow: hidden;
             transition: background-color var(--transition-theme), box-shadow var(--transition-theme), transform var(--transition-interactive);
-            animation: fadeIn 0.4s ease-out backwards; /* Backwards to apply start state before anim */
-            animation-delay: calc(var(--card-index, 0) * 0.07s);
+            animation: fadeIn 0.4s ease-out backwards; animation-delay: calc(var(--card-index, 0) * 0.07s);
         }
         .course-card:hover { transform: translateY(-2px); box-shadow: 0 6px 15px var(--shadow-strong-color); }
-
         .course-header {
-            padding: 16px 20px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border-primary);
             transition: border-color var(--transition-theme), background-color var(--transition-interactive);
         }
         .course-header:hover { background-color: var(--bg-surface-hover); }
         .course-header-content { flex-grow: 1; }
-        .course-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 0 0 4px 0;
-            transition: color var(--transition-theme);
-        }
-        .course-name-input { /* For editing name */
-            font-size: 1.2rem; font-weight: 600; padding: 6px 8px; margin: -6px 0;
-            flex-grow: 1;
-        }
+        .course-name { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin: 0 0 4px 0; transition: color var(--transition-theme); }
+        .course-name-input { font-size: 1.2rem; font-weight: 600; padding: 6px 8px; margin: -6px 0; flex-grow: 1; }
         .course-summary-text { font-size: 0.8rem; color: var(--text-secondary); transition: color var(--transition-theme); }
-        
         .course-header-controls { display: flex; align-items: center; gap: 10px; }
         .expand-toggle {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            background: none; border: none; padding: 5px; cursor: pointer;
+            font-size: 1.1rem; color: var(--text-secondary); background: none; border: none; padding: 5px; cursor: pointer;
             transition: transform var(--transition-interactive), color var(--transition-theme);
         }
         .course-card.expanded .expand-toggle { transform: rotate(90deg); }
-
-        /* Progress Bar */
         .progress-bar-wrapper { width: 80px; height: 8px; background-color: var(--border-primary); border-radius: 4px; overflow: hidden; transition: background-color var(--transition-theme); }
         .progress-bar-fill { height: 100%; background-color: var(--accent-secondary); border-radius: 4px; width: 0%; transition: width 0.5s ease-out, background-color var(--transition-theme); }
-
-        /* Course Details (Collapsible Area) */
         .course-details-content {
-            max-height: 0;
-            overflow: hidden;
-            padding: 0 20px;
+            max-height: 0; overflow: hidden; padding: 0 20px;
             transition: max-height 0.4s ease-out, padding 0.4s ease-out;
         }
-        .course-card.expanded .course-details-content {
-            max-height: 1500px; /* Sufficiently large */
-            padding: 20px 20px;
-        }
+        .course-card.expanded .course-details-content { max-height: 1500px; padding: 20px 20px; }
         .detail-group { margin-bottom: 25px; }
         .detail-group h4 {
-            font-size: 1rem; font-weight: 500; color: var(--text-primary);
-            margin: 0 0 12px 0; border-bottom: 1px solid var(--border-primary); padding-bottom: 8px;
+            font-size: 1rem; font-weight: 500; color: var(--text-primary); margin: 0 0 12px 0;
+            border-bottom: 1px solid var(--border-primary); padding-bottom: 8px;
             display: flex; justify-content: space-between; align-items: center;
             transition: color var(--transition-theme), border-color var(--transition-theme);
         }
         .detail-group h4 .small-text { font-size: 0.8rem; color: var(--text-secondary); font-weight: 400;}
-
-        /* Item Lists (Lectures, Homework) */
         .item-list { list-style: none; padding: 0; margin: 0; }
         .item-entry {
-            display: flex;
-            flex-direction: column; /* Mobile first */
-            align-items: flex-start;
-            gap: 8px;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--border-primary);
-            transition: border-color var(--transition-theme);
-            animation: fadeIn 0.3s ease-out;
+            display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+            padding: 10px 0; border-bottom: 1px solid var(--border-primary);
+            transition: border-color var(--transition-theme); animation: fadeIn 0.3s ease-out;
         }
         .item-entry:last-child { border-bottom: none; }
-        .item-entry.completed .item-title {
-            text-decoration: line-through;
-            color: var(--text-secondary);
-            opacity: 0.7;
-        }
+        .item-entry.completed .item-title { text-decoration: line-through; color: var(--text-secondary); opacity: 0.7; }
         .item-entry.animate-completion { animation: itemStateChange 0.4s ease-out; }
-
         .item-main-content { display: flex; justify-content: space-between; align-items: center; width: 100%;}
         .item-title { font-size: 0.9rem; font-weight: 400; color: var(--text-primary); word-break: break-word; flex-grow: 1; transition: color var(--transition-theme); }
-        .item-actions { display: flex; gap: 8px; margin-top: 8px; width: 100%; } /* Mobile: actions below */
-        .item-actions .button { flex-grow: 1; /* Buttons share space */ }
-
-
-        /* Add item forms within details */
+        .item-actions { display: flex; gap: 8px; margin-top: 8px; width: 100%; }
+        .item-actions .button { flex-grow: 1; }
         .add-item-form { display: grid; gap: 10px; margin-bottom: 15px; }
         .add-item-form .button-group { display: flex; gap: 10px; }
         .add-item-form .button-group .button { flex-grow: 1; }
-
-        /* Edit Target Lectures Form */
         .edit-target-lectures-form { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
         .edit-target-lectures-form label { font-size: 0.85rem; color: var(--text-secondary); white-space: nowrap; }
         .edit-target-lectures-form .input-field { width: 70px; padding: 8px 10px; text-align: center;}
-
-        /* Course-level actions (delete course) */
         .course-actions-footer { text-align: right; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-primary); transition: border-color var(--transition-theme); }
-
-        /* Placeholder message */
         .empty-state-message {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
-            font-weight: 300;
-            font-size: 1.1rem;
-            background-color: var(--bg-surface);
-            border-radius: var(--border-radius-lg);
+            text-align: center; padding: 40px 20px; color: var(--text-secondary); font-weight: 300; font-size: 1.1rem;
+            background-color: var(--bg-surface); border-radius: var(--border-radius-lg);
             box-shadow: 0 4px 12px var(--shadow-color);
             transition: background-color var(--transition-theme), color var(--transition-theme), box-shadow var(--transition-theme);
         }
         .empty-state-message span { font-size: 2rem; display: block; margin-bottom: 10px;}
 
         /* Responsive Adjustments */
-        @media (min-width: 640px) { /* Small tablets and up */
-            h1 { font-size: 2rem; }
-            .add-course-form { grid-template-columns: 1fr auto; align-items: flex-end; } /* Name | Lectures | Button */
-            .add-course-form .form-group:last-child { grid-column: 1 / -1; } /* Button spans all if it's the last one */
-            .add-course-form #newCourseButton { grid-column: auto; } /* If button is not last */
+        @media (min-width: 640px) {
+            .add-course-form { grid-template-columns: 1fr auto; align-items: flex-end; }
+            .add-course-form .form-group:nth-child(2) { /* Target lectures input */ grid-column: auto; } /* Allow it to not span if there's space */
+            .add-course-form #newCourseButton { grid-column: auto; width: auto; }
             
             .item-entry { flex-direction: row; align-items: center; }
             .item-actions { margin-top: 0; width: auto; }
@@ -333,21 +297,35 @@
             .add-item-form { grid-template-columns: 1fr auto; }
             .add-item-form .button-group { grid-column: 2 / 3; }
         }
-         @media (min-width: 400px) { /* Slightly larger phones for side-by-side add buttons */
+         @media (min-width: 400px) {
             .add-item-form .button-group { display: flex; gap: 10px; }
             .add-item-form .button-group .button { flex-grow: 1; }
         }
-
+        .hidden { display: none !important; }
 
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <header class="app-header">
-            <h1>Study Tracker</h1>
-            <button id="themeToggleButton" class="theme-toggle-button" title="Toggle theme">
-                <span class="theme-icon">☀️</span> </button>
+    <div id="loginScreen" class="login-screen hidden"> <h2>Welcome Back!</h2>
+        <p>Enter your phone number to load your study tracker. This is just a local identifier for this browser and device.</p>
+        <input type="tel" id="phoneNumberInput" class="input-field" placeholder="Enter Phone Number (e.g., 0501234567)">
+        <button id="loadTrackerButton" class="button button-primary">Load My Tracker</button>
+    </div>
+
+    <div id="appContainer" class="app-container hidden"> <header class="app-header">
+            <div class="app-header-title-group">
+                <h1>Study Tracker</h1>
+                <span id="currentUserIdentifier" class="current-user-identifier"></span>
+            </div>
+            <div class="app-header-actions">
+                <button id="themeToggleButton" class="theme-toggle-button" title="Toggle theme">
+                    <span class="theme-icon">☀️</span>
+                </button>
+                <button id="switchUserButton" class="switch-user-button" title="Switch User/Profile">
+                    <span class="user-icon">👤</span> Switch
+                </button>
+            </div>
         </header>
 
         <section class="add-course-form">
@@ -370,19 +348,31 @@
         let courses = [];
         const themeToggleButton = document.getElementById('themeToggleButton');
         const themeIcon = themeToggleButton.querySelector('.theme-icon');
+        const switchUserButton = document.getElementById('switchUserButton');
+        
+        const loginScreen = document.getElementById('loginScreen');
+        const appContainer = document.getElementById('appContainer');
+        const phoneNumberInput = document.getElementById('phoneNumberInput');
+        const loadTrackerButton = document.getElementById('loadTrackerButton');
+        const currentUserIdentifierDisplay = document.getElementById('currentUserIdentifier');
+
+        const APP_DATA_PREFIX = 'slickStudyTrackerDataV5_';
+        const CURRENT_USER_KEY = 'studyTrackerCurrentUserIdentifier';
+
 
         // --- THEME MANAGEMENT ---
         function setPreferredTheme() {
             const savedTheme = localStorage.getItem('studyTrackerTheme');
             const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            let currentThemeIsDark;
 
             if (savedTheme) {
-                document.body.classList.toggle('dark-mode', savedTheme === 'dark');
-                updateThemeIcon(savedTheme === 'dark');
+                currentThemeIsDark = (savedTheme === 'dark');
             } else {
-                document.body.classList.toggle('dark-mode', systemPrefersDark);
-                updateThemeIcon(systemPrefersDark);
+                currentThemeIsDark = systemPrefersDark;
             }
+            document.body.classList.toggle('dark-mode', currentThemeIsDark);
+            updateThemeIcon(currentThemeIsDark);
         }
 
         function updateThemeIcon(isDarkMode) {
@@ -395,55 +385,108 @@
             updateThemeIcon(isDarkMode);
         });
 
-
-        // --- DATA PERSISTENCE ---
-        function saveData() {
-            localStorage.setItem('slickStudyTrackerDataV4', JSON.stringify(courses));
+        // --- USER IDENTIFIER / LOGIN SIMULATION ---
+        function getCurrentUserIdentifier() {
+            return localStorage.getItem(CURRENT_USER_KEY);
         }
 
-        function loadData() {
-            const data = localStorage.getItem('slickStudyTrackerDataV4');
-            if (data) {
-                courses = JSON.parse(data);
+        function setCurrentUserIdentifier(identifier) {
+            if (identifier && identifier.trim() !== "") {
+                localStorage.setItem(CURRENT_USER_KEY, identifier.trim());
+                if(currentUserIdentifierDisplay) currentUserIdentifierDisplay.textContent = `Profile: ${identifier.trim()}`;
+                return true;
+            }
+            return false;
+        }
+
+        function clearCurrentUserIdentifier() {
+            localStorage.removeItem(CURRENT_USER_KEY);
+            courses = []; // Clear in-memory courses
+            if(currentUserIdentifierDisplay) currentUserIdentifierDisplay.textContent = '';
+        }
+
+        loadTrackerButton.addEventListener('click', () => {
+            const phoneIdentifier = phoneNumberInput.value;
+            // Basic validation - just ensure it's not empty and perhaps looks like a number string
+            if (phoneIdentifier && phoneIdentifier.trim().match(/^\d+$/)) {
+                setCurrentUserIdentifier(phoneIdentifier.trim());
+                showAppScreen();
+                loadData(); // Load data for the new identifier
+                renderCourses();
+            } else {
+                alert('Please enter a valid phone number as your local identifier (digits only).');
+            }
+        });
+
+        switchUserButton.addEventListener('click', () => {
+            if (confirm('Are you sure you want to switch profiles? Current unsaved changes might be lost if any.')) {
+                clearCurrentUserIdentifier();
+                showLoginScreen();
+            }
+        });
+
+        function showLoginScreen() {
+            loginScreen.classList.remove('hidden');
+            appContainer.classList.add('hidden');
+        }
+
+        function showAppScreen() {
+            loginScreen.classList.add('hidden');
+            appContainer.classList.remove('hidden');
+        }
+
+
+        // --- DATA PERSISTENCE (Scoped to User Identifier) ---
+        function saveData() {
+            const userIdentifier = getCurrentUserIdentifier();
+            if (userIdentifier) {
+                localStorage.setItem(APP_DATA_PREFIX + userIdentifier, JSON.stringify(courses));
+            } else {
+                console.error("No user identifier set. Cannot save data.");
             }
         }
 
-        function generateId() {
-            return '_' + Math.random().toString(36).substr(2, 9);
+        function loadData() {
+            const userIdentifier = getCurrentUserIdentifier();
+            if (userIdentifier) {
+                const data = localStorage.getItem(APP_DATA_PREFIX + userIdentifier);
+                if (data) {
+                    courses = JSON.parse(data);
+                } else {
+                    courses = []; // No data for this identifier, start fresh
+                }
+            } else {
+                courses = []; // Should not happen if login flow is correct
+            }
         }
 
-        // --- COURSE MANAGEMENT ---
+        function generateId() { return '_' + Math.random().toString(36).substr(2, 9); }
+
+        // --- COURSE MANAGEMENT & RENDERING (largely same as V4, with minor adjustments) ---
+        // Minor change: renderCourses() might be called after user "login"
+        // All add/toggle/delete functions will call saveData() which now correctly scopes
+        // Passed focusedCourseId to renderCourses to keep a card expanded after an action
+
         function addCourse() {
             const nameInput = document.getElementById('newCourseName');
             const lecturesInput = document.getElementById('newCourseLectures');
             const name = nameInput.value.trim();
             const targetLectures = parseInt(lecturesInput.value) || 0;
 
-            if (!name) {
-                alert('Please enter a course name.');
-                return;
-            }
+            if (!name) { alert('Please enter a course name.'); return; }
 
             courses.unshift({
-                id: generateId(),
-                name: name,
-                targetLectures: targetLectures,
-                lectures: [], 
-                homeworks: [], 
-                isEditingName: false
+                id: generateId(), name: name, targetLectures: targetLectures,
+                lectures: [], homeworks: [], isEditingName: false
             });
-
-            nameInput.value = '';
-            lecturesInput.value = '';
-            saveData();
-            renderCourses();
+            nameInput.value = ''; lecturesInput.value = '';
+            saveData(); renderCourses();
         }
 
         function deleteCourse(courseId) {
-            if (confirm('Are you sure you want to delete this entire course?')) {
-                courses = courses.filter(course => course.id !== courseId);
-                saveData();
-                renderCourses();
+            if (confirm('Delete this course?')) {
+                courses = courses.filter(c => c.id !== courseId);
+                saveData(); renderCourses();
             }
         }
         
@@ -461,112 +504,70 @@
 
         function saveCourseName(courseId, newName) {
             const course = courses.find(c => c.id === courseId);
-            if (course && newName.trim() !== '') {
-                course.name = newName.trim();
-            } // If empty, revert to old name (implicitly done by not saving if newName is empty)
+            if (course && newName.trim() !== '') course.name = newName.trim();
             course.isEditingName = false;
-            saveData();
-            renderCourses();
+            saveData(); renderCourses();
         }
 
-
-        // --- LECTURE & HOMEWORK MANAGEMENT (Shared logic for animation) ---
-        function handleItemCompletionToggle(item) {
-            item.watched = !item.watched; // For lectures
-            item.completed = !item.completed; // For homework (one will be undefined, that's fine)
-            
-            if (item.watched || item.completed) {
-                item.justCompletedAnimation = true; // Flag for animation
-            }
-        }
-        
-        // --- LECTURE MANAGEMENT ---
         function addLecture(courseId, markAsWatched = false) {
             const course = courses.find(c => c.id === courseId);
-            const lectureNameInput = document.getElementById(`lectureName-${courseId}`);
-            const lectureName = lectureNameInput.value.trim();
-
-            if (course && lectureName) {
-                course.lectures.push({ id: generateId(), name: lectureName, watched: markAsWatched });
-                lectureNameInput.value = '';
-                saveData();
-                renderCourses(courseId); // Pass courseId to keep it expanded
-            } else if (!lectureName) { alert("Please enter a lecture name."); }
+            const input = document.getElementById(`lectureName-${courseId}`);
+            const name = input.value.trim();
+            if (course && name) {
+                course.lectures.push({ id: generateId(), name, watched: markAsWatched });
+                if(markAsWatched && name) course.lectures[course.lectures.length-1].justCompletedAnimation = true;
+                input.value = ''; saveData(); renderCourses(courseId);
+            } else if (!name) alert("Lecture name missing.");
         }
 
         function toggleLectureWatched(courseId, lectureId) {
             const course = courses.find(c => c.id === courseId);
-            if (course) {
-                const lecture = course.lectures.find(l => l.id === lectureId);
-                if (lecture) {
-                    lecture.watched = !lecture.watched;
-                    if(lecture.watched) lecture.justCompletedAnimation = true;
-                    saveData();
-                    renderCourses(courseId);
-                }
+            const lecture = course?.lectures.find(l => l.id === lectureId);
+            if (lecture) {
+                lecture.watched = !lecture.watched;
+                if(lecture.watched) lecture.justCompletedAnimation = true;
+                saveData(); renderCourses(courseId);
             }
         }
-        function deleteLecture(courseId, lectureId) { /* ... similar to before ... */ 
+        function deleteLecture(courseId, lectureId) { 
             const course = courses.find(c => c.id === courseId);
-            if (course) {
-                course.lectures = course.lectures.filter(l => l.id !== lectureId);
-                saveData();
-                renderCourses(courseId);
-            }
+            if (course) { course.lectures = course.lectures.filter(l => l.id !== lectureId); saveData(); renderCourses(courseId); }
         }
-        function updateTargetLectures(courseId) { /* ... similar to before ... */ 
+        function updateTargetLectures(courseId) { 
             const course = courses.find(c => c.id === courseId);
-            const inputEl = document.getElementById(`targetLecturesInput-${courseId}`);
-            if (course && inputEl) {
-                const newTarget = parseInt(inputEl.value);
-                if (!isNaN(newTarget) && newTarget >= 0) {
-                    course.targetLectures = newTarget;
-                    saveData();
-                    renderCourses(courseId); 
-                } else {
-                    alert("Please enter a valid non-negative number.");
-                    inputEl.value = course.targetLectures; 
-                }
+            const input = document.getElementById(`targetLecturesInput-${courseId}`);
+            if (course && input) {
+                const newTarget = parseInt(input.value);
+                if (!isNaN(newTarget) && newTarget >= 0) { course.targetLectures = newTarget; saveData(); renderCourses(courseId); }
+                else { alert("Invalid target number."); input.value = course.targetLectures; }
             }
         }
 
-        // --- HOMEWORK MANAGEMENT ---
         function addHomework(courseId, markAsCompleted = false) {
             const course = courses.find(c => c.id === courseId);
-            const hwDescInput = document.getElementById(`homeworkDesc-${courseId}`);
-            const description = hwDescInput.value.trim();
-
-            if (course && description) {
-                course.homeworks.push({ id: generateId(), description: description, completed: markAsCompleted });
-                hwDescInput.value = '';
-                saveData();
-                renderCourses(courseId);
-            } else if(!description) { alert("Please enter a homework description."); }
+            const input = document.getElementById(`homeworkDesc-${courseId}`);
+            const desc = input.value.trim();
+            if (course && desc) {
+                course.homeworks.push({ id: generateId(), description: desc, completed: markAsCompleted });
+                 if(markAsCompleted && desc) course.homeworks[course.homeworks.length-1].justCompletedAnimation = true;
+                input.value = ''; saveData(); renderCourses(courseId);
+            } else if (!desc) alert("Homework description missing.");
         }
         function toggleHomeworkCompleted(courseId, homeworkId) {
             const course = courses.find(c => c.id === courseId);
-            if (course) {
-                const homework = course.homeworks.find(h => h.id === homeworkId);
-                if (homework) {
-                    homework.completed = !homework.completed;
-                    if(homework.completed) homework.justCompletedAnimation = true;
-                    saveData();
-                    renderCourses(courseId);
-                }
+            const hw = course?.homeworks.find(h => h.id === homeworkId);
+            if (hw) {
+                hw.completed = !hw.completed;
+                if(hw.completed) hw.justCompletedAnimation = true;
+                saveData(); renderCourses(courseId);
             }
         }
-        function deleteHomework(courseId, homeworkId) { /* ... similar to before ... */ 
+        function deleteHomework(courseId, homeworkId) { 
             const course = courses.find(c => c.id === courseId);
-            if (course) {
-                course.homeworks = course.homeworks.filter(h => h.id !== homeworkId);
-                saveData();
-                renderCourses(courseId);
-            }
+            if (course) { course.homeworks = course.homeworks.filter(h => h.id !== homeworkId); saveData(); renderCourses(courseId); }
         }
-
-
-        // --- UI RENDERING ---
-        let globallyExpandedState = {}; // Persist expanded state across re-renders
+        
+        let globallyExpandedState = {};
 
         function toggleCourseDetails(courseId) {
             const courseCard = document.getElementById(`course-${courseId}`);
@@ -598,14 +599,16 @@
 
                 if (globallyExpandedState[course.id] || (focusedCourseId === course.id && !globallyExpandedState.hasOwnProperty(course.id))) {
                     courseCard.classList.add('expanded');
-                    globallyExpandedState[course.id] = true; // Ensure it's set
+                    if (!globallyExpandedState.hasOwnProperty(course.id) && focusedCourseId === course.id) {
+                        globallyExpandedState[course.id] = true; // Set if focused and not previously set
+                    }
                 }
 
 
                 let courseNameHTML;
                 if (course.isEditingName) {
                     courseNameHTML = `
-                        <div class="course-header-content edit-form">
+                        <div class="course-header-content edit-form" style="display:flex; gap:8px; align-items:center;">
                             <input type="text" id="edit-name-${course.id}" class="input-field course-name-input" value="${course.name}" 
                                    onblur="saveCourseName('${course.id}', this.value)" 
                                    onkeypress="if(event.key==='Enter') {this.blur(); event.preventDefault();}"
@@ -649,7 +652,6 @@
                             <ul class="item-list">
                                 ${course.lectures.map(lec => {
                                     const animClass = lec.justCompletedAnimation ? 'animate-completion' : '';
-                                    if(lec.justCompletedAnimation) delete lec.justCompletedAnimation;
                                     return `<li class="item-entry ${lec.watched ? 'completed' : ''} ${animClass}">
                                         <div class="item-main-content"><span class="item-title">${lec.name}</span></div>
                                         <div class="item-actions">
@@ -676,7 +678,6 @@
                             <ul class="item-list">
                                 ${course.homeworks.map(hw => {
                                     const animClass = hw.justCompletedAnimation ? 'animate-completion' : '';
-                                    if(hw.justCompletedAnimation) delete hw.justCompletedAnimation;
                                     return `<li class="item-entry ${hw.completed ? 'completed' : ''} ${animClass}">
                                         <div class="item-main-content"><span class="item-title">${hw.description}</span></div>
                                         <div class="item-actions">
@@ -694,8 +695,7 @@
                 `;
                 container.appendChild(courseCard);
             });
-             // Clean up animation flags after rendering
-            courses.forEach(course => {
+            courses.forEach(course => { // Clear animation flags after render
                 course.lectures.forEach(l => delete l.justCompletedAnimation);
                 course.homeworks.forEach(h => delete h.justCompletedAnimation);
             });
@@ -704,8 +704,15 @@
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             setPreferredTheme(); // Set theme ASAP
-            loadData();
-            renderCourses();
+            const userIdentifier = getCurrentUserIdentifier();
+            if (userIdentifier) {
+                if(currentUserIdentifierDisplay) currentUserIdentifierDisplay.textContent = `Profile: ${userIdentifier}`;
+                showAppScreen();
+                loadData();
+                renderCourses();
+            } else {
+                showLoginScreen();
+            }
         });
     </script>
 
