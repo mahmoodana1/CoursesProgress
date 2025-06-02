@@ -148,16 +148,20 @@
             box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 20%, transparent);
         }
         .textarea-field {
-            min-height: 100px; 
+            min-height: 120px; /* Increased min height for notes */
             resize: vertical; 
+            white-space: pre-wrap; /* Respect newlines in display */
         }
         .textarea-field:read-only {
             background-color: color-mix(in srgb, var(--bg-input) 95%, var(--bg-main) 5%);
-            border-color: transparent; 
+            border-color: var(--border-primary); /* Subtle border for readonly */
             box-shadow: none;
             cursor: default;
             opacity: 0.9;
-            white-space: pre-wrap; /* Ensure newlines are respected in readonly view */
+        }
+        .textarea-field:read-only:focus { /* Prevent focus ring on readonly textareas */
+            border-color: var(--border-primary);
+            box-shadow: none;
         }
 
 
@@ -209,7 +213,7 @@
         .course-header-content { flex-grow: 1; }
         .course-name { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin: 0 0 4px 0; transition: color var(--transition-theme); }
         .course-name-input { font-size: 1.2rem; font-weight: 600; padding: 6px 8px; margin: -6px 0; flex-grow: 1; }
-        .course-summary-text { font-size: 0.8rem; color: var(--text-secondary); transition: color var(--transition-theme); display: block; /* Ensure it takes its own line if needed */ }
+        .course-summary-text { font-size: 0.8rem; color: var(--text-secondary); transition: color var(--transition-theme); display: block; }
         .course-date-added { font-size: 0.75rem; color: var(--text-secondary); opacity: 0.8; display: block; margin-top: 2px;}
 
         .course-header-controls { display: flex; align-items: center; gap: 10px; }
@@ -224,7 +228,7 @@
             max-height: 0; overflow: hidden; padding: 0 20px;
             transition: max-height 0.4s ease-out, padding 0.4s ease-out;
         }
-        .course-card.expanded .course-details-content { max-height: 2000px; padding: 20px 20px; }
+        .course-card.expanded .course-details-content { max-height: 2500px; padding: 20px 20px; } /* Increased max-height again */
         .detail-group { margin-bottom: 25px; }
         .detail-group h4 {
             font-size: 1rem; font-weight: 500; color: var(--text-primary); margin: 0 0 12px 0;
@@ -315,7 +319,7 @@
         const themeToggleButton = document.getElementById('themeToggleButton');
         const themeIcon = themeToggleButton.querySelector('.theme-icon');
         
-        const APP_DATA_KEY = 'slickStudyTrackerData_Global_V8'; // Updated key version for dateAdded field
+        const APP_DATA_KEY = 'slickStudyTrackerData_Global_V8'; 
 
 
         // --- THEME MANAGEMENT ---
@@ -352,11 +356,16 @@
             const data = localStorage.getItem(APP_DATA_KEY);
             if (data) {
                 courses = JSON.parse(data);
-                // Ensure new fields are present if loading old data
                 courses.forEach(course => {
                     if (course.notes === undefined) course.notes = "";
                     if (course.isEditingNotes === undefined) course.isEditingNotes = false;
-                    if (course.dateAdded === undefined) course.dateAdded = new Date().toISOString(); // Fallback for old data
+                    // Ensure dateAdded exists, if not (very old data), set to a noticeable past date or current
+                    if (course.dateAdded === undefined) {
+                         // For truly old data, you might set a very past fixed date,
+                         // or current if you want to imply it was "imported" now.
+                         // Let's default to now for simplicity if it's completely missing.
+                        course.dateAdded = new Date().toISOString(); 
+                    }
                 });
             } else {
                 courses = []; 
@@ -378,22 +387,29 @@
                 id: generateId(), name: name, targetLectures: targetLectures,
                 lectures: [], homeworks: [], 
                 notes: "", isEditingNotes: false, 
-                dateAdded: new Date().toISOString(), // Store date when course is added
+                dateAdded: new Date().toISOString(), 
                 isEditingName: false
             });
             nameInput.value = ''; lecturesInput.value = '';
             saveData(); renderCourses();
         }
 
-        function deleteCourse(courseId) { /* ... same as before ... */ 
+        function deleteCourse(courseId) { 
             if (confirm('Delete this course?')) {
                 courses = courses.filter(c => c.id !== courseId);
                 saveData(); renderCourses();
             }
         }
         
-        function toggleEditCourseName(courseId) { /* ... same as before ... */ 
-            courses.forEach(c => c.isEditingName = (c.id === courseId) ? !c.isEditingName : false);
+        function toggleEditCourseName(courseId) { 
+            courses.forEach(c => {
+                if (c.id === courseId) {
+                    c.isEditingName = !c.isEditingName;
+                } else {
+                    c.isEditingName = false; // Close other name edits
+                }
+                c.isEditingNotes = false; // Close notes edit if name edit is toggled
+            });
             renderCourses();
             const course = courses.find(c => c.id === courseId);
             if (course && course.isEditingName) {
@@ -404,7 +420,7 @@
             }
         }
 
-        function saveCourseName(courseId, newName) { /* ... same as before ... */ 
+        function saveCourseName(courseId, newName) { 
             const course = courses.find(c => c.id === courseId);
             if (course && newName.trim() !== '') course.name = newName.trim();
             course.isEditingName = false;
@@ -473,6 +489,10 @@
             const course = courses.find(c => c.id === courseId);
             if (!course) return;
 
+            // Close name editing if notes editing is toggled
+            courses.forEach(c => c.isEditingName = false);
+
+
             if (course.isEditingNotes) { // Was in edit mode, now "Save"
                 const notesTextarea = document.getElementById(`notes-textarea-${courseId}`);
                 course.notes = notesTextarea.value;
@@ -485,7 +505,10 @@
             if(course.isEditingNotes){ 
                  setTimeout(() => {
                     const textarea = document.getElementById(`notes-textarea-${courseId}`);
-                    if (textarea) textarea.focus();
+                    if (textarea) {
+                        textarea.focus();
+                        textarea.selectionStart = textarea.selectionEnd = textarea.value.length; // Move cursor to end
+                    }
                  },0);
             }
         }
