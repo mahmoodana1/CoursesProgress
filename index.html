@@ -1,81 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vibrant Study Tracker</title>
-    <style>
-        :root {
-            /* Light Mode - Vibrant & Modern */
-            --bg-main-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
-            --bg-surface: rgba(255, 255, 255, 0.85); /* Glassmorphism tendency */
-            --bg-surface-hover: rgba(255, 255, 255, 0.95);
-            --bg-input: rgba(255, 255, 255, 0.7);
-            --text-primary: #2c3e50; /* Dark Blue-Gray */
-            --text-secondary: #34495e; /* Slightly lighter Blue-Gray */
-            --text-placeholder: #7f8c8d;
-            --border-primary: rgba(44, 62, 80, 0.2);
-            --border-input: rgba(44, 62, 80, 0.3);
-            --border-input-focus: var(--accent-primary);
-            --accent-primary: #ff6b6b; /* Coral Red */
-            --accent-primary-hover: #ff4757;
-            --accent-secondary: #feca57; /* Sunny Yellow */
-            --accent-success: #2ed573; /* Bright Green */
-            --accent-danger: #ff4757; /* Coral Red (can be same as primary) */
-            --text-on-accent: #ffffff;
-            --shadow-color: rgba(50, 50, 93, 0.1);
-            --shadow-strong-color: rgba(50, 50, 93, 0.15);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vibrant Study Tracker</title>
+  <style>
+    :root {
+      /* Light Mode - Premium Vibrant */
+      --bg-main-gradient: linear-gradient(135deg, #a1ffce 0%, #faffd1 100%);
+      --bg-surface: rgba(255, 255, 255, 0.75);
+      --bg-surface-hover: rgba(255, 255, 255, 0.9);
+      --bg-input: rgba(255, 255, 255, 0.6);
+      --text-primary: #1e2a38;
+      --text-secondary: #3a4a5a;
+      --text-placeholder: #9ca6af;
+      --border-primary: rgba(30, 42, 56, 0.2);
+      --border-input: rgba(30, 42, 56, 0.3);
+      --border-input-focus: var(--accent-primary);
+      --accent-primary: #ff6f91;
+      --accent-primary-hover: #ff4d6d;
+      --accent-secondary: #ffde59;
+      --accent-success: #3fe1b0;
+      --accent-danger: #ff4d4f;
+      --text-on-accent: #ffffff;
+      --shadow-color: rgba(50, 50, 93, 0.1);
+      --shadow-strong-color: rgba(50, 50, 93, 0.2);
 
-            --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-            --border-radius-md: 10px; /* Softer, more modern rounding */
-            --border-radius-lg: 16px;
-            --transition-theme: 0.3s ease-in-out;
-            --transition-interactive: 0.15s ease-out;
-        }
+      --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      --border-radius-md: 12px;
+      --border-radius-lg: 18px;
+      --transition-theme: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-interactive: 0.2s ease-out;
+    }
 
-        body.dark-mode {
-            /* Dark Mode - Vibrant & Modern */
-            --bg-main-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); /* Dark Teal/Blue */
-            --bg-surface: rgba(40, 42, 54, 0.85); /* Darker, slightly transparent surface */
-            --bg-surface-hover: rgba(55, 58, 75, 0.95);
-            --bg-input: rgba(30, 32, 42, 0.7);
-            --text-primary: #f8f8f2; /* Off-white (Dracula theme text) */
-            --text-secondary: #bd93f9; /* Dracula purple for secondary text */
-            --text-placeholder: #999;
-            --border-primary: rgba(189, 147, 249, 0.2); /* Light purple border */
-            --border-input: rgba(189, 147, 249, 0.3);
-            --border-input-focus: var(--accent-primary);
-            --accent-primary: #ff79c6; /* Dracula Pink */
-            --accent-primary-hover: #ff55b8;
-            --accent-secondary: #f1fa8c; /* Dracula Yellow */
-            --accent-success: #50fa7b; /* Dracula Green */
-            --accent-danger: #ff5555; /* Dracula Red */
-            --text-on-accent: #282a36; /* Dark text for light accents */
-            --shadow-color: rgba(0, 0, 0, 0.25);
-            --shadow-strong-color: rgba(0, 0, 0, 0.35);
-        }
+    body.dark-mode {
+      /* Dark Mode - Elegant Night */
+      --bg-main-gradient: linear-gradient(135deg, #1a2a3a 0%, #1f1f47 100%);
+      --bg-surface: rgba(35, 38, 52, 0.75);
+      --bg-surface-hover: rgba(45, 48, 65, 0.9);
+      --bg-input: rgba(25, 27, 36, 0.6);
+      --text-primary: #f1f2f6;
+      --text-secondary: #d6acff;
+      --text-placeholder: #a3a3a3;
+      --border-primary: rgba(214, 172, 255, 0.2);
+      --border-input: rgba(214, 172, 255, 0.3);
+      --border-input-focus: var(--accent-primary);
+      --accent-primary: #ff79c6;
+      --accent-primary-hover: #ff5eb7;
+      --accent-secondary: #f7f18c;
+      --accent-success: #50fa7b;
+      --accent-danger: #ff5555;
+      --text-on-accent: #282a36;
+      --shadow-color: rgba(0, 0, 0, 0.25);
+      --shadow-strong-color: rgba(0, 0, 0, 0.4);
+    }
 
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-        *, *::before, *::after { box-sizing: border-box; }
-        body {
-            font-family: var(--font-family);
-            margin: 0;
-            background-image: var(--bg-main-gradient);
-            background-attachment: fixed; /* Keep gradient fixed during scroll */
-            color: var(--text-primary);
-            line-height: 1.7; /* Increased for readability */
-            font-weight: 400;
-            font-size: 16px;
-            padding: 20px;
-            transition: color var(--transition-theme); /* Only color and specific properties, not background-image */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
 
-        /* Animations */
+    body {
+      font-family: var(--font-family);
+      margin: 0;
+      background-image: var(--bg-main-gradient);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      line-height: 1.7;
+      font-size: 16px;
+      padding: 24px;
+      transition: background-color var(--transition-theme), color var(--transition-theme);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+      
+      /* Animations */
         @keyframes fadeInScaleUp {
             from { opacity: 0; transform: translateY(10px) scale(0.98); }
             to { opacity: 1; transform: translateY(0) scale(1); }
