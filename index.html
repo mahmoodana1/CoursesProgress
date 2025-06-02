@@ -3,405 +3,406 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poppy Study Tracker - Enhanced</title>
+    <title>Slick Study Tracker</title>
     <style>
         :root {
-            --bg-color: #f0f4f8;
-            --card-bg-color: #ffffff;
-            --primary-accent: #7e57c2; 
-            --primary-accent-hover: #673ab7;
-            --secondary-accent: #ffca28;
-            --text-color: #37474F;
-            --light-text-color: #ffffff;
-            --placeholder-text-color: #78909c;
-            --border-color: #CFD8DC;
-            --shadow-color: rgba(0, 0, 0, 0.08);
-            --success-color: #66bb6a;
-            --danger-color: #ef5350;
-            --input-bg: #eceff1;
+            /* Light Mode Default Palette (Calm & Modern) */
+            --bg-main: #F7FAFC; /* Very Light Grayish Blue */
+            --bg-surface: #FFFFFF; /* Card, Modal Backgrounds */
+            --bg-surface-hover: #F7FAFC;
+            --bg-input: #FFFFFF;
+            --bg-button-primary: #4A90E2; /* Calm Blue */
+            --bg-button-primary-hover: #357ABD;
+            --bg-button-secondary: #E2E8F0;
+            --bg-button-secondary-hover: #CBD5E0;
+            --text-primary: #2D3748; /* Dark Slate */
+            --text-secondary: #718096; /* Medium Slate */
+            --text-button-primary: #FFFFFF;
+            --text-button-secondary: #2D3748;
+            --text-placeholder: #A0AEC0;
+            --border-primary: #E2E8F0; /* Subtle borders */
+            --border-input: #CBD5E0; /* Input borders */
+            --border-input-focus: var(--accent-primary);
+            --accent-primary: #4A90E2; /* Calm Blue - also for focus rings, icons */
+            --accent-secondary: #F6E05E; /* Muted Yellow/Gold - for progress */
+            --accent-success: #48BB78; /* Calm Green */
+            --accent-danger: #F56565; /* Calm Red */
+            --shadow-color: rgba(45, 55, 72, 0.1); /* Soft shadow */
+            --shadow-strong-color: rgba(45, 55, 72, 0.15);
 
-            --font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            --border-radius: 12px;
-            --transition-speed: 0.3s; /* Consistent transition speed */
+            --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+            --transition-theme: 0.3s ease;
+            --transition-interactive: 0.2s ease-out;
+        }
+
+        body.dark-mode {
+            /* Dark Mode Palette */
+            --bg-main: #1A202C; /* Very Dark Desaturated Blue */
+            --bg-surface: #2D3748; /* Dark Slate Surface */
+            --bg-surface-hover: #4A5568;
+            --bg-input: #2D3748;
+            --bg-button-primary: #63B3ED; /* Lighter, Vivid Blue for Dark Mode */
+            --bg-button-primary-hover: #4299E1;
+            --bg-button-secondary: #4A5568;
+            --bg-button-secondary-hover: #718096;
+            --text-primary: #E2E8F0; /* Light Grayish Blue */
+            --text-secondary: #A0AEC0; /* Medium Grayish Blue */
+            --text-button-primary: #1A202C; /* Dark text on light blue button */
+            --text-button-secondary: #E2E8F0;
+            --text-placeholder: #718096;
+            --border-primary: #4A5568; /* Darker subtle borders */
+            --border-input: #4A5568;
+            --border-input-focus: var(--accent-primary);
+            --accent-primary: #63B3ED;
+            --accent-secondary: #F6E05E; /* Yellow can work well on dark too */
+            --accent-success: #68D391; /* Brighter Calm Green */
+            --accent-danger: #FC8181; /* Brighter Calm Red */
+            --shadow-color: rgba(0, 0, 0, 0.2);
+            --shadow-strong-color: rgba(0, 0, 0, 0.3);
         }
 
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-        @keyframes fadeInPage {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes cardEnter {
-            from { opacity: 0; transform: scale(0.95) translateY(10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        @keyframes itemCompleted {
-            0% { background-color: var(--card-bg-color); transform: scale(1); }
-            50% { background-color: color-mix(in srgb, var(--success-color) 40%, transparent); transform: scale(1.05); }
-            100% { /* Final state set by .completed class */ transform: scale(1); }
-        }
-
-
+        /* Base Styles & Resets */
+        *, *::before, *::after { box-sizing: border-box; }
         body {
             font-family: var(--font-family);
             margin: 0;
-            padding: 15px; /* Adjusted padding for mobile first */
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.65;
             font-weight: 400;
-            animation: fadeInPage 0.6s ease-out forwards;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 15px auto; /* Adjusted margin */
-            padding: 0; /* Container padding removed, body handles it */
-        }
-
-        h1 {
-            text-align: center;
-            color: var(--primary-accent);
-            font-weight: 700;
-            font-size: 2.2em; /* Adjusted for responsiveness */
-            margin-bottom: 30px;
-            letter-spacing: -1px;
-        }
-
-        .add-course-section {
-            background-color: var(--card-bg-color);
+            font-size: 16px;
             padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 6px 15px var(--shadow-color);
-            margin-bottom: 30px;
+            transition: background-color var(--transition-theme), color var(--transition-theme);
             display: flex;
-            flex-direction: column; /* Stack by default for mobile */
-            gap: 15px;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        .add-course-section input[type="text"],
-        .add-course-section input[type="number"],
-        .form-inline input[type="text"],
-        .form-inline input[type="number"],
-        .edit-input {
-            padding: 12px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1em;
-            font-family: var(--font-family);
-            font-weight: 400;
-            background-color: var(--input-bg);
-            color: var(--text-color);
-            width: 100%; /* Full width by default */
-            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .add-course-section input::placeholder,
-        .form-inline input::placeholder,
-        .edit-input::placeholder {
-            color: var(--placeholder-text-color);
-            font-weight: 300;
-        }
-        .add-course-section input:focus,
-        .form-inline input:focus,
-        .edit-input:focus {
-            outline: none;
-            border-color: var(--primary-accent);
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-accent) 20%, transparent);
+        @keyframes itemStateChange { /* Used for 'completed' items */
+            0% { opacity: 0.7; transform: scale(0.98); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
-        .add-course-section button, button.btn {
-            padding: 12px 20px;
-            background: linear-gradient(45deg, var(--primary-accent), color-mix(in srgb, var(--primary-accent) 80%, var(--secondary-accent) 20%));
-            color: var(--light-text-color);
-            border: none;
-            border-radius: 8px;
+        /* Layout & General Elements */
+        .app-container {
+            width: 100%;
+            max-width: 720px; /* Slightly narrower for a slicker feel */
+            margin: 0 auto;
+            animation: fadeIn 0.5s var(--transition-theme) forwards;
+        }
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 10px 0;
+        }
+        h1 {
+            font-size: 1.8rem; /* Adjusted size */
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+        .theme-toggle-button {
+            background-color: var(--bg-surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-primary);
+            padding: 8px 12px;
+            border-radius: var(--border-radius-md);
             cursor: pointer;
-            font-size: 1em;
+            font-size: 1rem;
+            transition: background-color var(--transition-theme), color var(--transition-theme), border-color var(--transition-theme), box-shadow var(--transition-interactive);
+            box-shadow: 0 1px 3px var(--shadow-color);
+        }
+        .theme-toggle-button:hover {
+            background-color: var(--bg-surface-hover);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            box-shadow: 0 2px 5px var(--shadow-color);
+        }
+
+        /* Form Elements (Inputs, Buttons) */
+        .input-field, .textarea-field {
+            width: 100%;
+            padding: 12px 16px;
             font-family: var(--font-family);
+            font-size: 0.95rem;
+            font-weight: 400;
+            color: var(--text-primary);
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-input);
+            border-radius: var(--border-radius-md);
+            transition: border-color var(--transition-interactive), box-shadow var(--transition-interactive), background-color var(--transition-theme), color var(--transition-theme);
+        }
+        .input-field::placeholder, .textarea-field::placeholder { color: var(--text-placeholder); font-weight: 300; }
+        .input-field:focus, .textarea-field:focus {
+            outline: none;
+            border-color: var(--border-input-focus);
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 20%, transparent);
+        }
+        .button {
+            padding: 12px 20px;
+            font-family: var(--font-family);
+            font-size: 0.95rem;
             font-weight: 500;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            width: 100%; /* Full width by default */
+            border-radius: var(--border-radius-md);
+            border: none;
+            cursor: pointer;
+            transition: background-color var(--transition-interactive), transform var(--transition-interactive), box-shadow var(--transition-interactive);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 1px 2px var(--shadow-color);
         }
-        .add-course-section button:hover, button.btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-         .add-course-section button:active, button.btn:active {
-            transform: translateY(0px) scale(0.98);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
+        .button:hover { transform: translateY(-1px); box-shadow: 0 3px 5px var(--shadow-strong-color); }
+        .button:active { transform: translateY(0px) scale(0.98); box-shadow: 0 1px 2px var(--shadow-color); }
 
+        .button-primary { background-color: var(--bg-button-primary); color: var(--text-button-primary); }
+        .button-primary:hover { background-color: var(--bg-button-primary-hover); }
+        .button-secondary { background-color: var(--bg-button-secondary); color: var(--text-button-secondary); border: 1px solid var(--border-primary); }
+        .button-secondary:hover { background-color: var(--bg-button-secondary-hover); }
+        .button-danger { background-color: var(--accent-danger); color: var(--text-button-primary); }
+        .button-danger:hover { background-color: color-mix(in srgb, var(--accent-danger) 85%, black); }
+        .button-success { background-color: var(--accent-success); color: var(--text-button-primary); }
+        .button-success:hover { background-color: color-mix(in srgb, var(--accent-success) 85%, black); }
+        .button-warning { background-color: var(--accent-secondary); color: var(--text-primary); } /* Yellow button text needs good contrast */
+        .button-warning:hover { background-color: color-mix(in srgb, var(--accent-secondary) 85%, black); }
+        
+        .button-small { padding: 8px 12px; font-size: 0.85rem; }
 
+        /* Add Course Section */
+        .add-course-form {
+            background-color: var(--bg-surface);
+            padding: 20px;
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            margin-bottom: 30px;
+            display: grid;
+            gap: 15px;
+            transition: background-color var(--transition-theme), box-shadow var(--transition-theme);
+        }
+        .add-course-form .form-group { display: flex; flex-direction: column; gap: 5px; }
+        .add-course-form label { font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); }
+
+        /* Course Card */
         .course-card {
-            background-color: var(--card-bg-color);
+            background-color: var(--bg-surface);
             margin-bottom: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 5px 12px var(--shadow-color);
-            overflow: hidden; 
-            transition: box-shadow var(--transition-speed) ease;
-            animation: cardEnter 0.5s ease-out forwards; /* Apply to all cards on render */
-            animation-delay: calc(var(--card-index, 0) * 0.05s); /* Stagger animation */
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            overflow: hidden;
+            transition: background-color var(--transition-theme), box-shadow var(--transition-theme), transform var(--transition-interactive);
+            animation: fadeIn 0.4s ease-out backwards; /* Backwards to apply start state before anim */
+            animation-delay: calc(var(--card-index, 0) * 0.07s);
         }
-        .course-card:hover {
-            box-shadow: 0 8px 20px color-mix(in srgb, var(--shadow-color) 150%, transparent);
-        }
+        .course-card:hover { transform: translateY(-2px); box-shadow: 0 6px 15px var(--shadow-strong-color); }
 
         .course-header {
-            padding: 15px 20px;
+            padding: 16px 20px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            transition: background-color var(--transition-speed) ease;
+            border-bottom: 1px solid var(--border-primary);
+            transition: border-color var(--transition-theme), background-color var(--transition-interactive);
         }
-        .course-header:hover {
-            background-color: color-mix(in srgb, var(--primary-accent) 5%, transparent);
+        .course-header:hover { background-color: var(--bg-surface-hover); }
+        .course-header-content { flex-grow: 1; }
+        .course-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 4px 0;
+            transition: color var(--transition-theme);
         }
-        .course-header-content {
+        .course-name-input { /* For editing name */
+            font-size: 1.2rem; font-weight: 600; padding: 6px 8px; margin: -6px 0;
             flex-grow: 1;
         }
-        .course-header h3 {
-            margin: 0 0 5px 0; /* Add some space below h3 */
-            color: var(--primary-accent);
-            font-size: 1.3em;
-            font-weight: 600;
+        .course-summary-text { font-size: 0.8rem; color: var(--text-secondary); transition: color var(--transition-theme); }
+        
+        .course-header-controls { display: flex; align-items: center; gap: 10px; }
+        .expand-toggle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            background: none; border: none; padding: 5px; cursor: pointer;
+            transition: transform var(--transition-interactive), color var(--transition-theme);
         }
-        .course-header .course-summary {
-            font-size: 0.85em;
-            color: var(--text-color);
-            font-weight: 400;
-        }
-        .expand-icon {
-            font-size: 1.2em;
-            margin-left: 10px;
-            transition: transform var(--transition-speed) cubic-bezier(0.25, 0.1, 0.25, 1);
-            color: var(--primary-accent);
-        }
-        .course-card.expanded .expand-icon {
-            transform: rotate(90deg);
-        }
+        .course-card.expanded .expand-toggle { transform: rotate(90deg); }
 
+        /* Progress Bar */
+        .progress-bar-wrapper { width: 80px; height: 8px; background-color: var(--border-primary); border-radius: 4px; overflow: hidden; transition: background-color var(--transition-theme); }
+        .progress-bar-fill { height: 100%; background-color: var(--accent-secondary); border-radius: 4px; width: 0%; transition: width 0.5s ease-out, background-color var(--transition-theme); }
 
-        .course-details {
+        /* Course Details (Collapsible Area) */
+        .course-details-content {
             max-height: 0;
             overflow: hidden;
-            padding: 0 20px; 
-            transition: max-height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1), padding 0.5s ease;
+            padding: 0 20px;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
         }
-        .course-card.expanded .course-details {
-            max-height: 1500px; 
-            padding: 20px;
-            border-top: 1px dashed var(--border-color);
+        .course-card.expanded .course-details-content {
+            max-height: 1500px; /* Sufficiently large */
+            padding: 20px 20px;
         }
+        .detail-group { margin-bottom: 25px; }
+        .detail-group h4 {
+            font-size: 1rem; font-weight: 500; color: var(--text-primary);
+            margin: 0 0 12px 0; border-bottom: 1px solid var(--border-primary); padding-bottom: 8px;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: color var(--transition-theme), border-color var(--transition-theme);
+        }
+        .detail-group h4 .small-text { font-size: 0.8rem; color: var(--text-secondary); font-weight: 400;}
 
-        .progress-bar-container-header { /* For header */
-            width: 100px; /* Smaller progress bar in header on mobile */
-            margin-left: 10px;
-        }
-        .progress-bar-container { /* For details section */
-            width: 100%;
-            background-color: var(--input-bg);
-            border-radius: 6px;
-            height: 12px;
-            margin: 8px 0 5px;
-            overflow: hidden;
-        }
-        .progress-bar {
-            height: 100%;
-            background-color: var(--secondary-accent);
-            border-radius: 6px;
-            width: 0%;
-            transition: width 0.5s ease-in-out;
-            text-align: right;
-            font-size: 0.75em; 
-            line-height: 12px;
-            color: var(--text-color);
-            font-weight: 500;
-            padding-right: 5px;
-        }
-
-        .detail-section {
-            margin-bottom: 20px;
-            padding: 15px; 
-            background-color: color-mix(in srgb, var(--bg-color) 50%, var(--card-bg-color) 50%); 
-            border-radius: 10px; 
-        }
-        .detail-section h4 {
-            margin-top: 0;
-            margin-bottom: 15px; 
-            color: var(--primary-accent);
-            font-weight: 600; 
-            font-size: 1.05em; /* Adjusted for mobile */
-            letter-spacing: 0.3px; 
-        }
-
-        .item-list { list-style: none; padding: 0; }
-        .item-list li {
+        /* Item Lists (Lectures, Homework) */
+        .item-list { list-style: none; padding: 0; margin: 0; }
+        .item-entry {
             display: flex;
-            flex-direction: column; /* Stack item content and buttons on mobile */
-            gap: 8px; /* Space between item name and buttons */
-            padding: 10px 12px;
-            background-color: var(--card-bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin-bottom: 8px;
-            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+            flex-direction: column; /* Mobile first */
+            align-items: flex-start;
+            gap: 8px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-primary);
+            transition: border-color var(--transition-theme);
+            animation: fadeIn 0.3s ease-out;
         }
-        .item-list li:hover {
-            transform: translateX(3px);
-            background-color: color-mix(in srgb, var(--secondary-accent) 10%, transparent);
-        }
-        .item-list li.completed {
-            /* Final state for completed items */
-            background-color: color-mix(in srgb, var(--success-color) 15%, transparent);
-        }
-        .item-list li.newly-completed-animation { /* Temp class for animation */
-            animation: itemCompleted 0.5s ease-out forwards;
-        }
-        .item-list li .item-name { 
-            font-weight: 400; 
-            font-size: 0.9em;
-            word-break: break-word; /* Prevent overflow */
-        }
-         .item-list li.completed .item-name {
+        .item-entry:last-child { border-bottom: none; }
+        .item-entry.completed .item-title {
             text-decoration: line-through;
-            color: color-mix(in srgb, var(--text-color) 70%, transparent);
+            color: var(--text-secondary);
+            opacity: 0.7;
         }
-        .item-list li .item-actions {
-            display: flex;
-            gap: 8px; /* Space between buttons */
-            width: 100%;
-        }
-        .item-list li .item-actions button {
-            flex-grow: 1; /* Make buttons take equal space */
-        }
+        .item-entry.animate-completion { animation: itemStateChange 0.4s ease-out; }
+
+        .item-main-content { display: flex; justify-content: space-between; align-items: center; width: 100%;}
+        .item-title { font-size: 0.9rem; font-weight: 400; color: var(--text-primary); word-break: break-word; flex-grow: 1; transition: color var(--transition-theme); }
+        .item-actions { display: flex; gap: 8px; margin-top: 8px; width: 100%; } /* Mobile: actions below */
+        .item-actions .button { flex-grow: 1; /* Buttons share space */ }
 
 
-        .form-inline {
-            display: flex;
-            flex-direction: column; /* Stack by default */
-            gap: 10px;
-            margin-bottom: 15px;
-            align-items: stretch; /* Full width inputs/buttons */
-        }
-        .form-inline .button-group { /* For side-by-side Add buttons */
-            display: flex;
-            gap: 10px;
-        }
-        .form-inline .button-group button {
-            flex-grow: 1;
-        }
+        /* Add item forms within details */
+        .add-item-form { display: grid; gap: 10px; margin-bottom: 15px; }
+        .add-item-form .button-group { display: flex; gap: 10px; }
+        .add-item-form .button-group .button { flex-grow: 1; }
 
+        /* Edit Target Lectures Form */
+        .edit-target-lectures-form { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+        .edit-target-lectures-form label { font-size: 0.85rem; color: var(--text-secondary); white-space: nowrap; }
+        .edit-target-lectures-form .input-field { width: 70px; padding: 8px 10px; text-align: center;}
 
-        button.small-btn {
-            padding: 10px 12px; /* Slightly larger for touch */
-            font-size: 0.9em;
-            font-weight: 500;
-            border-radius: 6px;
-            /* margin-left removed as flex gap handles spacing */
-            width: auto; /* Override full width from .btn if needed in specific contexts */
-        }
-        button.success-btn { background: var(--success-color); }
-        button.success-btn:hover { background: color-mix(in srgb, var(--success-color) 80%, black); }
-        button.warn-btn { background: var(--secondary-accent); color: var(--text-color); }
-        button.warn-btn:hover { background: color-mix(in srgb, var(--secondary-accent) 80%, black); }
-        button.danger-btn { background: var(--danger-color); }
-        button.danger-btn:hover { background: color-mix(in srgb, var(--danger-color) 80%, black); }
-        
-        .course-actions { text-align: center; margin-top:15px; }
-        .course-actions button.btn { width: auto; padding: 12px 30px; } /* Make delete course button not full width */
+        /* Course-level actions (delete course) */
+        .course-actions-footer { text-align: right; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-primary); transition: border-color var(--transition-theme); }
 
-        .edit-input {
-            font-size: 1.3em; /* Match H3 */
-            font-weight: 600;
-            margin: 0; /* Remove margin if it's part of flex */
-            /* width calc removed, rely on flex-grow */
+        /* Placeholder message */
+        .empty-state-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            font-weight: 300;
+            font-size: 1.1rem;
+            background-color: var(--bg-surface);
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: background-color var(--transition-theme), color var(--transition-theme), box-shadow var(--transition-theme);
         }
-        .course-header-content .edit-form { /* For editing course name */
-            display: flex;
-            gap: 10px;
-            align-items: center;
+        .empty-state-message span { font-size: 2rem; display: block; margin-bottom: 10px;}
+
+        /* Responsive Adjustments */
+        @media (min-width: 640px) { /* Small tablets and up */
+            h1 { font-size: 2rem; }
+            .add-course-form { grid-template-columns: 1fr auto; align-items: flex-end; } /* Name | Lectures | Button */
+            .add-course-form .form-group:last-child { grid-column: 1 / -1; } /* Button spans all if it's the last one */
+            .add-course-form #newCourseButton { grid-column: auto; } /* If button is not last */
+            
+            .item-entry { flex-direction: row; align-items: center; }
+            .item-actions { margin-top: 0; width: auto; }
+            .item-actions .button { flex-grow: 0; }
+
+            .add-item-form { grid-template-columns: 1fr auto; }
+            .add-item-form .button-group { grid-column: 2 / 3; }
+        }
+         @media (min-width: 400px) { /* Slightly larger phones for side-by-side add buttons */
+            .add-item-form .button-group { display: flex; gap: 10px; }
+            .add-item-form .button-group .button { flex-grow: 1; }
         }
 
-
-        /* Desktop and larger tablet styles */
-        @media (min-width: 600px) {
-            body { padding: 20px; }
-            .container { margin: 20px auto; }
-            h1 { font-size: 2.6em; margin-bottom: 35px; }
-
-            .add-course-section {
-                flex-direction: row; /* Horizontal layout for add course on desktop */
-                align-items: flex-end;
-                padding: 25px;
-            }
-            .add-course-section input[type="text"],
-            .add-course-section input[type="number"] {
-                flex-grow: 1;
-                min-width: 150px;
-            }
-            .add-course-section button { width: auto; } /* Button auto width on desktop */
-
-            .course-header { padding: 20px 25px; }
-            .course-header h3 { font-size: 1.5em; }
-            .course-header .course-summary { font-size: 0.9em; }
-            .progress-bar-container-header { width: 150px; } /* Restore size */
-
-            .course-details { padding: 0 25px; }
-            .course-card.expanded .course-details { padding: 25px; }
-            .detail-section { padding: 20px; }
-            .detail-section h4 { font-size: 1.1em; }
-
-            .item-list li {
-                flex-direction: row; /* Horizontal layout for list items */
-                align-items: center;
-                padding: 12px 15px;
-            }
-            .item-list li .item-name { font-size: 0.95em; }
-            .item-list li .item-actions { width: auto; } /* Actions don't need full width */
-
-            .form-inline {
-                flex-direction: row; /* Horizontal for lecture/hw add on desktop */
-                align-items: center;
-            }
-            .form-inline input[type="text"] { flex-grow: 1; }
-            .form-inline .button-group { width: auto; }
-            .form-inline .button-group button { width: auto; }
-
-            button.small-btn { padding: 8px 14px; font-size: 0.9em; }
-        }
 
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>My Course Tracker</h1>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Study Tracker</h1>
+            <button id="themeToggleButton" class="theme-toggle-button" title="Toggle theme">
+                <span class="theme-icon">☀️</span> </button>
+        </header>
 
-        <div class="add-course-section">
-            <input type="text" id="newCourseName" placeholder="Course Name (e.g., Web Design)">
-            <input type="number" id="newCourseLectures" placeholder="Target # of Lectures (e.g., 10)">
-            <button onclick="addCourse()">✨ Add Course</button>
-        </div>
-
-        <div id="coursesContainer">
+        <section class="add-course-form">
+            <div class="form-group">
+                <label for="newCourseName">Course Name</label>
+                <input type="text" id="newCourseName" class="input-field" placeholder="E.g., Advanced JavaScript">
             </div>
+            <div class="form-group">
+                <label for="newCourseLectures">Target Lectures</label>
+                <input type="number" id="newCourseLectures" class="input-field" placeholder="E.g., 24" min="0">
+            </div>
+            <button id="newCourseButton" class="button button-primary" onclick="addCourse()">Add Course</button>
+        </section>
+
+        <main id="coursesContainer">
+            </main>
     </div>
 
     <script>
         let courses = [];
+        const themeToggleButton = document.getElementById('themeToggleButton');
+        const themeIcon = themeToggleButton.querySelector('.theme-icon');
+
+        // --- THEME MANAGEMENT ---
+        function setPreferredTheme() {
+            const savedTheme = localStorage.getItem('studyTrackerTheme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (savedTheme) {
+                document.body.classList.toggle('dark-mode', savedTheme === 'dark');
+                updateThemeIcon(savedTheme === 'dark');
+            } else {
+                document.body.classList.toggle('dark-mode', systemPrefersDark);
+                updateThemeIcon(systemPrefersDark);
+            }
+        }
+
+        function updateThemeIcon(isDarkMode) {
+            if (themeIcon) themeIcon.textContent = isDarkMode ? '🌙' : '☀️';
+        }
+
+        themeToggleButton.addEventListener('click', () => {
+            const isDarkMode = document.body.classList.toggle('dark-mode');
+            localStorage.setItem('studyTrackerTheme', isDarkMode ? 'dark' : 'light');
+            updateThemeIcon(isDarkMode);
+        });
+
 
         // --- DATA PERSISTENCE ---
         function saveData() {
-            localStorage.setItem('poppyStudyTrackerDataV3', JSON.stringify(courses));
+            localStorage.setItem('slickStudyTrackerDataV4', JSON.stringify(courses));
         }
 
         function loadData() {
-            const data = localStorage.getItem('poppyStudyTrackerDataV3');
+            const data = localStorage.getItem('slickStudyTrackerDataV4');
             if (data) {
                 courses = JSON.parse(data);
             }
@@ -423,14 +424,13 @@
                 return;
             }
 
-            courses.unshift({ // Add to the beginning for "newest first" feel
+            courses.unshift({
                 id: generateId(),
                 name: name,
                 targetLectures: targetLectures,
                 lectures: [], 
                 homeworks: [], 
-                isEditingName: false,
-                justAdded: true // Flag for animation
+                isEditingName: false
             });
 
             nameInput.value = '';
@@ -448,16 +448,14 @@
         }
         
         function toggleEditCourseName(courseId) {
+            courses.forEach(c => c.isEditingName = (c.id === courseId) ? !c.isEditingName : false);
+            renderCourses();
             const course = courses.find(c => c.id === courseId);
-            if (course) {
-                courses.forEach(c => c.isEditingName = (c.id === courseId) ? !c.isEditingName : false);
-                renderCourses();
-                 if (course.isEditingName) {
-                    setTimeout(() => { 
-                        const inputEl = document.getElementById(`edit-name-${courseId}`);
-                        if (inputEl) inputEl.focus();
-                    }, 0);
-                }
+            if (course && course.isEditingName) {
+                setTimeout(() => { 
+                    const inputEl = document.getElementById(`edit-name-${courseId}`);
+                    if (inputEl) inputEl.focus();
+                }, 0);
             }
         }
 
@@ -465,15 +463,23 @@
             const course = courses.find(c => c.id === courseId);
             if (course && newName.trim() !== '') {
                 course.name = newName.trim();
-                course.isEditingName = false;
-                saveData();
-                renderCourses();
-            } else if (course) {
-                course.isEditingName = false; 
-                renderCourses();
-            }
+            } // If empty, revert to old name (implicitly done by not saving if newName is empty)
+            course.isEditingName = false;
+            saveData();
+            renderCourses();
         }
 
+
+        // --- LECTURE & HOMEWORK MANAGEMENT (Shared logic for animation) ---
+        function handleItemCompletionToggle(item) {
+            item.watched = !item.watched; // For lectures
+            item.completed = !item.completed; // For homework (one will be undefined, that's fine)
+            
+            if (item.watched || item.completed) {
+                item.justCompletedAnimation = true; // Flag for animation
+            }
+        }
+        
         // --- LECTURE MANAGEMENT ---
         function addLecture(courseId, markAsWatched = false) {
             const course = courses.find(c => c.id === courseId);
@@ -484,10 +490,8 @@
                 course.lectures.push({ id: generateId(), name: lectureName, watched: markAsWatched });
                 lectureNameInput.value = '';
                 saveData();
-                renderCourses();
-            } else if (!lectureName) {
-                alert("Please enter a lecture name.");
-            }
+                renderCourses(courseId); // Pass courseId to keep it expanded
+            } else if (!lectureName) { alert("Please enter a lecture name."); }
         }
 
         function toggleLectureWatched(courseId, lectureId) {
@@ -496,25 +500,21 @@
                 const lecture = course.lectures.find(l => l.id === lectureId);
                 if (lecture) {
                     lecture.watched = !lecture.watched;
-                    if(lecture.watched) { // Add animation class if just completed
-                        lecture.newlyCompleted = true;
-                    }
+                    if(lecture.watched) lecture.justCompletedAnimation = true;
                     saveData();
-                    renderCourses();
+                    renderCourses(courseId);
                 }
             }
         }
-
-        function deleteLecture(courseId, lectureId) {
+        function deleteLecture(courseId, lectureId) { /* ... similar to before ... */ 
             const course = courses.find(c => c.id === courseId);
             if (course) {
                 course.lectures = course.lectures.filter(l => l.id !== lectureId);
                 saveData();
-                renderCourses();
+                renderCourses(courseId);
             }
         }
-        
-        function updateTargetLectures(courseId) {
+        function updateTargetLectures(courseId) { /* ... similar to before ... */ 
             const course = courses.find(c => c.id === courseId);
             const inputEl = document.getElementById(`targetLecturesInput-${courseId}`);
             if (course && inputEl) {
@@ -522,9 +522,9 @@
                 if (!isNaN(newTarget) && newTarget >= 0) {
                     course.targetLectures = newTarget;
                     saveData();
-                    renderCourses(); 
+                    renderCourses(courseId); 
                 } else {
-                    alert("Please enter a valid non-negative number for target lectures.");
+                    alert("Please enter a valid non-negative number.");
                     inputEl.value = course.targetLectures; 
                 }
             }
@@ -540,59 +540,53 @@
                 course.homeworks.push({ id: generateId(), description: description, completed: markAsCompleted });
                 hwDescInput.value = '';
                 saveData();
-                renderCourses();
-            } else if(!description) {
-                alert("Please enter a homework description.");
-            }
+                renderCourses(courseId);
+            } else if(!description) { alert("Please enter a homework description."); }
         }
-
         function toggleHomeworkCompleted(courseId, homeworkId) {
             const course = courses.find(c => c.id === courseId);
             if (course) {
                 const homework = course.homeworks.find(h => h.id === homeworkId);
                 if (homework) {
                     homework.completed = !homework.completed;
-                     if(homework.completed) { // Add animation class if just completed
-                        homework.newlyCompleted = true;
-                    }
+                    if(homework.completed) homework.justCompletedAnimation = true;
                     saveData();
-                    renderCourses();
+                    renderCourses(courseId);
                 }
             }
         }
-
-        function deleteHomework(courseId, homeworkId) {
+        function deleteHomework(courseId, homeworkId) { /* ... similar to before ... */ 
             const course = courses.find(c => c.id === courseId);
             if (course) {
                 course.homeworks = course.homeworks.filter(h => h.id !== homeworkId);
                 saveData();
-                renderCourses();
+                renderCourses(courseId);
             }
         }
 
+
         // --- UI RENDERING ---
+        let globallyExpandedState = {}; // Persist expanded state across re-renders
+
         function toggleCourseDetails(courseId) {
             const courseCard = document.getElementById(`course-${courseId}`);
             if (courseCard) {
-                courseCard.classList.toggle('expanded');
+                const isExpanding = !courseCard.classList.contains('expanded');
+                courseCard.classList.toggle('expanded', isExpanding);
+                globallyExpandedState[courseId] = isExpanding;
             }
         }
 
-        function renderCourses() {
+        function renderCourses(focusedCourseId = null) {
             const container = document.getElementById('coursesContainer');
-            const currentlyExpanded = {}; 
-            document.querySelectorAll('.course-card.expanded').forEach(card => {
-                currentlyExpanded[card.id.split('-')[1]] = true;
-            });
-
             container.innerHTML = ''; 
 
             if (courses.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color: var(--text-color); font-weight: 300; font-size: 1.1em;">No courses added yet. Add one to get started! 🎉</p>';
+                container.innerHTML = '<div class="empty-state-message"><span>📚</span>No courses yet. Add one to start tracking!</div>';
                 return;
             }
 
-            courses.forEach((course, index) => { // Added index for stagger animation
+            courses.forEach((course, index) => {
                 const watchedLecturesCount = course.lectures.filter(l => l.watched).length;
                 const lectureProgress = course.targetLectures > 0 ? (watchedLecturesCount / course.targetLectures) * 100 : 0;
                 const completedHomeworkCount = course.homeworks.filter(h => h.completed).length;
@@ -600,125 +594,119 @@
                 const courseCard = document.createElement('div');
                 courseCard.className = 'course-card';
                 courseCard.id = `course-${course.id}`;
-                courseCard.style.setProperty('--card-index', index); // For stagger animation
+                courseCard.style.setProperty('--card-index', index); 
 
-                if (course.justAdded) {
-                    // courseCard.classList.add('newly-added-animation'); // If you want a specific anim for new cards
-                    delete course.justAdded; // Remove flag after use
-                }
-                if (currentlyExpanded[course.id]) { 
+                if (globallyExpandedState[course.id] || (focusedCourseId === course.id && !globallyExpandedState.hasOwnProperty(course.id))) {
                     courseCard.classList.add('expanded');
+                    globallyExpandedState[course.id] = true; // Ensure it's set
                 }
 
-                let courseNameDisplay;
+
+                let courseNameHTML;
                 if (course.isEditingName) {
-                    courseNameDisplay = `
-                        <div class="edit-form">
-                            <input type="text" class="edit-input" id="edit-name-${course.id}" value="${course.name}" 
+                    courseNameHTML = `
+                        <div class="course-header-content edit-form">
+                            <input type="text" id="edit-name-${course.id}" class="input-field course-name-input" value="${course.name}" 
                                    onblur="saveCourseName('${course.id}', this.value)" 
                                    onkeypress="if(event.key==='Enter') {this.blur(); event.preventDefault();}"
                                    onclick="event.stopPropagation();">
-                            <button class="btn small-btn success-btn" onclick="event.stopPropagation(); saveCourseName('${course.id}', document.getElementById('edit-name-${course.id}').value)">Save</button>
+                            <button class="button button-small button-success" onclick="event.stopPropagation(); saveCourseName('${course.id}', document.getElementById('edit-name-${course.id}').value)">Save</button>
                         </div>`;
                 } else {
-                     courseNameDisplay = `<h3 ondblclick="event.stopPropagation(); toggleEditCourseName('${course.id}')" title="Double-click to edit name">${course.name}</h3>`;
+                     courseNameHTML = `
+                        <div class="course-header-content">
+                            <h3 class="course-name" ondblclick="event.stopPropagation(); toggleEditCourseName('${course.id}')" title="Double-click to edit name">${course.name}</h3>
+                            <p class="course-summary-text">Lectures: ${watchedLecturesCount}/${course.targetLectures} | Homework: ${completedHomeworkCount}</p>
+                        </div>`;
                 }
 
                 courseCard.innerHTML = `
-                    <div class="course-header" onclick="toggleCourseDetails('${course.id}')">
-                        <div class="course-header-content">
-                            ${courseNameDisplay}
-                            <div class="course-summary">
-                                Lectures: ${watchedLecturesCount} / ${course.targetLectures} | Homework Done: ${completedHomeworkCount}
-                            </div>
+                    <header class="course-header" onclick="toggleCourseDetails('${course.id}')">
+                        ${courseNameHTML}
+                        <div class="course-header-controls">
+                            <div class="progress-bar-wrapper"><div class="progress-bar-fill" style="width: ${lectureProgress.toFixed(0)}%;"></div></div>
+                            <button class="expand-toggle" title="Expand/Collapse">▶</button>
                         </div>
-                        <div class="progress-bar-container-header">
-                            <div class="progress-bar" style="width: ${lectureProgress.toFixed(0)}%;">${lectureProgress.toFixed(0)}%</div>
-                        </div>
-                        <span class="expand-icon">▶</span>
-                    </div>
-                    <div class="course-details">
-                        <div class="detail-section">
-                            <h4>Lectures (${watchedLecturesCount} / ${course.targetLectures}) 
-                                <button class="btn small-btn warn-btn" style="font-size:0.75em; padding: 4px 8px;" onclick="event.stopPropagation(); document.getElementById('targetLecturesInput-${course.id}').focus();">Edit Target</button>
+                    </header>
+                    <section class="course-details-content">
+                        <div class="detail-group">
+                            <h4>
+                                <span>Lectures</span>
+                                <span class="small-text">${watchedLecturesCount} / ${course.targetLectures} Watched</span>
                             </h4>
-                            <div class="form-inline">
-                                <label for="targetLecturesInput-${course.id}" style="font-size:0.9em; white-space:nowrap; font-weight:500;">Target Lectures: </label>
-                                <input type="number" id="targetLecturesInput-${course.id}" value="${course.targetLectures}" min="0" onchange="updateTargetLectures('${course.id}')" style="width: 70px; padding: 8px 10px;">
-                            </div>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar" style="width: ${lectureProgress.toFixed(0)}%;">${lectureProgress.toFixed(0)}%</div>
-                            </div>
-                            <div class="form-inline" style="margin-top:15px;">
-                                <input type="text" id="lectureName-${course.id}" placeholder="New Lecture Name/Number">
+                            <form class="edit-target-lectures-form" onsubmit="event.preventDefault(); updateTargetLectures('${course.id}');">
+                                <label for="targetLecturesInput-${course.id}">Target:</label>
+                                <input type="number" id="targetLecturesInput-${course.id}" class="input-field" value="${course.targetLectures}" min="0">
+                                <button type="submit" class="button button-small button-secondary">Set</button>
+                            </form>
+                            <form class="add-item-form" onsubmit="event.preventDefault();">
+                                <input type="text" id="lectureName-${course.id}" class="input-field" placeholder="New Lecture Title">
                                 <div class="button-group">
-                                    <button class="btn small-btn" onclick="addLecture('${course.id}')">Add</button>
-                                    <button class="btn small-btn success-btn" onclick="addLecture('${course.id}', true)">Add & Watched</button>
+                                    <button class="button button-secondary" onclick="addLecture('${course.id}')">Add</button>
+                                    <button class="button button-success" onclick="addLecture('${course.id}', true)">Add & Watched</button>
                                 </div>
-                            </div>
-                            <ul class="item-list" id="lectureList-${course.id}">
+                            </form>
+                            <ul class="item-list">
                                 ${course.lectures.map(lec => {
-                                    let animationClass = '';
-                                    if (lec.newlyCompleted) {
-                                        animationClass = 'newly-completed-animation';
-                                        delete lec.newlyCompleted; // Clear flag after use
-                                    }
-                                    return `<li class="${lec.watched ? 'completed' : ''} ${animationClass}">
-                                        <span class="item-name">${lec.name}</span>
+                                    const animClass = lec.justCompletedAnimation ? 'animate-completion' : '';
+                                    if(lec.justCompletedAnimation) delete lec.justCompletedAnimation;
+                                    return `<li class="item-entry ${lec.watched ? 'completed' : ''} ${animClass}">
+                                        <div class="item-main-content"><span class="item-title">${lec.name}</span></div>
                                         <div class="item-actions">
-                                            <button class="btn small-btn ${lec.watched ? 'warn-btn' : 'success-btn'}" onclick="toggleLectureWatched('${course.id}', '${lec.id}')">${lec.watched ? 'Unwatch' : 'Watched'}</button>
-                                            <button class="btn small-btn danger-btn" onclick="deleteLecture('${course.id}', '${lec.id}')">Del</button>
+                                            <button class="button button-small ${lec.watched ? 'button-warning' : 'button-success'}" onclick="toggleLectureWatched('${course.id}', '${lec.id}')">${lec.watched ? 'Unwatch' : 'Watched'}</button>
+                                            <button class="button button-small button-danger" onclick="deleteLecture('${course.id}', '${lec.id}')">Delete</button>
                                         </div>
-                                    </li>`
+                                    </li>`;
                                 }).join('')}
                             </ul>
                         </div>
 
-                        <div class="detail-section">
-                            <h4>Homework (${completedHomeworkCount} done)</h4>
-                             <div class="form-inline">
-                                <input type="text" id="homeworkDesc-${course.id}" placeholder="New Homework Description/Number">
+                        <div class="detail-group">
+                            <h4>
+                                <span>Homework</span>
+                                <span class="small-text">${completedHomeworkCount} Done</span>
+                            </h4>
+                            <form class="add-item-form" onsubmit="event.preventDefault();">
+                                <input type="text" id="homeworkDesc-${course.id}" class="input-field" placeholder="New Homework Description">
                                 <div class="button-group">
-                                    <button class="btn small-btn" onclick="addHomework('${course.id}')">Add</button>
-                                    <button class="btn small-btn success-btn" onclick="addHomework('${course.id}', true)">Add & Done</button>
+                                    <button class="button button-secondary" onclick="addHomework('${course.id}')">Add</button>
+                                    <button class="button button-success" onclick="addHomework('${course.id}', true)">Add & Done</button>
                                 </div>
-                            </div>
-                            <ul class="item-list" id="homeworkList-${course.id}">
+                            </form>
+                            <ul class="item-list">
                                 ${course.homeworks.map(hw => {
-                                    let animationClass = '';
-                                    if (hw.newlyCompleted) {
-                                        animationClass = 'newly-completed-animation';
-                                        delete hw.newlyCompleted; // Clear flag after use
-                                    }
-                                   return `<li class="${hw.completed ? 'completed' : ''} ${animationClass}">
-                                        <span class="item-name">${hw.description}</span>
+                                    const animClass = hw.justCompletedAnimation ? 'animate-completion' : '';
+                                    if(hw.justCompletedAnimation) delete hw.justCompletedAnimation;
+                                    return `<li class="item-entry ${hw.completed ? 'completed' : ''} ${animClass}">
+                                        <div class="item-main-content"><span class="item-title">${hw.description}</span></div>
                                         <div class="item-actions">
-                                            <button class="btn small-btn ${hw.completed ? 'warn-btn' : 'success-btn'}" onclick="toggleHomeworkCompleted('${course.id}', '${hw.id}')">${hw.completed ? 'Undo' : 'Done'}</button>
-                                            <button class="btn small-btn danger-btn" onclick="deleteHomework('${course.id}', '${hw.id}')">Del</button>
+                                            <button class="button button-small ${hw.completed ? 'button-warning' : 'button-success'}" onclick="toggleHomeworkCompleted('${course.id}', '${hw.id}')">${hw.completed ? 'Undo' : 'Done'}</button>
+                                            <button class="button button-small button-danger" onclick="deleteHomework('${course.id}', '${hw.id}')">Delete</button>
                                         </div>
-                                    </li>`
+                                    </li>`;
                                 }).join('')}
                             </ul>
                         </div>
-                        <div class="course-actions">
-                            <button class="btn danger-btn" onclick="deleteCourse('${course.id}')">Delete This Course</button>
-                        </div>
-                    </div>
+                        <footer class="course-actions-footer">
+                            <button class="button button-danger" onclick="deleteCourse('${course.id}')">Delete Course</button>
+                        </footer>
+                    </section>
                 `;
                 container.appendChild(courseCard);
             });
-             // Clear all newlyCompleted flags after render to prevent re-animation on non-state-changing re-renders
+             // Clean up animation flags after rendering
             courses.forEach(course => {
-                course.lectures.forEach(l => delete l.newlyCompleted);
-                course.homeworks.forEach(h => delete h.newlyCompleted);
+                course.lectures.forEach(l => delete l.justCompletedAnimation);
+                course.homeworks.forEach(h => delete h.justCompletedAnimation);
             });
         }
 
         // --- INITIALIZATION ---
-        window.onload = () => {
+        document.addEventListener('DOMContentLoaded', () => {
+            setPreferredTheme(); // Set theme ASAP
             loadData();
             renderCourses();
-        };
+        });
     </script>
 
 </body>
