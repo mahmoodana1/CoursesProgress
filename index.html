@@ -5,6 +5,180 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vibrant Study Tracker</title>
   <style>
+    /* Mobile-specific modern styles */
+@media (max-width: 639px) {
+    :root {
+        /* Modern color palette */
+        --mobile-primary: #6c5ce7;
+        --mobile-primary-dark: #5b4cdb;
+        --mobile-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --mobile-surface: rgba(255, 255, 255, 0.95);
+        --mobile-accent: #6c5ce7;
+        --mobile-success: #00b894;
+        --mobile-danger: #ff7675;
+        --mobile-shadow: rgba(98, 0, 238, 0.1);
+        --mobile-text: #2d3436;
+        --mobile-text-secondary: #636e72;
+        --container-padding: 16px;
+    }
+    
+    body {
+        padding: var(--container-padding);
+        background: var(--mobile-gradient);
+        background-attachment: fixed;
+    }
+
+    .app-container {
+        padding: 0;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .app-header {
+        background: var(--mobile-surface);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 20px;
+        margin: 0 0 20px 0;
+        padding: 20px;
+        box-shadow: 0 8px 20px var(--mobile-shadow);
+    }
+
+    .app-header h1 {
+        font-size: 2rem;
+        font-weight: 800;
+        background: var(--mobile-gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .add-course-form {
+        background: var(--mobile-surface);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 8px 20px var(--mobile-shadow);
+    }
+
+    .input-field {
+        background: white;
+        border: none;
+        padding: 16px;
+        border-radius: 12px;
+        font-size: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .input-field:focus {
+        box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
+    }
+
+    .button {
+        background: var(--mobile-accent);
+        color: white;
+        padding: 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 12px rgba(108, 92, 231, 0.2);
+    }
+
+    .button-success {
+        background: var(--mobile-success);
+    }
+
+    .button-danger {
+        background: var(--mobile-danger);
+    }
+
+    .course-card {
+        background: var(--mobile-surface);
+        border-radius: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 20px var(--mobile-shadow);
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .course-header {
+        padding: 20px;
+        border-bottom: 1px solid rgba(108, 92, 231, 0.1);
+    }
+
+    .course-name {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--mobile-text);
+        margin-bottom: 8px;
+    }
+
+    .course-summary-text {
+        color: var(--mobile-text-secondary);
+        font-size: 0.9rem;
+    }
+
+    .progress-bar-wrapper {
+        background: rgba(108, 92, 231, 0.1);
+        border-radius: 8px;
+    }
+
+    .progress-bar-fill {
+        background: var(--mobile-gradient);
+        border-radius: 8px;
+    }
+
+    .course-details-content {
+        padding: 20px;
+    }
+
+    .detail-group h4 {
+        color: var(--mobile-accent);
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid rgba(108, 92, 231, 0.2);
+    }
+
+    .item-entry {
+        background: rgba(255, 255, 255, 0.5);
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 10px;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+    }
+
+    .item-title {
+        color: var(--mobile-text);
+        font-weight: 500;
+    }
+
+    .item-actions {
+        margin-top: 12px;
+        display: flex;
+        gap: 8px;
+    }
+
+    .notes-actions {
+        margin-top: 15px;
+        text-align: right;
+    }
+
+    .course-actions-footer {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(108, 92, 231, 0.1);
+        text-align: center;
+    }
+}
+    
+    @import url('mobile-styles.css');
     :root {
       /* Light Mode - Premium Vibrant */
       --bg-main-gradient: linear-gradient(135deg, #a1ffce 0%, #faffd1 100%);
@@ -738,17 +912,46 @@
         /* Responsive Adjustments */
         @media (max-width: 639px) {
             :root {
-                --container-padding: 20px;
+                /* Mobile-specific modern colors */
+                --mobile-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                --mobile-surface: rgba(255, 255, 255, 0.95);
+                --mobile-surface-hover: #ffffff;
+                --mobile-accent: #6c5ce7;
+                --mobile-accent-hover: #5b4cdb;
+                --mobile-success: #00b894;
+                --mobile-danger: #ff7675;
+                --mobile-warning: #ffeaa7;
+                --mobile-shadow: rgba(98, 0, 238, 0.1);
+                --mobile-radius: 16px;
+                --container-padding: 16px;
             }
             
             body {
                 padding: var(--container-padding);
+                background-image: var(--mobile-gradient);
             }
 
             .app-container {
                 padding: 0;
                 width: 100%;
                 max-width: 100%;
+            }
+
+            /* Modern mobile header */
+            .app-header {
+                background: var(--mobile-surface);
+                margin: 0 0 20px 0;
+                padding: 20px;
+                border-radius: var(--mobile-radius);
+                box-shadow: 0 8px 20px var(--mobile-shadow);
+            }
+
+            .app-header h1 {
+                font-size: 1.8rem;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                font-weight: 800;
             }
 
             .add-course-form {
