@@ -738,7 +738,7 @@
         /* Responsive Adjustments */
         @media (max-width: 639px) {
             :root {
-                --container-padding: 16px;
+                --container-padding: 20px;
             }
             
             body {
@@ -748,12 +748,48 @@
             .app-container {
                 padding: 0;
                 width: 100%;
+                max-width: 100%;
+            }
+
+            .add-course-form {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 25px;
+            }
+
+            .item-actions {
+                display: flex;
+                gap: 10px;
+            }
+
+            .button {
+                padding: 12px 24px;
+                font-size: 0.95rem;
+                min-height: 44px;
+            }
+
+            .add-item-form .button-group {
+                display: flex;
+                gap: 10px;
+            }
+
+            .course-card {
+                margin-bottom: 25px;
+            }
+
+            .course-header {
+                padding: 20px 25px;
+            }
+
+            .course-name {
+                font-size: 1.35rem;
             }
 
             .app-header {
-                margin-bottom: 24px;
-                padding: 16px;
-                border-radius: var(--border-radius-md);
+                margin-bottom: 30px;
+                padding: 20px;
+                border-radius: var(--border-radius-lg);
             }
 
             .add-course-form {
@@ -815,7 +851,28 @@
             }
 
             .course-actions-footer {
-                text-align: center;
+                text-align: right;
+                margin-top: 25px;
+                padding-top: 25px;
+            }
+
+            .item-entry {
+                padding: 15px 0;
+                flex-direction: row;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .item-actions {
+                margin-top: 0;
+                width: auto;
+            }
+
+            .add-item-form {
+                display: grid;
+                grid-template-columns: 1fr auto auto;
+                gap: 15px;
+                align-items: start;
             }
         }
 
