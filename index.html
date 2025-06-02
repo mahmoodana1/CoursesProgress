@@ -8,20 +8,20 @@
     :root {
       /* Light Mode - Premium Vibrant */
       --bg-main-gradient: linear-gradient(135deg, #a1ffce 0%, #faffd1 100%);
-      --bg-surface: rgba(255, 255, 255, 0.75);
-      --bg-surface-hover: rgba(255, 255, 255, 0.9);
-      --bg-input: rgba(255, 255, 255, 0.6);
-      --text-primary: #1e2a38;
-      --text-secondary: #3a4a5a;
-      --text-placeholder: #9ca6af;
-      --border-primary: rgba(30, 42, 56, 0.2);
-      --border-input: rgba(30, 42, 56, 0.3);
+      --bg-surface: rgba(255, 255, 255, 0.85);
+      --bg-surface-hover: rgba(255, 255, 255, 0.95);
+      --bg-input: rgba(255, 255, 255, 0.75);
+      --text-primary: #1a1f36;
+      --text-secondary: #4a5568;
+      --text-placeholder: #a0aec0;
+      --border-primary: rgba(26, 31, 54, 0.15);
+      --border-input: rgba(26, 31, 54, 0.2);
       --border-input-focus: var(--accent-primary);
-      --accent-primary: #ff6f91;
-      --accent-primary-hover: #ff4d6d;
-      --accent-secondary: #ffde59;
-      --accent-success: #3fe1b0;
-      --accent-danger: #ff4d4f;
+      --accent-primary: #ff6b6b;
+      --accent-primary-hover: #ff5252;
+      --accent-secondary: #ffd93d;
+      --accent-success: #4fd1c5;
+      --accent-danger: #fc8181;
       --text-on-accent: #ffffff;
       --shadow-color: rgba(50, 50, 93, 0.1);
       --shadow-strong-color: rgba(50, 50, 93, 0.2);
@@ -31,23 +31,24 @@
       --border-radius-lg: 18px;
       --transition-theme: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-interactive: 0.2s ease-out;
+      --container-padding: 24px;
     }
 
     body.dark-mode {
       /* Dark Mode - Elegant Night */
       --bg-main-gradient: linear-gradient(135deg, #1a2a3a 0%, #1f1f47 100%);
-      --bg-surface: rgba(35, 38, 52, 0.75);
-      --bg-surface-hover: rgba(45, 48, 65, 0.9);
-      --bg-input: rgba(25, 27, 36, 0.6);
-      --text-primary: #f1f2f6;
-      --text-secondary: #d6acff;
-      --text-placeholder: #a3a3a3;
-      --border-primary: rgba(214, 172, 255, 0.2);
-      --border-input: rgba(214, 172, 255, 0.3);
+      --bg-surface: rgba(35, 38, 52, 0.85);
+      --bg-surface-hover: rgba(45, 48, 65, 0.95);
+      --bg-input: rgba(25, 27, 36, 0.75);
+      --text-primary: #f7fafc;
+      --text-secondary: #e2e8f0;
+      --text-placeholder: #a0aec0;
+      --border-primary: rgba(226, 232, 240, 0.15);
+      --border-input: rgba(226, 232, 240, 0.2);
       --border-input-focus: var(--accent-primary);
       --accent-primary: #ff79c6;
       --accent-primary-hover: #ff5eb7;
-      --accent-secondary: #f7f18c;
+      --accent-secondary: #f1fa8c;
       --accent-success: #50fa7b;
       --accent-danger: #ff5555;
       --text-on-accent: #282a36;
@@ -196,14 +197,477 @@
 
         /* Course Card */
         .course-card {
-            background-color: var(--bg-surface); margin-bottom: 25px; border-radius: var(--border-radius-lg);
-            box-shadow: 0 6px 20px var(--shadow-color); overflow: hidden;
+            background-color: var(--bg-surface); 
+            margin-bottom: 25px; 
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 6px 20px var(--shadow-color); 
+            overflow: hidden;
             transition: background-color var(--transition-theme), box-shadow var(--transition-theme), transform var(--transition-interactive);
-            animation: fadeInScaleUp 0.5s ease-out backwards; animation-delay: calc(var(--card-index, 0) * 0.08s);
+            animation: fadeInScaleUp 0.5s ease-out backwards; 
+            animation-delay: calc(var(--card-index, 0) * 0.08s);
         }
-        .course-card:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 8px 25px var(--shadow-strong-color); }
+        .course-card:hover { 
+            transform: translateY(-4px) scale(1.01); 
+            box-shadow: 0 8px 25px var(--shadow-strong-color); 
+        }
         .course-header {
-            padding: 20px 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 25px; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid var(--border-primary);
+            transition: border-color var(--transition-theme), background-color var(--transition-interactive);
+        }
+        h1 {
+            font-size: 1.75rem; /* Slightly adjusted */
+            font-weight: 700; /* Bolder */
+            color: var(--text-primary);
+            margin: 0;
+            letter-spacing: -0.5px;
+            padding-left: 10px;
+        }
+        .theme-toggle-button {
+            background-color: transparent; /* Transparent bg, rely on icon color */
+            color: var(--text-secondary);
+            border: 2px solid var(--border-primary);
+            padding: 8px;
+            width: 44px; height: 44px; /* Make it circular */
+            border-radius: 50%; /* Circular button */
+            cursor: pointer;
+            font-size: 1.2rem; /* Larger icon */
+            transition: color var(--transition-theme), border-color var(--transition-theme), transform var(--transition-interactive);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-toggle-button:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        /* Form Elements */
+        .input-field, .textarea-field {
+            width: 100%; padding: 14px 18px; /* More padding */
+            font-family: var(--font-family); font-size: 1rem; font-weight: 400;
+            color: var(--text-primary); background-color: var(--bg-input);
+            border: 1px solid var(--border-input);
+            border-radius: var(--border-radius-md);
+            transition: all var(--transition-interactive); /* Smooth transition for all props */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03) inset;
+        }
+        .input-field::placeholder, .textarea-field::placeholder { color: var(--text-placeholder); font-weight: 300; }
+        .input-field:focus, .textarea-field:focus {
+            outline: none; border-color: var(--border-input-focus);
+            background-color: var(--bg-surface); /* Lighten on focus */
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 25%, transparent), 0 2px 6px var(--shadow-color);
+        }
+        .textarea-field { min-height: 120px; resize: vertical; white-space: pre-wrap; }
+        .textarea-field:read-only {
+            background-color: transparent; /* Fully transparent when readonly */
+            border-color: transparent; 
+            box-shadow: none; padding-left: 0; padding-right: 0;
+            color: var(--text-secondary);
+            opacity: 1;
+        }
+        .textarea-field:read-only:focus { box-shadow: none; }
+
+
+        .button {
+            padding: 12px 24px; /* Adjusted padding */
+            font-family: var(--font-family); font-size: 0.95rem; font-weight: 600; /* Bolder button text */
+            border-radius: var(--border-radius-md); border: none; cursor: pointer;
+            transition: all var(--transition-interactive);
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            text-transform: uppercase; /* Modern touch */
+            letter-spacing: 0.5px;
+            box-shadow: 0 3px 6px var(--shadow-color);
+        }
+        .button:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 5px 10px var(--shadow-strong-color); }
+        .button:active { transform: translateY(0px) scale(0.99); box-shadow: 0 2px 4px var(--shadow-color); }
+
+        .button-primary { background-color: var(--accent-primary); color: var(--text-on-accent); }
+        .button-primary:hover { background-color: var(--accent-primary-hover); }
+        .button-secondary { background-color: var(--bg-surface); color: var(--accent-primary); border: 2px solid var(--accent-primary); }
+        .button-secondary:hover { background-color: color-mix(in srgb, var(--accent-primary) 10%, transparent); border-color: var(--accent-primary-hover); }
+        .button-danger { background-color: var(--accent-danger); color: var(--text-on-accent); }
+        .button-danger:hover { background-color: color-mix(in srgb, var(--accent-danger) 85%, black); }
+        .button-success { background-color: var(--accent-success); color: var(--text-on-accent); }
+        .button-success:hover { background-color: color-mix(in srgb, var(--accent-success) 85%, black); }
+        .button-warning { background-color: var(--accent-secondary); color: #333; } /* Ensure contrast */
+        .button-warning:hover { background-color: color-mix(in srgb, var(--accent-secondary) 85%, black); }
+        .button-small { padding: 10px 16px; font-size: 0.8rem; }
+
+        /* Add Course Section */
+        .add-course-form {
+            background-color: var(--bg-surface); padding: 25px; border-radius: var(--border-radius-lg);
+            box-shadow: 0 6px 20px var(--shadow-strong-color); margin-bottom: 40px; display: grid; gap: 20px;
+            transition: background-color var(--transition-theme), box-shadow var(--transition-theme);
+        }
+        .add-course-form .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .add-course-form label { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
+
+        /* Course Card */
+        .course-card {
+            background-color: var(--bg-surface); 
+            margin-bottom: 25px; 
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 6px 20px var(--shadow-color); 
+            overflow: hidden;
+            transition: background-color var(--transition-theme), box-shadow var(--transition-theme), transform var(--transition-interactive);
+            animation: fadeInScaleUp 0.5s ease-out backwards; 
+            animation-delay: calc(var(--card-index, 0) * 0.08s);
+        }
+        .course-card:hover { 
+            transform: translateY(-4px) scale(1.01); 
+            box-shadow: 0 8px 25px var(--shadow-strong-color); 
+        }
+        .course-header {
+            padding: 20px 25px; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid var(--border-primary);
+            transition: border-color var(--transition-theme), background-color var(--transition-interactive);
+        }
+        h1 {
+            font-size: 1.75rem; /* Slightly adjusted */
+            font-weight: 700; /* Bolder */
+            color: var(--text-primary);
+            margin: 0;
+            letter-spacing: -0.5px;
+            padding-left: 10px;
+        }
+        .theme-toggle-button {
+            background-color: transparent; /* Transparent bg, rely on icon color */
+            color: var(--text-secondary);
+            border: 2px solid var(--border-primary);
+            padding: 8px;
+            width: 44px; height: 44px; /* Make it circular */
+            border-radius: 50%; /* Circular button */
+            cursor: pointer;
+            font-size: 1.2rem; /* Larger icon */
+            transition: color var(--transition-theme), border-color var(--transition-theme), transform var(--transition-interactive);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-toggle-button:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        /* Form Elements */
+        .input-field, .textarea-field {
+            width: 100%; padding: 14px 18px; /* More padding */
+            font-family: var(--font-family); font-size: 1rem; font-weight: 400;
+            color: var(--text-primary); background-color: var(--bg-input);
+            border: 1px solid var(--border-input);
+            border-radius: var(--border-radius-md);
+            transition: all var(--transition-interactive); /* Smooth transition for all props */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03) inset;
+        }
+        .input-field::placeholder, .textarea-field::placeholder { color: var(--text-placeholder); font-weight: 300; }
+        .input-field:focus, .textarea-field:focus {
+            outline: none; border-color: var(--border-input-focus);
+            background-color: var(--bg-surface); /* Lighten on focus */
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 25%, transparent), 0 2px 6px var(--shadow-color);
+        }
+        .textarea-field { min-height: 120px; resize: vertical; white-space: pre-wrap; }
+        .textarea-field:read-only {
+            background-color: transparent; /* Fully transparent when readonly */
+            border-color: transparent; 
+            box-shadow: none; padding-left: 0; padding-right: 0;
+            color: var(--text-secondary);
+            opacity: 1;
+        }
+        .textarea-field:read-only:focus { box-shadow: none; }
+
+
+        .button {
+            padding: 12px 24px; /* Adjusted padding */
+            font-family: var(--font-family); font-size: 0.95rem; font-weight: 600; /* Bolder button text */
+            border-radius: var(--border-radius-md); border: none; cursor: pointer;
+            transition: all var(--transition-interactive);
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            text-transform: uppercase; /* Modern touch */
+            letter-spacing: 0.5px;
+            box-shadow: 0 3px 6px var(--shadow-color);
+        }
+        .button:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 5px 10px var(--shadow-strong-color); }
+        .button:active { transform: translateY(0px) scale(0.99); box-shadow: 0 2px 4px var(--shadow-color); }
+
+        .button-primary { background-color: var(--accent-primary); color: var(--text-on-accent); }
+        .button-primary:hover { background-color: var(--accent-primary-hover); }
+        .button-secondary { background-color: var(--bg-surface); color: var(--accent-primary); border: 2px solid var(--accent-primary); }
+        .button-secondary:hover { background-color: color-mix(in srgb, var(--accent-primary) 10%, transparent); border-color: var(--accent-primary-hover); }
+        .button-danger { background-color: var(--accent-danger); color: var(--text-on-accent); }
+        .button-danger:hover { background-color: color-mix(in srgb, var(--accent-danger) 85%, black); }
+        .button-success { background-color: var(--accent-success); color: var(--text-on-accent); }
+        .button-success:hover { background-color: color-mix(in srgb, var(--accent-success) 85%, black); }
+        .button-warning { background-color: var(--accent-secondary); color: #333; } /* Ensure contrast */
+        .button-warning:hover { background-color: color-mix(in srgb, var(--accent-secondary) 85%, black); }
+        .button-small { padding: 10px 16px; font-size: 0.8rem; }
+
+        /* Add Course Section */
+        .add-course-form {
+            background-color: var(--bg-surface); padding: 25px; border-radius: var(--border-radius-lg);
+            box-shadow: 0 6px 20px var(--shadow-strong-color); margin-bottom: 40px; display: grid; gap: 20px;
+            transition: background-color var(--transition-theme), box-shadow var(--transition-theme);
+        }
+        .add-course-form .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .add-course-form label { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
+
+        /* Course Card */
+        .course-card {
+            background-color: var(--bg-surface); 
+            margin-bottom: 25px; 
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 6px 20px var(--shadow-color); 
+            overflow: hidden;
+            transition: background-color var(--transition-theme), box-shadow var(--transition-theme), transform var(--transition-interactive);
+            animation: fadeInScaleUp 0.5s ease-out backwards; 
+            animation-delay: calc(var(--card-index, 0) * 0.08s);
+        }
+        .course-card:hover { 
+            transform: translateY(-4px) scale(1.01); 
+            box-shadow: 0 8px 25px var(--shadow-strong-color); 
+        }
+        .course-header {
+            padding: 20px 25px; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid var(--border-primary);
+            transition: border-color var(--transition-theme), background-color var(--transition-interactive);
+        }
+        h1 {
+            font-size: 1.75rem; /* Slightly adjusted */
+            font-weight: 700; /* Bolder */
+            color: var(--text-primary);
+            margin: 0;
+            letter-spacing: -0.5px;
+            padding-left: 10px;
+        }
+        .theme-toggle-button {
+            background-color: transparent; /* Transparent bg, rely on icon color */
+            color: var(--text-secondary);
+            border: 2px solid var(--border-primary);
+            padding: 8px;
+            width: 44px; height: 44px; /* Make it circular */
+            border-radius: 50%; /* Circular button */
+            cursor: pointer;
+            font-size: 1.2rem; /* Larger icon */
+            transition: color var(--transition-theme), border-color var(--transition-theme), transform var(--transition-interactive);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-toggle-button:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        /* Form Elements */
+        .input-field, .textarea-field {
+            width: 100%; padding: 14px 18px; /* More padding */
+            font-family: var(--font-family); font-size: 1rem; font-weight: 400;
+            color: var(--text-primary); background-color: var(--bg-input);
+            border: 1px solid var(--border-input);
+            border-radius: var(--border-radius-md);
+            transition: all var(--transition-interactive); /* Smooth transition for all props */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03) inset;
+        }
+        .input-field::placeholder, .textarea-field::placeholder { color: var(--text-placeholder); font-weight: 300; }
+        .input-field:focus, .textarea-field:focus {
+            outline: none; border-color: var(--border-input-focus);
+            background-color: var(--bg-surface); /* Lighten on focus */
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 25%, transparent), 0 2px 6px var(--shadow-color);
+        }
+        .textarea-field { min-height: 120px; resize: vertical; white-space: pre-wrap; }
+        .textarea-field:read-only {
+            background-color: transparent; /* Fully transparent when readonly */
+            border-color: transparent; 
+            box-shadow: none; padding-left: 0; padding-right: 0;
+            color: var(--text-secondary);
+            opacity: 1;
+        }
+        .textarea-field:read-only:focus { box-shadow: none; }
+
+
+        .button {
+            padding: 12px 24px; /* Adjusted padding */
+            font-family: var(--font-family); font-size: 0.95rem; font-weight: 600; /* Bolder button text */
+            border-radius: var(--border-radius-md); border: none; cursor: pointer;
+            transition: all var(--transition-interactive);
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            text-transform: uppercase; /* Modern touch */
+            letter-spacing: 0.5px;
+            box-shadow: 0 3px 6px var(--shadow-color);
+        }
+        .button:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 5px 10px var(--shadow-strong-color); }
+        .button:active { transform: translateY(0px) scale(0.99); box-shadow: 0 2px 4px var(--shadow-color); }
+
+        .button-primary { background-color: var(--accent-primary); color: var(--text-on-accent); }
+        .button-primary:hover { background-color: var(--accent-primary-hover); }
+        .button-secondary { background-color: var(--bg-surface); color: var(--accent-primary); border: 2px solid var(--accent-primary); }
+        .button-secondary:hover { background-color: color-mix(in srgb, var(--accent-primary) 10%, transparent); border-color: var(--accent-primary-hover); }
+        .button-danger { background-color: var(--accent-danger); color: var(--text-on-accent); }
+        .button-danger:hover { background-color: color-mix(in srgb, var(--accent-danger) 85%, black); }
+        .button-success { background-color: var(--accent-success); color: var(--text-on-accent); }
+        .button-success:hover { background-color: color-mix(in srgb, var(--accent-success) 85%, black); }
+        .button-warning { background-color: var(--accent-secondary); color: #333; } /* Ensure contrast */
+        .button-warning:hover { background-color: color-mix(in srgb, var(--accent-secondary) 85%, black); }
+        .button-small { padding: 10px 16px; font-size: 0.8rem; }
+
+        /* Add Course Section */
+        .add-course-form {
+            background-color: var(--bg-surface); padding: 25px; border-radius: var(--border-radius-lg);
+            box-shadow: 0 6px 20px var(--shadow-strong-color); margin-bottom: 40px; display: grid; gap: 20px;
+            transition: background-color var(--transition-theme), box-shadow var(--transition-theme);
+        }
+        .add-course-form .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .add-course-form label { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
+
+        /* Course Card */
+        .course-card {
+            background-color: var(--bg-surface); 
+            margin-bottom: 25px; 
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 6px 20px var(--shadow-color); 
+            overflow: hidden;
+            transition: background-color var(--transition-theme), box-shadow var(--transition-theme), transform var(--transition-interactive);
+            animation: fadeInScaleUp 0.5s ease-out backwards; 
+            animation-delay: calc(var(--card-index, 0) * 0.08s);
+        }
+        .course-card:hover { 
+            transform: translateY(-4px) scale(1.01); 
+            box-shadow: 0 8px 25px var(--shadow-strong-color); 
+        }
+        .course-header {
+            padding: 20px 25px; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid var(--border-primary);
+            transition: border-color var(--transition-theme), background-color var(--transition-interactive);
+        }
+        h1 {
+            font-size: 1.75rem; /* Slightly adjusted */
+            font-weight: 700; /* Bolder */
+            color: var(--text-primary);
+            margin: 0;
+            letter-spacing: -0.5px;
+            padding-left: 10px;
+        }
+        .theme-toggle-button {
+            background-color: transparent; /* Transparent bg, rely on icon color */
+            color: var(--text-secondary);
+            border: 2px solid var(--border-primary);
+            padding: 8px;
+            width: 44px; height: 44px; /* Make it circular */
+            border-radius: 50%; /* Circular button */
+            cursor: pointer;
+            font-size: 1.2rem; /* Larger icon */
+            transition: color var(--transition-theme), border-color var(--transition-theme), transform var(--transition-interactive);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .theme-toggle-button:hover {
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+            transform: rotate(15deg) scale(1.1);
+        }
+
+        /* Form Elements */
+        .input-field, .textarea-field {
+            width: 100%; padding: 14px 18px; /* More padding */
+            font-family: var(--font-family); font-size: 1rem; font-weight: 400;
+            color: var(--text-primary); background-color: var(--bg-input);
+            border: 1px solid var(--border-input);
+            border-radius: var(--border-radius-md);
+            transition: all var(--transition-interactive); /* Smooth transition for all props */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03) inset;
+        }
+        .input-field::placeholder, .textarea-field::placeholder { color: var(--text-placeholder); font-weight: 300; }
+        .input-field:focus, .textarea-field:focus {
+            outline: none; border-color: var(--border-input-focus);
+            background-color: var(--bg-surface); /* Lighten on focus */
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 25%, transparent), 0 2px 6px var(--shadow-color);
+        }
+        .textarea-field { min-height: 120px; resize: vertical; white-space: pre-wrap; }
+        .textarea-field:read-only {
+            background-color: transparent; /* Fully transparent when readonly */
+            border-color: transparent; 
+            box-shadow: none; padding-left: 0; padding-right: 0;
+            color: var(--text-secondary);
+            opacity: 1;
+        }
+        .textarea-field:read-only:focus { box-shadow: none; }
+
+
+        .button {
+            padding: 12px 24px; /* Adjusted padding */
+            font-family: var(--font-family); font-size: 0.95rem; font-weight: 600; /* Bolder button text */
+            border-radius: var(--border-radius-md); border: none; cursor: pointer;
+            transition: all var(--transition-interactive);
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            text-transform: uppercase; /* Modern touch */
+            letter-spacing: 0.5px;
+            box-shadow: 0 3px 6px var(--shadow-color);
+        }
+        .button:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 5px 10px var(--shadow-strong-color); }
+        .button:active { transform: translateY(0px) scale(0.99); box-shadow: 0 2px 4px var(--shadow-color); }
+
+        .button-primary { background-color: var(--accent-primary); color: var(--text-on-accent); }
+        .button-primary:hover { background-color: var(--accent-primary-hover); }
+        .button-secondary { background-color: var(--bg-surface); color: var(--accent-primary); border: 2px solid var(--accent-primary); }
+        .button-secondary:hover { background-color: color-mix(in srgb, var(--accent-primary) 10%, transparent); border-color: var(--accent-primary-hover); }
+        .button-danger { background-color: var(--accent-danger); color: var(--text-on-accent); }
+        .button-danger:hover { background-color: color-mix(in srgb, var(--accent-danger) 85%, black); }
+        .button-success { background-color: var(--accent-success); color: var(--text-on-accent); }
+        .button-success:hover { background-color: color-mix(in srgb, var(--accent-success) 85%, black); }
+        .button-warning { background-color: var(--accent-secondary); color: #333; } /* Ensure contrast */
+        .button-warning:hover { background-color: color-mix(in srgb, var(--accent-secondary) 85%, black); }
+        .button-small { padding: 10px 16px; font-size: 0.8rem; }
+
+        /* Add Course Section */
+        .add-course-form {
+            background-color: var(--bg-surface); padding: 25px; border-radius: var(--border-radius-lg);
+            box-shadow: 0 6px 20px var(--shadow-strong-color); margin-bottom: 40px; display: grid; gap: 20px;
+            transition: background-color var(--transition-theme), box-shadow var(--transition-theme);
+        }
+        .add-course-form .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .add-course-form label { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
+
+        /* Course Card */
+        .course-card {
+            background-color: var(--bg-surface); 
+            margin-bottom: 25px; 
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 6px 20px var(--shadow-color); 
+            overflow: hidden;
+            transition: background-color var(--transition-theme), box-shadow var(--transition-theme), transform var(--transition-interactive);
+            animation: fadeInScaleUp 0.5s ease-out backwards; 
+            animation-delay: calc(var(--card-index, 0) * 0.08s);
+        }
+        .course-card:hover { 
+            transform: translateY(-4px) scale(1.01); 
+            box-shadow: 0 8px 25px var(--shadow-strong-color); 
+        }
+        .course-header {
+            padding: 20px 25px; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
             border-bottom: 1px solid var(--border-primary);
             transition: border-color var(--transition-theme), background-color var(--transition-interactive);
         }
@@ -272,21 +736,101 @@
         .notes-actions { text-align: right; margin-top: 15px; }
 
         /* Responsive Adjustments */
-        @media (min-width: 640px) {
-            .add-course-form { grid-template-columns: 1fr auto auto; align-items: flex-end; gap: 20px; } /* Name | Lectures | Button on one line */
-            .add-course-form .form-group { margin-bottom: 0; }
-            .add-course-form #newCourseButton { width: auto; }
+        @media (max-width: 639px) {
+            :root {
+                --container-padding: 16px;
+            }
             
-            .item-entry { flex-direction: row; align-items: center; }
-            .item-actions { margin-top: 0; width: auto; }
-            .item-actions .button { flex-grow: 0; }
+            body {
+                padding: var(--container-padding);
+            }
 
-            .add-item-form { grid-template-columns: 1fr auto; }
-            .add-item-form .button-group { grid-column: 2 / 3; }
+            .app-container {
+                padding: 0;
+                width: 100%;
+            }
+
+            .app-header {
+                margin-bottom: 24px;
+                padding: 16px;
+                border-radius: var(--border-radius-md);
+            }
+
+            .add-course-form {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                padding: 20px;
+                margin-bottom: 24px;
+            }
+
+            .form-group {
+                width: 100%;
+            }
+
+            .course-card {
+                margin-bottom: 20px;
+            }
+
+            .course-header {
+                padding: 16px;
+            }
+
+            .course-name {
+                font-size: 1.1rem;
+                line-height: 1.4;
+            }
+
+            .course-summary-text {
+                font-size: 0.8rem;
+                margin-top: 4px;
+            }
+
+            .course-date-added {
+                font-size: 0.75rem;
+            }
+
+            .progress-bar-wrapper {
+                width: 70px;
+            }
+
+            .detail-group h4 {
+                font-size: 1rem;
+                padding-bottom: 8px;
+                margin-bottom: 12px;
+            }
+
+            .item-entry {
+                padding: 12px 0;
+            }
+
+            .item-title {
+                font-size: 0.9rem;
+                line-height: 1.4;
+            }
+
+            .button {
+                white-space: nowrap;
+                padding: 10px 14px;
+            }
+
+            .course-actions-footer {
+                text-align: center;
+            }
         }
-         @media (min-width: 480px) { /* Minor adjustment for slightly larger phones */
-            .add-item-form .button-group { display: flex; gap: 10px; }
-            .add-item-form .button-group .button { flex-grow: 1; }
+
+        @media (min-width: 640px) and (max-width: 1023px) {
+            .app-container {
+                max-width: 800px;
+            }
+
+            .course-card {
+                margin-bottom: 30px;
+            }
+
+            .detail-group {
+                margin-bottom: 35px;
+            }
         }
 
     </style>
