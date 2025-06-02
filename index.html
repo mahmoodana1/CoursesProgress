@@ -3,65 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Poppy Study Tracker</title>
+    <title>Poppy Study Tracker - Enhanced</title>
     <style>
         :root {
-            --bg-color: #f0f4f8; /* Light Sky Blue/Gray */
+            --bg-color: #f0f4f8;
             --card-bg-color: #ffffff;
-            --primary-accent: #7e57c2; /* Deep Purple - adjusted for pop */
+            --primary-accent: #7e57c2; 
             --primary-accent-hover: #673ab7;
-            --secondary-accent: #ffca28; /* Bright Yellow - adjusted */
-            --text-color: #37474F; /* Dark Slate Gray */
+            --secondary-accent: #ffca28;
+            --text-color: #37474F;
             --light-text-color: #ffffff;
-            --placeholder-text-color: #78909c; /* For placeholders */
-            --border-color: #CFD8DC; /* Light Blue Gray */
-            --shadow-color: rgba(0, 0, 0, 0.08); /* Softer shadow */
-            --success-color: #66bb6a; /* Softer Green */
-            --danger-color: #ef5350; /* Softer Red */
+            --placeholder-text-color: #78909c;
+            --border-color: #CFD8DC;
+            --shadow-color: rgba(0, 0, 0, 0.08);
+            --success-color: #66bb6a;
+            --danger-color: #ef5350;
             --input-bg: #eceff1;
 
             --font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            --border-radius: 12px; /* More rounded for "popy" feel */
+            --border-radius: 12px;
+            --transition-speed: 0.3s; /* Consistent transition speed */
         }
 
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
+        @keyframes fadeInPage {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes cardEnter {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        @keyframes itemCompleted {
+            0% { background-color: var(--card-bg-color); transform: scale(1); }
+            50% { background-color: color-mix(in srgb, var(--success-color) 40%, transparent); transform: scale(1.05); }
+            100% { /* Final state set by .completed class */ transform: scale(1); }
+        }
+
+
         body {
             font-family: var(--font-family);
             margin: 0;
-            padding: 20px;
+            padding: 15px; /* Adjusted padding for mobile first */
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
-            transition: background-color 0.3s ease;
-            font-weight: 400; /* Default body text weight */
+            font-weight: 400;
+            animation: fadeInPage 0.6s ease-out forwards;
         }
 
         .container {
             max-width: 800px;
-            margin: 20px auto;
-            padding: 0 15px;
+            margin: 15px auto; /* Adjusted margin */
+            padding: 0; /* Container padding removed, body handles it */
         }
 
         h1 {
             text-align: center;
             color: var(--primary-accent);
             font-weight: 700;
-            font-size: 2.6em; /* Slightly larger */
-            margin-bottom: 35px; /* More spacing */
+            font-size: 2.2em; /* Adjusted for responsiveness */
+            margin-bottom: 30px;
             letter-spacing: -1px;
         }
 
         .add-course-section {
             background-color: var(--card-bg-color);
-            padding: 25px;
+            padding: 20px;
             border-radius: var(--border-radius);
-            box-shadow: 0 6px 15px var(--shadow-color); /* Adjusted shadow */
-            margin-bottom: 35px; /* More spacing */
+            box-shadow: 0 6px 15px var(--shadow-color);
+            margin-bottom: 30px;
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column; /* Stack by default for mobile */
             gap: 15px;
-            align-items: flex-end;
         }
 
         .add-course-section input[type="text"],
@@ -69,16 +86,16 @@
         .form-inline input[type="text"],
         .form-inline input[type="number"],
         .edit-input {
-            flex-grow: 1;
             padding: 12px 15px;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            font-size: 1em; /* Standardized input font size */
+            font-size: 1em;
             font-family: var(--font-family);
             font-weight: 400;
             background-color: var(--input-bg);
             color: var(--text-color);
-            min-width: 150px;
+            width: 100%; /* Full width by default */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
         }
         .add-course-section input::placeholder,
         .form-inline input::placeholder,
@@ -91,11 +108,11 @@
         .edit-input:focus {
             outline: none;
             border-color: var(--primary-accent);
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-accent) 20%, transparent); /* Slightly larger focus ring */
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-accent) 20%, transparent);
         }
 
         .add-course-section button, button.btn {
-            padding: 12px 22px; /* Slightly adjusted padding */
+            padding: 12px 20px;
             background: linear-gradient(45deg, var(--primary-accent), color-mix(in srgb, var(--primary-accent) 80%, var(--secondary-accent) 20%));
             color: var(--light-text-color);
             border: none;
@@ -104,66 +121,88 @@
             font-size: 1em;
             font-family: var(--font-family);
             font-weight: 500;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%; /* Full width by default */
         }
         .add-course-section button:hover, button.btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-            background: linear-gradient(45deg, var(--primary-accent-hover), color-mix(in srgb, var(--primary-accent-hover) 80%, var(--secondary-accent) 30%));
+        }
+         .add-course-section button:active, button.btn:active {
+            transform: translateY(0px) scale(0.98);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
 
         .course-card {
             background-color: var(--card-bg-color);
-            margin-bottom: 25px; /* More spacing */
+            margin-bottom: 20px;
             border-radius: var(--border-radius);
-            box-shadow: 0 5px 12px var(--shadow-color); /* Adjusted shadow */
+            box-shadow: 0 5px 12px var(--shadow-color);
             overflow: hidden; 
-            transition: box-shadow 0.3s ease;
+            transition: box-shadow var(--transition-speed) ease;
+            animation: cardEnter 0.5s ease-out forwards; /* Apply to all cards on render */
+            animation-delay: calc(var(--card-index, 0) * 0.05s); /* Stagger animation */
         }
         .course-card:hover {
             box-shadow: 0 8px 20px color-mix(in srgb, var(--shadow-color) 150%, transparent);
         }
 
         .course-header {
-            padding: 20px 25px; /* More padding */
+            padding: 15px 20px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.2s ease;
+            transition: background-color var(--transition-speed) ease;
         }
         .course-header:hover {
             background-color: color-mix(in srgb, var(--primary-accent) 5%, transparent);
         }
+        .course-header-content {
+            flex-grow: 1;
+        }
         .course-header h3 {
-            margin: 0;
+            margin: 0 0 5px 0; /* Add some space below h3 */
             color: var(--primary-accent);
-            font-size: 1.5em; /* Slightly larger */
+            font-size: 1.3em;
             font-weight: 600;
         }
         .course-header .course-summary {
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: var(--text-color);
             font-weight: 400;
         }
+        .expand-icon {
+            font-size: 1.2em;
+            margin-left: 10px;
+            transition: transform var(--transition-speed) cubic-bezier(0.25, 0.1, 0.25, 1);
+            color: var(--primary-accent);
+        }
+        .course-card.expanded .expand-icon {
+            transform: rotate(90deg);
+        }
+
 
         .course-details {
             max-height: 0;
             overflow: hidden;
-            padding: 0 25px; /* Match header padding */
+            padding: 0 20px; 
             transition: max-height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1), padding 0.5s ease;
         }
         .course-card.expanded .course-details {
             max-height: 1500px; 
-            padding: 25px;
+            padding: 20px;
             border-top: 1px dashed var(--border-color);
         }
 
-
-        .progress-bar-container {
+        .progress-bar-container-header { /* For header */
+            width: 100px; /* Smaller progress bar in header on mobile */
+            margin-left: 10px;
+        }
+        .progress-bar-container { /* For details section */
             width: 100%;
             background-color: var(--input-bg);
             border-radius: 6px;
@@ -178,7 +217,7 @@
             width: 0%;
             transition: width 0.5s ease-in-out;
             text-align: right;
-            font-size: 0.75em; /* Slightly more readable */
+            font-size: 0.75em; 
             line-height: 12px;
             color: var(--text-color);
             font-weight: 500;
@@ -186,108 +225,154 @@
         }
 
         .detail-section {
-            margin-bottom: 25px;
-            padding: 20px; /* More padding */
-            background-color: color-mix(in srgb, var(--bg-color) 50%, var(--card-bg-color) 50%); /* Lighter, cleaner */
-            border-radius: 10px; /* Slightly more rounded */
+            margin-bottom: 20px;
+            padding: 15px; 
+            background-color: color-mix(in srgb, var(--bg-color) 50%, var(--card-bg-color) 50%); 
+            border-radius: 10px; 
         }
         .detail-section h4 {
             margin-top: 0;
-            margin-bottom: 15px; /* More spacing */
+            margin-bottom: 15px; 
             color: var(--primary-accent);
-            font-weight: 600; /* Bolder sub-section titles */
-            font-size: 1.1em;
-            letter-spacing: 0.3px; /* Slight letter spacing */
+            font-weight: 600; 
+            font-size: 1.05em; /* Adjusted for mobile */
+            letter-spacing: 0.3px; 
         }
 
-        .item-list {
-            list-style: none;
-            padding: 0;
-        }
+        .item-list { list-style: none; padding: 0; }
         .item-list li {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 15px; /* More padding */
+            flex-direction: column; /* Stack item content and buttons on mobile */
+            gap: 8px; /* Space between item name and buttons */
+            padding: 10px 12px;
             background-color: var(--card-bg-color);
             border: 1px solid var(--border-color);
-            border-radius: 8px; /* More rounded items */
-            margin-bottom: 10px; /* More spacing */
-            transition: background-color 0.2s ease, transform 0.2s ease;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
         }
         .item-list li:hover {
-            transform: translateX(4px); /* Slightly more pronounced hover */
+            transform: translateX(3px);
             background-color: color-mix(in srgb, var(--secondary-accent) 10%, transparent);
         }
-
         .item-list li.completed {
-            background-color: color-mix(in srgb, var(--success-color) 15%, transparent); /* Lighter completed */
-            /* text-decoration: line-through; */ /* Optional: remove line-through for cleaner look */
+            /* Final state for completed items */
+            background-color: color-mix(in srgb, var(--success-color) 15%, transparent);
+        }
+        .item-list li.newly-completed-animation { /* Temp class for animation */
+            animation: itemCompleted 0.5s ease-out forwards;
+        }
+        .item-list li .item-name { 
+            font-weight: 400; 
+            font-size: 0.9em;
+            word-break: break-word; /* Prevent overflow */
         }
          .item-list li.completed .item-name {
             text-decoration: line-through;
-            color: color-mix(in srgb, var(--text-color) 70%, transparent); /* Softer strikethrough text */
+            color: color-mix(in srgb, var(--text-color) 70%, transparent);
         }
-        .item-list li .item-name { 
-            flex-grow: 1; 
-            font-weight: 400; /* Lighter item names */
-            font-size: 0.95em;
+        .item-list li .item-actions {
+            display: flex;
+            gap: 8px; /* Space between buttons */
+            width: 100%;
         }
+        .item-list li .item-actions button {
+            flex-grow: 1; /* Make buttons take equal space */
+        }
+
 
         .form-inline {
             display: flex;
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            flex-direction: column; /* Stack by default */
             gap: 10px;
             margin-bottom: 15px;
-            align-items: center;
+            align-items: stretch; /* Full width inputs/buttons */
         }
-        .form-inline input[type="text"],
-        .form-inline input[type="number"] {
-            font-size: 0.95em;
-            padding: 10px 12px; /* Adjusted padding */
+        .form-inline .button-group { /* For side-by-side Add buttons */
+            display: flex;
+            gap: 10px;
         }
+        .form-inline .button-group button {
+            flex-grow: 1;
+        }
+
 
         button.small-btn {
-            padding: 8px 14px; /* Adjusted padding */
-            font-size: 0.9em; /* Standardized small button font size */
+            padding: 10px 12px; /* Slightly larger for touch */
+            font-size: 0.9em;
             font-weight: 500;
             border-radius: 6px;
-            margin-left: 5px;
+            /* margin-left removed as flex gap handles spacing */
+            width: auto; /* Override full width from .btn if needed in specific contexts */
         }
-        button.success-btn {
-            background: var(--success-color);
-        }
-        button.success-btn:hover {
-             background: color-mix(in srgb, var(--success-color) 80%, black);
-        }
-        button.warn-btn {
-            background: var(--secondary-accent);
-            color: var(--text-color);
-        }
-         button.warn-btn:hover {
-            background: color-mix(in srgb, var(--secondary-accent) 80%, black);
-        }
-        button.danger-btn {
-            background: var(--danger-color);
-        }
-        button.danger-btn:hover {
-            background: color-mix(in srgb, var(--danger-color) 80%, black);
-        }
-        .action-buttons button { margin-top: 10px; }
-
-        .course-actions {
-            text-align: right;
-            margin-top:15px;
-        }
+        button.success-btn { background: var(--success-color); }
+        button.success-btn:hover { background: color-mix(in srgb, var(--success-color) 80%, black); }
+        button.warn-btn { background: var(--secondary-accent); color: var(--text-color); }
+        button.warn-btn:hover { background: color-mix(in srgb, var(--secondary-accent) 80%, black); }
+        button.danger-btn { background: var(--danger-color); }
+        button.danger-btn:hover { background: color-mix(in srgb, var(--danger-color) 80%, black); }
+        
+        .course-actions { text-align: center; margin-top:15px; }
+        .course-actions button.btn { width: auto; padding: 12px 30px; } /* Make delete course button not full width */
 
         .edit-input {
-            padding: 10px 12px;
-            border: 1px dashed var(--primary-accent);
-            border-radius: 8px;
-            font-size: 1.2em; /* Match H3 better for editing */
-            font-weight: 600; /* Match H3 */
-            margin-right: 10px;
-            width: calc(100% - 130px); /* Adjust based on button sizes */
+            font-size: 1.3em; /* Match H3 */
+            font-weight: 600;
+            margin: 0; /* Remove margin if it's part of flex */
+            /* width calc removed, rely on flex-grow */
+        }
+        .course-header-content .edit-form { /* For editing course name */
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+
+        /* Desktop and larger tablet styles */
+        @media (min-width: 600px) {
+            body { padding: 20px; }
+            .container { margin: 20px auto; }
+            h1 { font-size: 2.6em; margin-bottom: 35px; }
+
+            .add-course-section {
+                flex-direction: row; /* Horizontal layout for add course on desktop */
+                align-items: flex-end;
+                padding: 25px;
+            }
+            .add-course-section input[type="text"],
+            .add-course-section input[type="number"] {
+                flex-grow: 1;
+                min-width: 150px;
+            }
+            .add-course-section button { width: auto; } /* Button auto width on desktop */
+
+            .course-header { padding: 20px 25px; }
+            .course-header h3 { font-size: 1.5em; }
+            .course-header .course-summary { font-size: 0.9em; }
+            .progress-bar-container-header { width: 150px; } /* Restore size */
+
+            .course-details { padding: 0 25px; }
+            .course-card.expanded .course-details { padding: 25px; }
+            .detail-section { padding: 20px; }
+            .detail-section h4 { font-size: 1.1em; }
+
+            .item-list li {
+                flex-direction: row; /* Horizontal layout for list items */
+                align-items: center;
+                padding: 12px 15px;
+            }
+            .item-list li .item-name { font-size: 0.95em; }
+            .item-list li .item-actions { width: auto; } /* Actions don't need full width */
+
+            .form-inline {
+                flex-direction: row; /* Horizontal for lecture/hw add on desktop */
+                align-items: center;
+            }
+            .form-inline input[type="text"] { flex-grow: 1; }
+            .form-inline .button-group { width: auto; }
+            .form-inline .button-group button { width: auto; }
+
+            button.small-btn { padding: 8px 14px; font-size: 0.9em; }
         }
 
     </style>
@@ -298,8 +383,8 @@
         <h1>My Course Tracker</h1>
 
         <div class="add-course-section">
-            <input type="text" id="newCourseName" placeholder="Course Name (e.g., Creative Coding)">
-            <input type="number" id="newCourseLectures" placeholder="Target # of Lectures (e.g., 12)">
+            <input type="text" id="newCourseName" placeholder="Course Name (e.g., Web Design)">
+            <input type="number" id="newCourseLectures" placeholder="Target # of Lectures (e.g., 10)">
             <button onclick="addCourse()">✨ Add Course</button>
         </div>
 
@@ -312,11 +397,11 @@
 
         // --- DATA PERSISTENCE ---
         function saveData() {
-            localStorage.setItem('poppyStudyTrackerDataV2', JSON.stringify(courses)); // V2 for new structure if any
+            localStorage.setItem('poppyStudyTrackerDataV3', JSON.stringify(courses));
         }
 
         function loadData() {
-            const data = localStorage.getItem('poppyStudyTrackerDataV2');
+            const data = localStorage.getItem('poppyStudyTrackerDataV3');
             if (data) {
                 courses = JSON.parse(data);
             }
@@ -338,13 +423,14 @@
                 return;
             }
 
-            courses.push({
+            courses.unshift({ // Add to the beginning for "newest first" feel
                 id: generateId(),
                 name: name,
                 targetLectures: targetLectures,
-                lectures: [], // { id, name, watched: false }
-                homeworks: [], // { id, description, completed: false }
-                isEditingName: false
+                lectures: [], 
+                homeworks: [], 
+                isEditingName: false,
+                justAdded: true // Flag for animation
             });
 
             nameInput.value = '';
@@ -364,7 +450,6 @@
         function toggleEditCourseName(courseId) {
             const course = courses.find(c => c.id === courseId);
             if (course) {
-                // Ensure only one course name is being edited at a time
                 courses.forEach(c => c.isEditingName = (c.id === courseId) ? !c.isEditingName : false);
                 renderCourses();
                  if (course.isEditingName) {
@@ -389,7 +474,6 @@
             }
         }
 
-
         // --- LECTURE MANAGEMENT ---
         function addLecture(courseId, markAsWatched = false) {
             const course = courses.find(c => c.id === courseId);
@@ -412,6 +496,9 @@
                 const lecture = course.lectures.find(l => l.id === lectureId);
                 if (lecture) {
                     lecture.watched = !lecture.watched;
+                    if(lecture.watched) { // Add animation class if just completed
+                        lecture.newlyCompleted = true;
+                    }
                     saveData();
                     renderCourses();
                 }
@@ -443,7 +530,6 @@
             }
         }
 
-
         // --- HOMEWORK MANAGEMENT ---
         function addHomework(courseId, markAsCompleted = false) {
             const course = courses.find(c => c.id === courseId);
@@ -466,6 +552,9 @@
                 const homework = course.homeworks.find(h => h.id === homeworkId);
                 if (homework) {
                     homework.completed = !homework.completed;
+                     if(homework.completed) { // Add animation class if just completed
+                        homework.newlyCompleted = true;
+                    }
                     saveData();
                     renderCourses();
                 }
@@ -485,8 +574,6 @@
         function toggleCourseDetails(courseId) {
             const courseCard = document.getElementById(`course-${courseId}`);
             if (courseCard) {
-                // Prevent toggling if click was on an input or button inside header (for future-proofing)
-                // For now, simple toggle is fine as only name edit is in header.
                 courseCard.classList.toggle('expanded');
             }
         }
@@ -505,7 +592,7 @@
                 return;
             }
 
-            courses.forEach(course => {
+            courses.forEach((course, index) => { // Added index for stagger animation
                 const watchedLecturesCount = course.lectures.filter(l => l.watched).length;
                 const lectureProgress = course.targetLectures > 0 ? (watchedLecturesCount / course.targetLectures) * 100 : 0;
                 const completedHomeworkCount = course.homeworks.filter(h => h.completed).length;
@@ -513,6 +600,12 @@
                 const courseCard = document.createElement('div');
                 courseCard.className = 'course-card';
                 courseCard.id = `course-${course.id}`;
+                courseCard.style.setProperty('--card-index', index); // For stagger animation
+
+                if (course.justAdded) {
+                    // courseCard.classList.add('newly-added-animation'); // If you want a specific anim for new cards
+                    delete course.justAdded; // Remove flag after use
+                }
                 if (currentlyExpanded[course.id]) { 
                     courseCard.classList.add('expanded');
                 }
@@ -520,28 +613,29 @@
                 let courseNameDisplay;
                 if (course.isEditingName) {
                     courseNameDisplay = `
-                        <input type="text" class="edit-input" id="edit-name-${course.id}" value="${course.name}" 
-                               onblur="saveCourseName('${course.id}', this.value)" 
-                               onkeypress="if(event.key==='Enter') {this.blur(); event.preventDefault();}"
-                               onclick="event.stopPropagation();">
-                        <button class="btn small-btn success-btn" onclick="event.stopPropagation(); saveCourseName('${course.id}', document.getElementById('edit-name-${course.id}').value)">Save</button>
-                    `;
+                        <div class="edit-form">
+                            <input type="text" class="edit-input" id="edit-name-${course.id}" value="${course.name}" 
+                                   onblur="saveCourseName('${course.id}', this.value)" 
+                                   onkeypress="if(event.key==='Enter') {this.blur(); event.preventDefault();}"
+                                   onclick="event.stopPropagation();">
+                            <button class="btn small-btn success-btn" onclick="event.stopPropagation(); saveCourseName('${course.id}', document.getElementById('edit-name-${course.id}').value)">Save</button>
+                        </div>`;
                 } else {
                      courseNameDisplay = `<h3 ondblclick="event.stopPropagation(); toggleEditCourseName('${course.id}')" title="Double-click to edit name">${course.name}</h3>`;
                 }
 
-
                 courseCard.innerHTML = `
                     <div class="course-header" onclick="toggleCourseDetails('${course.id}')">
-                        <div style="flex-grow:1;">
+                        <div class="course-header-content">
                             ${courseNameDisplay}
                             <div class="course-summary">
                                 Lectures: ${watchedLecturesCount} / ${course.targetLectures} | Homework Done: ${completedHomeworkCount}
                             </div>
                         </div>
-                        <div class="progress-bar-container" style="width: 150px; margin-left:15px;">
+                        <div class="progress-bar-container-header">
                             <div class="progress-bar" style="width: ${lectureProgress.toFixed(0)}%;">${lectureProgress.toFixed(0)}%</div>
                         </div>
+                        <span class="expand-icon">▶</span>
                     </div>
                     <div class="course-details">
                         <div class="detail-section">
@@ -557,19 +651,26 @@
                             </div>
                             <div class="form-inline" style="margin-top:15px;">
                                 <input type="text" id="lectureName-${course.id}" placeholder="New Lecture Name/Number">
-                                <button class="btn small-btn" onclick="addLecture('${course.id}')">Add</button>
-                                <button class="btn small-btn success-btn" onclick="addLecture('${course.id}', true)">Add & Watched</button>
+                                <div class="button-group">
+                                    <button class="btn small-btn" onclick="addLecture('${course.id}')">Add</button>
+                                    <button class="btn small-btn success-btn" onclick="addLecture('${course.id}', true)">Add & Watched</button>
+                                </div>
                             </div>
                             <ul class="item-list" id="lectureList-${course.id}">
-                                ${course.lectures.map(lec => `
-                                    <li class="${lec.watched ? 'completed' : ''}">
+                                ${course.lectures.map(lec => {
+                                    let animationClass = '';
+                                    if (lec.newlyCompleted) {
+                                        animationClass = 'newly-completed-animation';
+                                        delete lec.newlyCompleted; // Clear flag after use
+                                    }
+                                    return `<li class="${lec.watched ? 'completed' : ''} ${animationClass}">
                                         <span class="item-name">${lec.name}</span>
-                                        <div>
+                                        <div class="item-actions">
                                             <button class="btn small-btn ${lec.watched ? 'warn-btn' : 'success-btn'}" onclick="toggleLectureWatched('${course.id}', '${lec.id}')">${lec.watched ? 'Unwatch' : 'Watched'}</button>
                                             <button class="btn small-btn danger-btn" onclick="deleteLecture('${course.id}', '${lec.id}')">Del</button>
                                         </div>
-                                    </li>
-                                `).join('')}
+                                    </li>`
+                                }).join('')}
                             </ul>
                         </div>
 
@@ -577,19 +678,26 @@
                             <h4>Homework (${completedHomeworkCount} done)</h4>
                              <div class="form-inline">
                                 <input type="text" id="homeworkDesc-${course.id}" placeholder="New Homework Description/Number">
-                                <button class="btn small-btn" onclick="addHomework('${course.id}')">Add</button>
-                                <button class="btn small-btn success-btn" onclick="addHomework('${course.id}', true)">Add & Done</button>
+                                <div class="button-group">
+                                    <button class="btn small-btn" onclick="addHomework('${course.id}')">Add</button>
+                                    <button class="btn small-btn success-btn" onclick="addHomework('${course.id}', true)">Add & Done</button>
+                                </div>
                             </div>
                             <ul class="item-list" id="homeworkList-${course.id}">
-                                ${course.homeworks.map(hw => `
-                                    <li class="${hw.completed ? 'completed' : ''}">
+                                ${course.homeworks.map(hw => {
+                                    let animationClass = '';
+                                    if (hw.newlyCompleted) {
+                                        animationClass = 'newly-completed-animation';
+                                        delete hw.newlyCompleted; // Clear flag after use
+                                    }
+                                   return `<li class="${hw.completed ? 'completed' : ''} ${animationClass}">
                                         <span class="item-name">${hw.description}</span>
-                                        <div>
+                                        <div class="item-actions">
                                             <button class="btn small-btn ${hw.completed ? 'warn-btn' : 'success-btn'}" onclick="toggleHomeworkCompleted('${course.id}', '${hw.id}')">${hw.completed ? 'Undo' : 'Done'}</button>
                                             <button class="btn small-btn danger-btn" onclick="deleteHomework('${course.id}', '${hw.id}')">Del</button>
                                         </div>
-                                    </li>
-                                `).join('')}
+                                    </li>`
+                                }).join('')}
                             </ul>
                         </div>
                         <div class="course-actions">
@@ -598,6 +706,11 @@
                     </div>
                 `;
                 container.appendChild(courseCard);
+            });
+             // Clear all newlyCompleted flags after render to prevent re-animation on non-state-changing re-renders
+            courses.forEach(course => {
+                course.lectures.forEach(l => delete l.newlyCompleted);
+                course.homeworks.forEach(h => delete h.newlyCompleted);
             });
         }
 
