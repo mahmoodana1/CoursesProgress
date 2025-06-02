@@ -3,80 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slick Study Tracker - With Notes & Dates</title>
+    <title>Vibrant Study Tracker</title>
     <style>
         :root {
-            /* Light Mode Default Palette (Calm & Modern) */
-            --bg-main: #F7FAFC; /* Very Light Grayish Blue */
-            --bg-surface: #FFFFFF; /* Card, Modal Backgrounds */
-            --bg-surface-hover: #F0F4F8; /* Slightly darker hover for surfaces */
-            --bg-input: #FFFFFF;
-            --bg-button-primary: #4A90E2; /* Calm Blue */
-            --bg-button-primary-hover: #357ABD;
-            --bg-button-secondary: #E2E8F0;
-            --bg-button-secondary-hover: #CBD5E0;
-            --text-primary: #2D3748; /* Dark Slate */
-            --text-secondary: #718096; /* Medium Slate */
-            --text-button-primary: #FFFFFF;
-            --text-button-secondary: #2D3748;
-            --text-placeholder: #A0AEC0;
-            --border-primary: #E2E8F0; /* Subtle borders */
-            --border-input: #CBD5E0; /* Input borders */
+            /* Light Mode - Vibrant & Modern */
+            --bg-main-gradient: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            --bg-surface: rgba(255, 255, 255, 0.85); /* Glassmorphism tendency */
+            --bg-surface-hover: rgba(255, 255, 255, 0.95);
+            --bg-input: rgba(255, 255, 255, 0.7);
+            --text-primary: #2c3e50; /* Dark Blue-Gray */
+            --text-secondary: #34495e; /* Slightly lighter Blue-Gray */
+            --text-placeholder: #7f8c8d;
+            --border-primary: rgba(44, 62, 80, 0.2);
+            --border-input: rgba(44, 62, 80, 0.3);
             --border-input-focus: var(--accent-primary);
-            --accent-primary: #4A90E2; /* Calm Blue - also for focus rings, icons */
-            --accent-secondary: #F6E05E; /* Muted Yellow/Gold - for progress */
-            --accent-success: #48BB78; /* Calm Green */
-            --accent-danger: #F56565; /* Calm Red */
-            --shadow-color: rgba(45, 55, 72, 0.1); /* Soft shadow */
-            --shadow-strong-color: rgba(45, 55, 72, 0.15);
+            --accent-primary: #ff6b6b; /* Coral Red */
+            --accent-primary-hover: #ff4757;
+            --accent-secondary: #feca57; /* Sunny Yellow */
+            --accent-success: #2ed573; /* Bright Green */
+            --accent-danger: #ff4757; /* Coral Red (can be same as primary) */
+            --text-on-accent: #ffffff;
+            --shadow-color: rgba(50, 50, 93, 0.1);
+            --shadow-strong-color: rgba(50, 50, 93, 0.15);
 
             --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-            --border-radius-md: 8px;
-            --border-radius-lg: 12px;
-            --transition-theme: 0.3s ease;
-            --transition-interactive: 0.2s ease-out;
+            --border-radius-md: 10px; /* Softer, more modern rounding */
+            --border-radius-lg: 16px;
+            --transition-theme: 0.3s ease-in-out;
+            --transition-interactive: 0.15s ease-out;
         }
 
         body.dark-mode {
-            /* Dark Mode Palette */
-            --bg-main: #1A202C; /* Very Dark Desaturated Blue */
-            --bg-surface: #2D3748; /* Dark Slate Surface */
-            --bg-surface-hover: #4A5568;
-            --bg-input: #2D3748;
-            --bg-button-primary: #63B3ED; /* Lighter, Vivid Blue for Dark Mode */
-            --bg-button-primary-hover: #4299E1;
-            --bg-button-secondary: #4A5568;
-            --bg-button-secondary-hover: #718096;
-            --text-primary: #E2E8F0; /* Light Grayish Blue */
-            --text-secondary: #A0AEC0; /* Medium Grayish Blue */
-            --text-button-primary: #1A202C; /* Dark text on light blue button */
-            --text-button-secondary: #E2E8F0;
-            --text-placeholder: #718096;
-            --border-primary: #4A5568; /* Darker subtle borders */
-            --border-input: #4A5568;
+            /* Dark Mode - Vibrant & Modern */
+            --bg-main-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%); /* Dark Teal/Blue */
+            --bg-surface: rgba(40, 42, 54, 0.85); /* Darker, slightly transparent surface */
+            --bg-surface-hover: rgba(55, 58, 75, 0.95);
+            --bg-input: rgba(30, 32, 42, 0.7);
+            --text-primary: #f8f8f2; /* Off-white (Dracula theme text) */
+            --text-secondary: #bd93f9; /* Dracula purple for secondary text */
+            --text-placeholder: #999;
+            --border-primary: rgba(189, 147, 249, 0.2); /* Light purple border */
+            --border-input: rgba(189, 147, 249, 0.3);
             --border-input-focus: var(--accent-primary);
-            --accent-primary: #63B3ED;
-            --accent-secondary: #F6E05E; /* Yellow can work well on dark too */
-            --accent-success: #68D391; /* Brighter Calm Green */
-            --accent-danger: #FC8181; /* Brighter Calm Red */
-            --shadow-color: rgba(0, 0, 0, 0.2);
-            --shadow-strong-color: rgba(0, 0, 0, 0.3);
+            --accent-primary: #ff79c6; /* Dracula Pink */
+            --accent-primary-hover: #ff55b8;
+            --accent-secondary: #f1fa8c; /* Dracula Yellow */
+            --accent-success: #50fa7b; /* Dracula Green */
+            --accent-danger: #ff5555; /* Dracula Red */
+            --text-on-accent: #282a36; /* Dark text for light accents */
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --shadow-strong-color: rgba(0, 0, 0, 0.35);
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;700&display=swap');
 
-        /* Base Styles & Resets */
         *, *::before, *::after { box-sizing: border-box; }
         body {
             font-family: var(--font-family);
             margin: 0;
-            background-color: var(--bg-main);
+            background-image: var(--bg-main-gradient);
+            background-attachment: fixed; /* Keep gradient fixed during scroll */
             color: var(--text-primary);
-            line-height: 1.65;
+            line-height: 1.7; /* Increased for readability */
             font-weight: 400;
             font-size: 16px;
             padding: 20px;
-            transition: background-color var(--transition-theme), color var(--transition-theme);
+            transition: color var(--transition-theme); /* Only color and specific properties, not background-image */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -84,195 +76,204 @@
         }
 
         /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeInScaleUp {
+            from { opacity: 0; transform: translateY(10px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        @keyframes itemStateChange { /* Used for 'completed' items */
-            0% { opacity: 0.7; transform: scale(0.98); }
-            100% { opacity: 1; transform: scale(1); }
+        @keyframes itemStateChangeVibrant {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; filter: brightness(1.2); }
+            100% { transform: scale(1); opacity: 1; filter: brightness(1); }
         }
 
-        /* App Container (Main Content) */
         .app-container {
             width: 100%;
-            max-width: 720px;
-            margin: 0 auto;
-            animation: fadeIn 0.5s var(--transition-theme) forwards;
+            max-width: 700px; /* Slightly narrower */
+            margin: 20px auto;
+            animation: fadeInScaleUp 0.6s var(--transition-theme) forwards;
         }
         .app-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding: 10px 0;
+            margin-bottom: 40px; /* More space */
+            padding: 15px 10px;
+            background-color: var(--bg-surface);
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 4px 15px var(--shadow-color);
+            transition: background-color var(--transition-theme), box-shadow var(--transition-theme);
         }
         h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
+            font-size: 1.75rem; /* Slightly adjusted */
+            font-weight: 700; /* Bolder */
             color: var(--text-primary);
             margin: 0;
             letter-spacing: -0.5px;
+            padding-left: 10px;
         }
         .theme-toggle-button {
-            background-color: var(--bg-surface);
+            background-color: transparent; /* Transparent bg, rely on icon color */
             color: var(--text-secondary);
-            border: 1px solid var(--border-primary);
-            padding: 8px 12px;
-            border-radius: var(--border-radius-md);
+            border: 2px solid var(--border-primary);
+            padding: 8px;
+            width: 44px; height: 44px; /* Make it circular */
+            border-radius: 50%; /* Circular button */
             cursor: pointer;
-            font-size: 1rem;
-            transition: background-color var(--transition-theme), color var(--transition-theme), border-color var(--transition-theme), box-shadow var(--transition-interactive);
-            box-shadow: 0 1px 3px var(--shadow-color);
+            font-size: 1.2rem; /* Larger icon */
+            transition: color var(--transition-theme), border-color var(--transition-theme), transform var(--transition-interactive);
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
         }
         .theme-toggle-button:hover {
-            background-color: var(--bg-surface-hover);
-            border-color: var(--accent-primary);
             color: var(--accent-primary);
-            box-shadow: 0 2px 5px var(--shadow-color);
+            border-color: var(--accent-primary);
+            transform: rotate(15deg) scale(1.1);
         }
 
-        /* Form Elements (Inputs, Buttons) */
+        /* Form Elements */
         .input-field, .textarea-field {
-            width: 100%; padding: 12px 16px; font-family: var(--font-family); font-size: 0.95rem; font-weight: 400;
-            color: var(--text-primary); background-color: var(--bg-input); border: 1px solid var(--border-input);
+            width: 100%; padding: 14px 18px; /* More padding */
+            font-family: var(--font-family); font-size: 1rem; font-weight: 400;
+            color: var(--text-primary); background-color: var(--bg-input);
+            border: 1px solid var(--border-input);
             border-radius: var(--border-radius-md);
-            transition: border-color var(--transition-interactive), box-shadow var(--transition-interactive), background-color var(--transition-theme), color var(--transition-theme), opacity var(--transition-theme);
+            transition: all var(--transition-interactive); /* Smooth transition for all props */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03) inset;
         }
         .input-field::placeholder, .textarea-field::placeholder { color: var(--text-placeholder); font-weight: 300; }
         .input-field:focus, .textarea-field:focus {
             outline: none; border-color: var(--border-input-focus);
-            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 20%, transparent);
+            background-color: var(--bg-surface); /* Lighten on focus */
+            box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 25%, transparent), 0 2px 6px var(--shadow-color);
         }
-        .textarea-field {
-            min-height: 120px; /* Increased min height for notes */
-            resize: vertical; 
-            white-space: pre-wrap; /* Respect newlines in display */
-        }
+        .textarea-field { min-height: 120px; resize: vertical; white-space: pre-wrap; }
         .textarea-field:read-only {
-            background-color: color-mix(in srgb, var(--bg-input) 95%, var(--bg-main) 5%);
-            border-color: var(--border-primary); /* Subtle border for readonly */
-            box-shadow: none;
-            cursor: default;
-            opacity: 0.9;
+            background-color: transparent; /* Fully transparent when readonly */
+            border-color: transparent; 
+            box-shadow: none; padding-left: 0; padding-right: 0;
+            color: var(--text-secondary);
+            opacity: 1;
         }
-        .textarea-field:read-only:focus { /* Prevent focus ring on readonly textareas */
-            border-color: var(--border-primary);
-            box-shadow: none;
-        }
+        .textarea-field:read-only:focus { box-shadow: none; }
 
 
         .button {
-            padding: 12px 20px; font-family: var(--font-family); font-size: 0.95rem; font-weight: 500;
+            padding: 12px 24px; /* Adjusted padding */
+            font-family: var(--font-family); font-size: 0.95rem; font-weight: 600; /* Bolder button text */
             border-radius: var(--border-radius-md); border: none; cursor: pointer;
-            transition: background-color var(--transition-interactive), transform var(--transition-interactive), box-shadow var(--transition-interactive);
+            transition: all var(--transition-interactive);
             display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-            box-shadow: 0 1px 2px var(--shadow-color);
+            text-transform: uppercase; /* Modern touch */
+            letter-spacing: 0.5px;
+            box-shadow: 0 3px 6px var(--shadow-color);
         }
-        .button:hover { transform: translateY(-1px); box-shadow: 0 3px 5px var(--shadow-strong-color); }
-        .button:active { transform: translateY(0px) scale(0.98); box-shadow: 0 1px 2px var(--shadow-color); }
+        .button:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 5px 10px var(--shadow-strong-color); }
+        .button:active { transform: translateY(0px) scale(0.99); box-shadow: 0 2px 4px var(--shadow-color); }
 
-        .button-primary { background-color: var(--bg-button-primary); color: var(--text-button-primary); }
-        .button-primary:hover { background-color: var(--bg-button-primary-hover); }
-        .button-secondary { background-color: var(--bg-button-secondary); color: var(--text-button-secondary); border: 1px solid var(--border-primary); }
-        .button-secondary:hover { background-color: var(--bg-button-secondary-hover); }
-        .button-danger { background-color: var(--accent-danger); color: var(--text-button-primary); }
+        .button-primary { background-color: var(--accent-primary); color: var(--text-on-accent); }
+        .button-primary:hover { background-color: var(--accent-primary-hover); }
+        .button-secondary { background-color: var(--bg-surface); color: var(--accent-primary); border: 2px solid var(--accent-primary); }
+        .button-secondary:hover { background-color: color-mix(in srgb, var(--accent-primary) 10%, transparent); border-color: var(--accent-primary-hover); }
+        .button-danger { background-color: var(--accent-danger); color: var(--text-on-accent); }
         .button-danger:hover { background-color: color-mix(in srgb, var(--accent-danger) 85%, black); }
-        .button-success { background-color: var(--accent-success); color: var(--text-button-primary); }
+        .button-success { background-color: var(--accent-success); color: var(--text-on-accent); }
         .button-success:hover { background-color: color-mix(in srgb, var(--accent-success) 85%, black); }
-        .button-warning { background-color: var(--accent-secondary); color: var(--text-primary); }
+        .button-warning { background-color: var(--accent-secondary); color: #333; } /* Ensure contrast */
         .button-warning:hover { background-color: color-mix(in srgb, var(--accent-secondary) 85%, black); }
-        .button-small { padding: 8px 12px; font-size: 0.85rem; }
+        .button-small { padding: 10px 16px; font-size: 0.8rem; }
 
         /* Add Course Section */
         .add-course-form {
-            background-color: var(--bg-surface); padding: 20px; border-radius: var(--border-radius-lg);
-            box-shadow: 0 4px 12px var(--shadow-color); margin-bottom: 30px; display: grid; gap: 15px;
+            background-color: var(--bg-surface); padding: 25px; border-radius: var(--border-radius-lg);
+            box-shadow: 0 6px 20px var(--shadow-strong-color); margin-bottom: 40px; display: grid; gap: 20px;
             transition: background-color var(--transition-theme), box-shadow var(--transition-theme);
         }
-        .add-course-form .form-group { display: flex; flex-direction: column; gap: 5px; }
-        .add-course-form label { font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); }
+        .add-course-form .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .add-course-form label { font-size: 0.9rem; font-weight: 500; color: var(--text-secondary); }
 
-        /* Course Card, Details, Item Lists etc. */
+        /* Course Card */
         .course-card {
-            background-color: var(--bg-surface); margin-bottom: 20px; border-radius: var(--border-radius-lg);
-            box-shadow: 0 4px 12px var(--shadow-color); overflow: hidden;
+            background-color: var(--bg-surface); margin-bottom: 25px; border-radius: var(--border-radius-lg);
+            box-shadow: 0 6px 20px var(--shadow-color); overflow: hidden;
             transition: background-color var(--transition-theme), box-shadow var(--transition-theme), transform var(--transition-interactive);
-            animation: fadeIn 0.4s ease-out backwards; animation-delay: calc(var(--card-index, 0) * 0.07s);
+            animation: fadeInScaleUp 0.5s ease-out backwards; animation-delay: calc(var(--card-index, 0) * 0.08s);
         }
-        .course-card:hover { transform: translateY(-2px); box-shadow: 0 6px 15px var(--shadow-strong-color); }
+        .course-card:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 8px 25px var(--shadow-strong-color); }
         .course-header {
-            padding: 16px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 25px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
             border-bottom: 1px solid var(--border-primary);
             transition: border-color var(--transition-theme), background-color var(--transition-interactive);
         }
         .course-header:hover { background-color: var(--bg-surface-hover); }
         .course-header-content { flex-grow: 1; }
-        .course-name { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin: 0 0 4px 0; transition: color var(--transition-theme); }
-        .course-name-input { font-size: 1.2rem; font-weight: 600; padding: 6px 8px; margin: -6px 0; flex-grow: 1; }
-        .course-summary-text { font-size: 0.8rem; color: var(--text-secondary); transition: color var(--transition-theme); display: block; }
-        .course-date-added { font-size: 0.75rem; color: var(--text-secondary); opacity: 0.8; display: block; margin-top: 2px;}
+        .course-name { font-size: 1.35rem; font-weight: 700; color: var(--text-primary); margin: 0 0 5px 0; transition: color var(--transition-theme); }
+        .course-name-input { font-size: 1.35rem; font-weight: 700; padding: 8px 10px; margin: -8px 0; flex-grow: 1; }
+        .course-summary-text { font-size: 0.85rem; color: var(--text-secondary); transition: color var(--transition-theme); display: block; }
+        .course-date-added { font-size: 0.8rem; color: var(--text-secondary); opacity: 0.7; display: block; margin-top: 3px;}
 
-        .course-header-controls { display: flex; align-items: center; gap: 10px; }
+        .course-header-controls { display: flex; align-items: center; gap: 15px; }
         .expand-toggle {
-            font-size: 1.1rem; color: var(--text-secondary); background: none; border: none; padding: 5px; cursor: pointer;
+            font-size: 1.3rem; color: var(--accent-primary); background: none; border: none; padding: 5px; cursor: pointer;
             transition: transform var(--transition-interactive), color var(--transition-theme);
         }
         .course-card.expanded .expand-toggle { transform: rotate(90deg); }
-        .progress-bar-wrapper { width: 80px; height: 8px; background-color: var(--border-primary); border-radius: 4px; overflow: hidden; transition: background-color var(--transition-theme); }
-        .progress-bar-fill { height: 100%; background-color: var(--accent-secondary); border-radius: 4px; width: 0%; transition: width 0.5s ease-out, background-color var(--transition-theme); }
+        .progress-bar-wrapper { width: 90px; height: 10px; background-color: var(--border-input); border-radius: 5px; overflow: hidden; transition: background-color var(--transition-theme); }
+        .progress-bar-fill { height: 100%; background-image: linear-gradient(45deg, var(--accent-secondary), color-mix(in srgb, var(--accent-secondary) 70%, var(--accent-primary) 30%)); border-radius: 5px; width: 0%; transition: width 0.6s ease-out, background-image var(--transition-theme); }
+        
         .course-details-content {
-            max-height: 0; overflow: hidden; padding: 0 20px;
-            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+            max-height: 0; overflow: hidden; padding: 0 25px;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out; /* Smoother easing */
         }
-        .course-card.expanded .course-details-content { max-height: 2500px; padding: 20px 20px; } /* Increased max-height again */
-        .detail-group { margin-bottom: 25px; }
+        .course-card.expanded .course-details-content { max-height: 2500px; padding: 25px; }
+        .detail-group { margin-bottom: 30px; }
         .detail-group h4 {
-            font-size: 1rem; font-weight: 500; color: var(--text-primary); margin: 0 0 12px 0;
-            border-bottom: 1px solid var(--border-primary); padding-bottom: 8px;
+            font-size: 1.1rem; font-weight: 600; color: var(--accent-primary); margin: 0 0 15px 0;
+            border-bottom: 2px solid var(--accent-primary); padding-bottom: 10px; /* More prominent heading underline */
             display: flex; justify-content: space-between; align-items: center;
             transition: color var(--transition-theme), border-color var(--transition-theme);
         }
-        .detail-group h4 .small-text { font-size: 0.8rem; color: var(--text-secondary); font-weight: 400;}
+        .detail-group h4 .small-text { font-size: 0.85rem; color: var(--text-secondary); font-weight: 400;}
+        
         .item-list { list-style: none; padding: 0; margin: 0; }
         .item-entry {
-            display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
-            padding: 10px 0; border-bottom: 1px solid var(--border-primary);
-            transition: border-color var(--transition-theme); animation: fadeIn 0.3s ease-out;
+            display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+            padding: 12px 0; border-bottom: 1px dashed var(--border-primary); /* Dashed for softer separation */
+            transition: border-color var(--transition-theme); animation: fadeInScaleUp 0.4s ease-out;
         }
         .item-entry:last-child { border-bottom: none; }
-        .item-entry.completed .item-title { text-decoration: line-through; color: var(--text-secondary); opacity: 0.7; }
-        .item-entry.animate-completion { animation: itemStateChange 0.4s ease-out; }
+        .item-entry.completed .item-title { text-decoration: line-through; color: var(--text-secondary); opacity: 0.6; }
+        .item-entry.animate-completion { animation: itemStateChangeVibrant 0.4s ease-out; }
         .item-main-content { display: flex; justify-content: space-between; align-items: center; width: 100%;}
-        .item-title { font-size: 0.9rem; font-weight: 400; color: var(--text-primary); word-break: break-word; flex-grow: 1; transition: color var(--transition-theme); }
-        .item-actions { display: flex; gap: 8px; margin-top: 8px; width: 100%; }
+        .item-title { font-size: 0.95rem; font-weight: 500; color: var(--text-primary); word-break: break-word; flex-grow: 1; transition: color var(--transition-theme); }
+        .item-actions { display: flex; gap: 10px; margin-top: 10px; width: 100%; }
         .item-actions .button { flex-grow: 1; }
-        .add-item-form { display: grid; gap: 10px; margin-bottom: 15px; }
+        
+        .add-item-form { display: grid; gap: 15px; margin-bottom: 20px; }
         .add-item-form .button-group { display: flex; gap: 10px; }
         .add-item-form .button-group .button { flex-grow: 1; }
-        .edit-target-lectures-form { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-        .edit-target-lectures-form label { font-size: 0.85rem; color: var(--text-secondary); white-space: nowrap; }
-        .edit-target-lectures-form .input-field { width: 70px; padding: 8px 10px; text-align: center;}
-        .course-actions-footer { text-align: right; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-primary); transition: border-color var(--transition-theme); }
+        
+        .edit-target-lectures-form { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .edit-target-lectures-form label { font-size: 0.9rem; color: var(--text-secondary); white-space: nowrap; }
+        .edit-target-lectures-form .input-field { width: 80px; padding: 10px 12px; text-align: center;}
+        
+        .course-actions-footer { text-align: right; margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--border-primary); transition: border-color var(--transition-theme); }
+        
         .empty-state-message {
-            text-align: center; padding: 40px 20px; color: var(--text-secondary); font-weight: 300; font-size: 1.1rem;
+            text-align: center; padding: 50px 25px; color: var(--text-secondary); font-weight: 400; font-size: 1.15rem;
             background-color: var(--bg-surface); border-radius: var(--border-radius-lg);
-            box-shadow: 0 4px 12px var(--shadow-color);
+            box-shadow: 0 6px 20px var(--shadow-color);
             transition: background-color var(--transition-theme), color var(--transition-theme), box-shadow var(--transition-theme);
         }
-        .empty-state-message span { font-size: 2rem; display: block; margin-bottom: 10px;}
+        .empty-state-message span { font-size: 2.5rem; display: block; margin-bottom: 15px; animation: fadeInScaleUp 0.5s ease-out; }
 
-        /* Notes Section Specific Styles */
-        .notes-actions { text-align: right; margin-top: 10px; }
+        .notes-actions { text-align: right; margin-top: 15px; }
 
         /* Responsive Adjustments */
         @media (min-width: 640px) {
-            .add-course-form { grid-template-columns: 1fr auto; align-items: flex-end; }
-            .add-course-form .form-group:nth-child(2) { grid-column: auto; }
-            .add-course-form #newCourseButton { grid-column: auto; width: auto; }
+            .add-course-form { grid-template-columns: 1fr auto auto; align-items: flex-end; gap: 20px; } /* Name | Lectures | Button on one line */
+            .add-course-form .form-group { margin-bottom: 0; }
+            .add-course-form #newCourseButton { width: auto; }
             
             .item-entry { flex-direction: row; align-items: center; }
             .item-actions { margin-top: 0; width: auto; }
@@ -281,7 +282,7 @@
             .add-item-form { grid-template-columns: 1fr auto; }
             .add-item-form .button-group { grid-column: 2 / 3; }
         }
-         @media (min-width: 400px) {
+         @media (min-width: 480px) { /* Minor adjustment for slightly larger phones */
             .add-item-form .button-group { display: flex; gap: 10px; }
             .add-item-form .button-group .button { flex-grow: 1; }
         }
@@ -292,20 +293,19 @@
 
     <div class="app-container">
         <header class="app-header">
-            <h1>Study Tracker</h1>
-            <button id="themeToggleButton" class="theme-toggle-button" title="Toggle theme">
+            <h1>Study Spark ✨</h1> <button id="themeToggleButton" class="theme-toggle-button" title="Toggle theme">
                 <span class="theme-icon">☀️</span>
             </button>
         </header>
 
         <section class="add-course-form">
             <div class="form-group">
-                <label for="newCourseName">Course Name</label>
-                <input type="text" id="newCourseName" class="input-field" placeholder="E.g., Advanced JavaScript">
+                <label for="newCourseName">New Course Title</label>
+                <input type="text" id="newCourseName" class="input-field" placeholder="E.g., Quantum Computing Fundamentals">
             </div>
             <div class="form-group">
                 <label for="newCourseLectures">Target Lectures</label>
-                <input type="number" id="newCourseLectures" class="input-field" placeholder="E.g., 24" min="0">
+                <input type="number" id="newCourseLectures" class="input-field" placeholder="e.g., 15" min="0">
             </div>
             <button id="newCourseButton" class="button button-primary" onclick="addCourse()">Add Course</button>
         </section>
@@ -319,59 +319,82 @@
         const themeToggleButton = document.getElementById('themeToggleButton');
         const themeIcon = themeToggleButton.querySelector('.theme-icon');
         
-        const APP_DATA_KEY = 'slickStudyTrackerData_Global_V8'; 
+        const APP_DATA_KEY = 'vibrantStudyTrackerData_V9'; // Updated key version
+
+        // --- Web Audio API for Sounds ---
+        let audioCtx;
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            return audioCtx;
+        }
+
+        function playPopSound(type = 'add') {
+            try {
+                const context = getAudioContext();
+                if (!context) return;
+
+                const oscillator = context.createOscillator();
+                const gainNode = context.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(context.destination);
+
+                gainNode.gain.setValueAtTime(0, context.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.3, context.currentTime + 0.01); // Quick attack
+                
+                if (type === 'add') {
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(660, context.currentTime); // Higher pitch for add
+                } else { // remove
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.setValueAtTime(330, context.currentTime); // Lower pitch for remove
+                }
+                
+                oscillator.start(context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.1); // Quick decay
+                oscillator.stop(context.currentTime + 0.1);
+            } catch (e) {
+                console.warn("Web Audio API sound failed:", e);
+            }
+        }
 
 
         // --- THEME MANAGEMENT ---
-        function setPreferredTheme() {
+        function setPreferredTheme() { /* ... same as before ... */ 
             const savedTheme = localStorage.getItem('studyTrackerTheme');
             const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
             let currentThemeIsDark;
-
-            if (savedTheme) {
-                currentThemeIsDark = (savedTheme === 'dark');
-            } else {
-                currentThemeIsDark = systemPrefersDark;
-            }
+            if (savedTheme) currentThemeIsDark = (savedTheme === 'dark');
+            else currentThemeIsDark = systemPrefersDark;
             document.body.classList.toggle('dark-mode', currentThemeIsDark);
             updateThemeIcon(currentThemeIsDark);
         }
-
-        function updateThemeIcon(isDarkMode) {
+        function updateThemeIcon(isDarkMode) { /* ... same as before ... */ 
             if (themeIcon) themeIcon.textContent = isDarkMode ? '🌙' : '☀️';
         }
-
-        themeToggleButton.addEventListener('click', () => {
+        themeToggleButton.addEventListener('click', () => { /* ... same as before ... */ 
             const isDarkMode = document.body.classList.toggle('dark-mode');
             localStorage.setItem('studyTrackerTheme', isDarkMode ? 'dark' : 'light');
             updateThemeIcon(isDarkMode);
         });
 
         // --- DATA PERSISTENCE ---
-        function saveData() {
+        function saveData() { /* ... same as before ... */ 
             localStorage.setItem(APP_DATA_KEY, JSON.stringify(courses));
         }
-
-        function loadData() {
+        function loadData() { /* ... same as before, ensuring all fields ... */ 
             const data = localStorage.getItem(APP_DATA_KEY);
             if (data) {
                 courses = JSON.parse(data);
                 courses.forEach(course => {
                     if (course.notes === undefined) course.notes = "";
                     if (course.isEditingNotes === undefined) course.isEditingNotes = false;
-                    // Ensure dateAdded exists, if not (very old data), set to a noticeable past date or current
-                    if (course.dateAdded === undefined) {
-                         // For truly old data, you might set a very past fixed date,
-                         // or current if you want to imply it was "imported" now.
-                         // Let's default to now for simplicity if it's completely missing.
-                        course.dateAdded = new Date().toISOString(); 
-                    }
+                    if (course.dateAdded === undefined) course.dateAdded = new Date().toISOString(); 
                 });
-            } else {
-                courses = []; 
-            }
+            } else courses = []; 
         }
-
         function generateId() { return '_' + Math.random().toString(36).substr(2, 9); }
 
         // --- COURSE MANAGEMENT & RENDERING ---
@@ -391,24 +414,23 @@
                 isEditingName: false
             });
             nameInput.value = ''; lecturesInput.value = '';
+            playPopSound('add'); // Play add sound
             saveData(); renderCourses();
         }
 
         function deleteCourse(courseId) { 
-            if (confirm('Delete this course?')) {
+            if (confirm('Delete this course? This action cannot be undone.')) { // Stronger confirmation
                 courses = courses.filter(c => c.id !== courseId);
+                playPopSound('remove'); // Play remove sound
                 saveData(); renderCourses();
             }
         }
         
-        function toggleEditCourseName(courseId) { 
+        function toggleEditCourseName(courseId) { /* ... same as before ... */ 
             courses.forEach(c => {
-                if (c.id === courseId) {
-                    c.isEditingName = !c.isEditingName;
-                } else {
-                    c.isEditingName = false; // Close other name edits
-                }
-                c.isEditingNotes = false; // Close notes edit if name edit is toggled
+                if (c.id === courseId) c.isEditingName = !c.isEditingName;
+                else c.isEditingName = false; 
+                c.isEditingNotes = false; 
             });
             renderCourses();
             const course = courses.find(c => c.id === courseId);
@@ -419,16 +441,15 @@
                 }, 0);
             }
         }
-
-        function saveCourseName(courseId, newName) { 
+        function saveCourseName(courseId, newName) { /* ... same as before ... */ 
             const course = courses.find(c => c.id === courseId);
             if (course && newName.trim() !== '') course.name = newName.trim();
             course.isEditingName = false;
             saveData(); renderCourses();
         }
 
-        // --- LECTURE & HOMEWORK (Core logic same) ---
-        function addLecture(courseId, markAsWatched = false) {
+        // --- LECTURE & HOMEWORK ---
+        function addLecture(courseId, markAsWatched = false) { /* ... same ... */ 
             const course = courses.find(c => c.id === courseId);
             const input = document.getElementById(`lectureName-${courseId}`);
             const name = input.value.trim();
@@ -438,7 +459,7 @@
                 input.value = ''; saveData(); renderCourses(courseId);
             } else if (!name) alert("Lecture name missing.");
         }
-        function toggleLectureWatched(courseId, lectureId) {
+        function toggleLectureWatched(courseId, lectureId) { /* ... same ... */ 
             const course = courses.find(c => c.id === courseId);
             const lecture = course?.lectures.find(l => l.id === lectureId);
             if (lecture) {
@@ -447,11 +468,11 @@
                 saveData(); renderCourses(courseId);
             }
         }
-        function deleteLecture(courseId, lectureId) { 
+        function deleteLecture(courseId, lectureId) { /* ... same ... */ 
             const course = courses.find(c => c.id === courseId);
             if (course) { course.lectures = course.lectures.filter(l => l.id !== lectureId); saveData(); renderCourses(courseId); }
         }
-        function updateTargetLectures(courseId) { 
+        function updateTargetLectures(courseId) { /* ... same ... */ 
             const course = courses.find(c => c.id === courseId);
             const input = document.getElementById(`targetLecturesInput-${courseId}`);
             if (course && input) {
@@ -460,7 +481,7 @@
                 else { alert("Invalid target number."); input.value = course.targetLectures; }
             }
         }
-        function addHomework(courseId, markAsCompleted = false) {
+        function addHomework(courseId, markAsCompleted = false) { /* ... same ... */ 
             const course = courses.find(c => c.id === courseId);
             const input = document.getElementById(`homeworkDesc-${courseId}`);
             const desc = input.value.trim();
@@ -470,7 +491,7 @@
                 input.value = ''; saveData(); renderCourses(courseId);
             } else if (!desc) alert("Homework description missing.");
         }
-        function toggleHomeworkCompleted(courseId, homeworkId) {
+        function toggleHomeworkCompleted(courseId, homeworkId) { /* ... same ... */ 
             const course = courses.find(c => c.id === courseId);
             const hw = course?.homeworks.find(h => h.id === homeworkId);
             if (hw) {
@@ -479,43 +500,34 @@
                 saveData(); renderCourses(courseId);
             }
         }
-        function deleteHomework(courseId, homeworkId) { 
+        function deleteHomework(courseId, homeworkId) { /* ... same ... */ 
             const course = courses.find(c => c.id === courseId);
             if (course) { course.homeworks = course.homeworks.filter(h => h.id !== homeworkId); saveData(); renderCourses(courseId); }
         }
 
         // --- NOTES MANAGEMENT ---
-        function toggleEditSaveNotes(courseId) {
+        function toggleEditSaveNotes(courseId) { /* ... same as before ... */ 
             const course = courses.find(c => c.id === courseId);
             if (!course) return;
-
-            // Close name editing if notes editing is toggled
             courses.forEach(c => c.isEditingName = false);
-
-
-            if (course.isEditingNotes) { // Was in edit mode, now "Save"
+            if (course.isEditingNotes) {
                 const notesTextarea = document.getElementById(`notes-textarea-${courseId}`);
                 course.notes = notesTextarea.value;
                 course.isEditingNotes = false;
                 saveData();
-            } else { // Was in view mode, now "Edit"
-                course.isEditingNotes = true;
-            }
+            } else course.isEditingNotes = true;
             renderCourses(courseId); 
             if(course.isEditingNotes){ 
                  setTimeout(() => {
                     const textarea = document.getElementById(`notes-textarea-${courseId}`);
-                    if (textarea) {
-                        textarea.focus();
-                        textarea.selectionStart = textarea.selectionEnd = textarea.value.length; // Move cursor to end
-                    }
+                    if (textarea) { textarea.focus(); textarea.selectionStart = textarea.selectionEnd = textarea.value.length; }
                  },0);
             }
         }
         
         let globallyExpandedState = {};
 
-        function toggleCourseDetails(courseId) {
+        function toggleCourseDetails(courseId) { /* ... same as before ... */ 
             const courseCard = document.getElementById(`course-${courseId}`);
             if (courseCard) {
                 const isExpanding = !courseCard.classList.contains('expanded');
@@ -529,7 +541,7 @@
             container.innerHTML = ''; 
 
             if (courses.length === 0) {
-                container.innerHTML = '<div class="empty-state-message"><span>📚</span>No courses yet. Add one to start tracking!</div>';
+                container.innerHTML = '<div class="empty-state-message"><span>🚀</span>Ready to launch a new course? Add one above!</div>';
                 return;
             }
 
@@ -565,10 +577,12 @@
                         <div class="course-header-content">
                             <h3 class="course-name" ondblclick="event.stopPropagation(); toggleEditCourseName('${course.id}')" title="Double-click to edit name">${course.name}</h3>
                             <p class="course-summary-text">Lectures: ${watchedLecturesCount}/${course.targetLectures} | Homework: ${completedHomeworkCount}</p>
-                            ${course.dateAdded ? `<span class="course-date-added">Added: ${new Date(course.dateAdded).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</span>` : ''}
+                            ${course.dateAdded ? `<span class="course-date-added">Added: ${new Date(course.dateAdded).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' })}</span>` : ''}
                         </div>`;
                 }
 
+                // The rest of the innerHTML for courseCard is the same as the previous version with notes
+                // Ensuring notes section is correctly included:
                 courseCard.innerHTML = `
                     <header class="course-header" onclick="toggleCourseDetails('${course.id}')">
                         ${courseNameHTML}
@@ -636,8 +650,8 @@
                         </div>
 
                         <div class="detail-group">
-                            <h4>Notes</h4>
-                            <textarea id="notes-textarea-${course.id}" class="textarea-field" placeholder="Add your course notes here..." ${course.isEditingNotes ? '' : 'readonly'}>${course.notes || ''}</textarea>
+                            <h4>Course Notes</h4>
+                            <textarea id="notes-textarea-${course.id}" class="textarea-field" placeholder="Jot down your thoughts, key points, or reminders here..." ${course.isEditingNotes ? '' : 'readonly'}>${course.notes || ''}</textarea>
                             <div class="notes-actions">
                                 <button class="button button-small ${course.isEditingNotes ? 'button-success' : 'button-secondary'}" onclick="toggleEditSaveNotes('${course.id}')">
                                     ${course.isEditingNotes ? 'Save Notes' : 'Edit Notes'}
@@ -646,7 +660,7 @@
                         </div>
 
                         <footer class="course-actions-footer">
-                            <button class="button button-danger" onclick="deleteCourse('${course.id}')">Delete Course</button>
+                            <button class="button button-danger" onclick="deleteCourse('${course.id}')">Delete This Course</button>
                         </footer>
                     </section>
                 `;
