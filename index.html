@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slick Study Tracker</title>
+    <title>Slick Study Tracker - With Notes & Dates</title>
     <style>
         :root {
             /* Light Mode Default Palette (Calm & Modern) */
@@ -140,13 +140,27 @@
             width: 100%; padding: 12px 16px; font-family: var(--font-family); font-size: 0.95rem; font-weight: 400;
             color: var(--text-primary); background-color: var(--bg-input); border: 1px solid var(--border-input);
             border-radius: var(--border-radius-md);
-            transition: border-color var(--transition-interactive), box-shadow var(--transition-interactive), background-color var(--transition-theme), color var(--transition-theme);
+            transition: border-color var(--transition-interactive), box-shadow var(--transition-interactive), background-color var(--transition-theme), color var(--transition-theme), opacity var(--transition-theme);
         }
         .input-field::placeholder, .textarea-field::placeholder { color: var(--text-placeholder); font-weight: 300; }
         .input-field:focus, .textarea-field:focus {
             outline: none; border-color: var(--border-input-focus);
             box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-primary) 20%, transparent);
         }
+        .textarea-field {
+            min-height: 100px; 
+            resize: vertical; 
+        }
+        .textarea-field:read-only {
+            background-color: color-mix(in srgb, var(--bg-input) 95%, var(--bg-main) 5%);
+            border-color: transparent; 
+            box-shadow: none;
+            cursor: default;
+            opacity: 0.9;
+            white-space: pre-wrap; /* Ensure newlines are respected in readonly view */
+        }
+
+
         .button {
             padding: 12px 20px; font-family: var(--font-family); font-size: 0.95rem; font-weight: 500;
             border-radius: var(--border-radius-md); border: none; cursor: pointer;
@@ -195,7 +209,9 @@
         .course-header-content { flex-grow: 1; }
         .course-name { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin: 0 0 4px 0; transition: color var(--transition-theme); }
         .course-name-input { font-size: 1.2rem; font-weight: 600; padding: 6px 8px; margin: -6px 0; flex-grow: 1; }
-        .course-summary-text { font-size: 0.8rem; color: var(--text-secondary); transition: color var(--transition-theme); }
+        .course-summary-text { font-size: 0.8rem; color: var(--text-secondary); transition: color var(--transition-theme); display: block; /* Ensure it takes its own line if needed */ }
+        .course-date-added { font-size: 0.75rem; color: var(--text-secondary); opacity: 0.8; display: block; margin-top: 2px;}
+
         .course-header-controls { display: flex; align-items: center; gap: 10px; }
         .expand-toggle {
             font-size: 1.1rem; color: var(--text-secondary); background: none; border: none; padding: 5px; cursor: pointer;
@@ -208,7 +224,7 @@
             max-height: 0; overflow: hidden; padding: 0 20px;
             transition: max-height 0.4s ease-out, padding 0.4s ease-out;
         }
-        .course-card.expanded .course-details-content { max-height: 1500px; padding: 20px 20px; }
+        .course-card.expanded .course-details-content { max-height: 2000px; padding: 20px 20px; }
         .detail-group { margin-bottom: 25px; }
         .detail-group h4 {
             font-size: 1rem; font-weight: 500; color: var(--text-primary); margin: 0 0 12px 0;
@@ -245,6 +261,9 @@
         }
         .empty-state-message span { font-size: 2rem; display: block; margin-bottom: 10px;}
 
+        /* Notes Section Specific Styles */
+        .notes-actions { text-align: right; margin-top: 10px; }
+
         /* Responsive Adjustments */
         @media (min-width: 640px) {
             .add-course-form { grid-template-columns: 1fr auto; align-items: flex-end; }
@@ -267,7 +286,8 @@
 </head>
 <body>
 
-    <div class="app-container"> <header class="app-header">
+    <div class="app-container">
+        <header class="app-header">
             <h1>Study Tracker</h1>
             <button id="themeToggleButton" class="theme-toggle-button" title="Toggle theme">
                 <span class="theme-icon">☀️</span>
@@ -295,7 +315,7 @@
         const themeToggleButton = document.getElementById('themeToggleButton');
         const themeIcon = themeToggleButton.querySelector('.theme-icon');
         
-        const APP_DATA_KEY = 'slickStudyTrackerData_Global_V6'; // Single key for all data
+        const APP_DATA_KEY = 'slickStudyTrackerData_Global_V8'; // Updated key version for dateAdded field
 
 
         // --- THEME MANAGEMENT ---
@@ -323,7 +343,7 @@
             updateThemeIcon(isDarkMode);
         });
 
-        // --- DATA PERSISTENCE (Simplified to Global Key) ---
+        // --- DATA PERSISTENCE ---
         function saveData() {
             localStorage.setItem(APP_DATA_KEY, JSON.stringify(courses));
         }
@@ -332,6 +352,12 @@
             const data = localStorage.getItem(APP_DATA_KEY);
             if (data) {
                 courses = JSON.parse(data);
+                // Ensure new fields are present if loading old data
+                courses.forEach(course => {
+                    if (course.notes === undefined) course.notes = "";
+                    if (course.isEditingNotes === undefined) course.isEditingNotes = false;
+                    if (course.dateAdded === undefined) course.dateAdded = new Date().toISOString(); // Fallback for old data
+                });
             } else {
                 courses = []; 
             }
@@ -339,7 +365,7 @@
 
         function generateId() { return '_' + Math.random().toString(36).substr(2, 9); }
 
-        // --- COURSE MANAGEMENT & RENDERING (Core logic remains similar) ---
+        // --- COURSE MANAGEMENT & RENDERING ---
         function addCourse() {
             const nameInput = document.getElementById('newCourseName');
             const lecturesInput = document.getElementById('newCourseLectures');
@@ -350,20 +376,23 @@
 
             courses.unshift({
                 id: generateId(), name: name, targetLectures: targetLectures,
-                lectures: [], homeworks: [], isEditingName: false
+                lectures: [], homeworks: [], 
+                notes: "", isEditingNotes: false, 
+                dateAdded: new Date().toISOString(), // Store date when course is added
+                isEditingName: false
             });
             nameInput.value = ''; lecturesInput.value = '';
             saveData(); renderCourses();
         }
 
-        function deleteCourse(courseId) {
+        function deleteCourse(courseId) { /* ... same as before ... */ 
             if (confirm('Delete this course?')) {
                 courses = courses.filter(c => c.id !== courseId);
                 saveData(); renderCourses();
             }
         }
         
-        function toggleEditCourseName(courseId) {
+        function toggleEditCourseName(courseId) { /* ... same as before ... */ 
             courses.forEach(c => c.isEditingName = (c.id === courseId) ? !c.isEditingName : false);
             renderCourses();
             const course = courses.find(c => c.id === courseId);
@@ -375,13 +404,14 @@
             }
         }
 
-        function saveCourseName(courseId, newName) {
+        function saveCourseName(courseId, newName) { /* ... same as before ... */ 
             const course = courses.find(c => c.id === courseId);
             if (course && newName.trim() !== '') course.name = newName.trim();
             course.isEditingName = false;
             saveData(); renderCourses();
         }
 
+        // --- LECTURE & HOMEWORK (Core logic same) ---
         function addLecture(courseId, markAsWatched = false) {
             const course = courses.find(c => c.id === courseId);
             const input = document.getElementById(`lectureName-${courseId}`);
@@ -392,7 +422,6 @@
                 input.value = ''; saveData(); renderCourses(courseId);
             } else if (!name) alert("Lecture name missing.");
         }
-
         function toggleLectureWatched(courseId, lectureId) {
             const course = courses.find(c => c.id === courseId);
             const lecture = course?.lectures.find(l => l.id === lectureId);
@@ -415,7 +444,6 @@
                 else { alert("Invalid target number."); input.value = course.targetLectures; }
             }
         }
-
         function addHomework(courseId, markAsCompleted = false) {
             const course = courses.find(c => c.id === courseId);
             const input = document.getElementById(`homeworkDesc-${courseId}`);
@@ -438,6 +466,28 @@
         function deleteHomework(courseId, homeworkId) { 
             const course = courses.find(c => c.id === courseId);
             if (course) { course.homeworks = course.homeworks.filter(h => h.id !== homeworkId); saveData(); renderCourses(courseId); }
+        }
+
+        // --- NOTES MANAGEMENT ---
+        function toggleEditSaveNotes(courseId) {
+            const course = courses.find(c => c.id === courseId);
+            if (!course) return;
+
+            if (course.isEditingNotes) { // Was in edit mode, now "Save"
+                const notesTextarea = document.getElementById(`notes-textarea-${courseId}`);
+                course.notes = notesTextarea.value;
+                course.isEditingNotes = false;
+                saveData();
+            } else { // Was in view mode, now "Edit"
+                course.isEditingNotes = true;
+            }
+            renderCourses(courseId); 
+            if(course.isEditingNotes){ 
+                 setTimeout(() => {
+                    const textarea = document.getElementById(`notes-textarea-${courseId}`);
+                    if (textarea) textarea.focus();
+                 },0);
+            }
         }
         
         let globallyExpandedState = {};
@@ -477,7 +527,6 @@
                     }
                 }
 
-
                 let courseNameHTML;
                 if (course.isEditingName) {
                     courseNameHTML = `
@@ -493,6 +542,7 @@
                         <div class="course-header-content">
                             <h3 class="course-name" ondblclick="event.stopPropagation(); toggleEditCourseName('${course.id}')" title="Double-click to edit name">${course.name}</h3>
                             <p class="course-summary-text">Lectures: ${watchedLecturesCount}/${course.targetLectures} | Homework: ${completedHomeworkCount}</p>
+                            ${course.dateAdded ? `<span class="course-date-added">Added: ${new Date(course.dateAdded).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</span>` : ''}
                         </div>`;
                 }
 
@@ -561,6 +611,17 @@
                                 }).join('')}
                             </ul>
                         </div>
+
+                        <div class="detail-group">
+                            <h4>Notes</h4>
+                            <textarea id="notes-textarea-${course.id}" class="textarea-field" placeholder="Add your course notes here..." ${course.isEditingNotes ? '' : 'readonly'}>${course.notes || ''}</textarea>
+                            <div class="notes-actions">
+                                <button class="button button-small ${course.isEditingNotes ? 'button-success' : 'button-secondary'}" onclick="toggleEditSaveNotes('${course.id}')">
+                                    ${course.isEditingNotes ? 'Save Notes' : 'Edit Notes'}
+                                </button>
+                            </div>
+                        </div>
+
                         <footer class="course-actions-footer">
                             <button class="button button-danger" onclick="deleteCourse('${course.id}')">Delete Course</button>
                         </footer>
@@ -577,7 +638,7 @@
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             setPreferredTheme();
-            loadData(); // Load global data
+            loadData(); 
             renderCourses();
         });
     </script>
