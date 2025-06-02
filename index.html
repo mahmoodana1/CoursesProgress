@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slick Study Tracker - Local Profiles</title>
+    <title>Slick Study Tracker</title>
     <style>
         :root {
             /* Light Mode Default Palette (Calm & Modern) */
@@ -93,40 +93,8 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* Login Screen Styles */
-        .login-screen {
-            display: flex; /* Hidden by default, shown by JS */
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            max-width: 400px;
-            padding: 30px;
-            background-color: var(--bg-surface);
-            border-radius: var(--border-radius-lg);
-            box-shadow: 0 6px 20px var(--shadow-strong-color);
-            text-align: center;
-            animation: fadeIn 0.5s var(--transition-theme) forwards;
-            transition: background-color var(--transition-theme), box-shadow var(--transition-theme);
-        }
-        .login-screen h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
-        .login-screen p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-        .login-screen .input-field { margin-bottom: 20px; text-align: center; }
-        .login-screen .button { width: 100%; }
-
         /* App Container (Main Content) */
         .app-container {
-            display: none; /* Hidden by default, shown after "login" */
             width: 100%;
             max-width: 720px;
             margin: 0 auto;
@@ -139,7 +107,6 @@
             margin-bottom: 30px;
             padding: 10px 0;
         }
-        .app-header-title-group { display: flex; flex-direction: column; }
         h1 {
             font-size: 1.8rem;
             font-weight: 600;
@@ -147,13 +114,7 @@
             margin: 0;
             letter-spacing: -0.5px;
         }
-        .current-user-identifier {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            font-weight: 400;
-        }
-        .app-header-actions { display: flex; gap: 10px; }
-        .theme-toggle-button, .switch-user-button {
+        .theme-toggle-button {
             background-color: var(--bg-surface);
             color: var(--text-secondary);
             border: 1px solid var(--border-primary);
@@ -167,14 +128,14 @@
             align-items: center;
             gap: 6px;
         }
-        .theme-toggle-button:hover, .switch-user-button:hover {
+        .theme-toggle-button:hover {
             background-color: var(--bg-surface-hover);
             border-color: var(--accent-primary);
             color: var(--accent-primary);
             box-shadow: 0 2px 5px var(--shadow-color);
         }
 
-        /* Form Elements (Inputs, Buttons) - Styles from previous version, ensure consistency */
+        /* Form Elements (Inputs, Buttons) */
         .input-field, .textarea-field {
             width: 100%; padding: 12px 16px; font-family: var(--font-family); font-size: 0.95rem; font-weight: 400;
             color: var(--text-primary); background-color: var(--bg-input); border: 1px solid var(--border-input);
@@ -217,7 +178,7 @@
         .add-course-form .form-group { display: flex; flex-direction: column; gap: 5px; }
         .add-course-form label { font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); }
 
-        /* Course Card, Details, Item Lists etc. - Using existing styles, verified for theme compatibility */
+        /* Course Card, Details, Item Lists etc. */
         .course-card {
             background-color: var(--bg-surface); margin-bottom: 20px; border-radius: var(--border-radius-lg);
             box-shadow: 0 4px 12px var(--shadow-color); overflow: hidden;
@@ -287,7 +248,7 @@
         /* Responsive Adjustments */
         @media (min-width: 640px) {
             .add-course-form { grid-template-columns: 1fr auto; align-items: flex-end; }
-            .add-course-form .form-group:nth-child(2) { /* Target lectures input */ grid-column: auto; } /* Allow it to not span if there's space */
+            .add-course-form .form-group:nth-child(2) { grid-column: auto; }
             .add-course-form #newCourseButton { grid-column: auto; width: auto; }
             
             .item-entry { flex-direction: row; align-items: center; }
@@ -301,31 +262,16 @@
             .add-item-form .button-group { display: flex; gap: 10px; }
             .add-item-form .button-group .button { flex-grow: 1; }
         }
-        .hidden { display: none !important; }
 
     </style>
 </head>
 <body>
 
-    <div id="loginScreen" class="login-screen hidden"> <h2>Welcome Back!</h2>
-        <p>Enter your phone number to load your study tracker. This is just a local identifier for this browser and device.</p>
-        <input type="tel" id="phoneNumberInput" class="input-field" placeholder="Enter Phone Number (e.g., 0501234567)">
-        <button id="loadTrackerButton" class="button button-primary">Load My Tracker</button>
-    </div>
-
-    <div id="appContainer" class="app-container hidden"> <header class="app-header">
-            <div class="app-header-title-group">
-                <h1>Study Tracker</h1>
-                <span id="currentUserIdentifier" class="current-user-identifier"></span>
-            </div>
-            <div class="app-header-actions">
-                <button id="themeToggleButton" class="theme-toggle-button" title="Toggle theme">
-                    <span class="theme-icon">☀️</span>
-                </button>
-                <button id="switchUserButton" class="switch-user-button" title="Switch User/Profile">
-                    <span class="user-icon">👤</span> Switch
-                </button>
-            </div>
+    <div class="app-container"> <header class="app-header">
+            <h1>Study Tracker</h1>
+            <button id="themeToggleButton" class="theme-toggle-button" title="Toggle theme">
+                <span class="theme-icon">☀️</span>
+            </button>
         </header>
 
         <section class="add-course-form">
@@ -348,16 +294,8 @@
         let courses = [];
         const themeToggleButton = document.getElementById('themeToggleButton');
         const themeIcon = themeToggleButton.querySelector('.theme-icon');
-        const switchUserButton = document.getElementById('switchUserButton');
         
-        const loginScreen = document.getElementById('loginScreen');
-        const appContainer = document.getElementById('appContainer');
-        const phoneNumberInput = document.getElementById('phoneNumberInput');
-        const loadTrackerButton = document.getElementById('loadTrackerButton');
-        const currentUserIdentifierDisplay = document.getElementById('currentUserIdentifier');
-
-        const APP_DATA_PREFIX = 'slickStudyTrackerDataV5_';
-        const CURRENT_USER_KEY = 'studyTrackerCurrentUserIdentifier';
+        const APP_DATA_KEY = 'slickStudyTrackerData_Global_V6'; // Single key for all data
 
 
         // --- THEME MANAGEMENT ---
@@ -385,88 +323,23 @@
             updateThemeIcon(isDarkMode);
         });
 
-        // --- USER IDENTIFIER / LOGIN SIMULATION ---
-        function getCurrentUserIdentifier() {
-            return localStorage.getItem(CURRENT_USER_KEY);
-        }
-
-        function setCurrentUserIdentifier(identifier) {
-            if (identifier && identifier.trim() !== "") {
-                localStorage.setItem(CURRENT_USER_KEY, identifier.trim());
-                if(currentUserIdentifierDisplay) currentUserIdentifierDisplay.textContent = `Profile: ${identifier.trim()}`;
-                return true;
-            }
-            return false;
-        }
-
-        function clearCurrentUserIdentifier() {
-            localStorage.removeItem(CURRENT_USER_KEY);
-            courses = []; // Clear in-memory courses
-            if(currentUserIdentifierDisplay) currentUserIdentifierDisplay.textContent = '';
-        }
-
-        loadTrackerButton.addEventListener('click', () => {
-            const phoneIdentifier = phoneNumberInput.value;
-            // Basic validation - just ensure it's not empty and perhaps looks like a number string
-            if (phoneIdentifier && phoneIdentifier.trim().match(/^\d+$/)) {
-                setCurrentUserIdentifier(phoneIdentifier.trim());
-                showAppScreen();
-                loadData(); // Load data for the new identifier
-                renderCourses();
-            } else {
-                alert('Please enter a valid phone number as your local identifier (digits only).');
-            }
-        });
-
-        switchUserButton.addEventListener('click', () => {
-            if (confirm('Are you sure you want to switch profiles? Current unsaved changes might be lost if any.')) {
-                clearCurrentUserIdentifier();
-                showLoginScreen();
-            }
-        });
-
-        function showLoginScreen() {
-            loginScreen.classList.remove('hidden');
-            appContainer.classList.add('hidden');
-        }
-
-        function showAppScreen() {
-            loginScreen.classList.add('hidden');
-            appContainer.classList.remove('hidden');
-        }
-
-
-        // --- DATA PERSISTENCE (Scoped to User Identifier) ---
+        // --- DATA PERSISTENCE (Simplified to Global Key) ---
         function saveData() {
-            const userIdentifier = getCurrentUserIdentifier();
-            if (userIdentifier) {
-                localStorage.setItem(APP_DATA_PREFIX + userIdentifier, JSON.stringify(courses));
-            } else {
-                console.error("No user identifier set. Cannot save data.");
-            }
+            localStorage.setItem(APP_DATA_KEY, JSON.stringify(courses));
         }
 
         function loadData() {
-            const userIdentifier = getCurrentUserIdentifier();
-            if (userIdentifier) {
-                const data = localStorage.getItem(APP_DATA_PREFIX + userIdentifier);
-                if (data) {
-                    courses = JSON.parse(data);
-                } else {
-                    courses = []; // No data for this identifier, start fresh
-                }
+            const data = localStorage.getItem(APP_DATA_KEY);
+            if (data) {
+                courses = JSON.parse(data);
             } else {
-                courses = []; // Should not happen if login flow is correct
+                courses = []; 
             }
         }
 
         function generateId() { return '_' + Math.random().toString(36).substr(2, 9); }
 
-        // --- COURSE MANAGEMENT & RENDERING (largely same as V4, with minor adjustments) ---
-        // Minor change: renderCourses() might be called after user "login"
-        // All add/toggle/delete functions will call saveData() which now correctly scopes
-        // Passed focusedCourseId to renderCourses to keep a card expanded after an action
-
+        // --- COURSE MANAGEMENT & RENDERING (Core logic remains similar) ---
         function addCourse() {
             const nameInput = document.getElementById('newCourseName');
             const lecturesInput = document.getElementById('newCourseLectures');
@@ -600,7 +473,7 @@
                 if (globallyExpandedState[course.id] || (focusedCourseId === course.id && !globallyExpandedState.hasOwnProperty(course.id))) {
                     courseCard.classList.add('expanded');
                     if (!globallyExpandedState.hasOwnProperty(course.id) && focusedCourseId === course.id) {
-                        globallyExpandedState[course.id] = true; // Set if focused and not previously set
+                        globallyExpandedState[course.id] = true;
                     }
                 }
 
@@ -695,7 +568,7 @@
                 `;
                 container.appendChild(courseCard);
             });
-            courses.forEach(course => { // Clear animation flags after render
+            courses.forEach(course => { 
                 course.lectures.forEach(l => delete l.justCompletedAnimation);
                 course.homeworks.forEach(h => delete h.justCompletedAnimation);
             });
@@ -703,16 +576,9 @@
 
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
-            setPreferredTheme(); // Set theme ASAP
-            const userIdentifier = getCurrentUserIdentifier();
-            if (userIdentifier) {
-                if(currentUserIdentifierDisplay) currentUserIdentifierDisplay.textContent = `Profile: ${userIdentifier}`;
-                showAppScreen();
-                loadData();
-                renderCourses();
-            } else {
-                showLoginScreen();
-            }
+            setPreferredTheme();
+            loadData(); // Load global data
+            renderCourses();
         });
     </script>
 
