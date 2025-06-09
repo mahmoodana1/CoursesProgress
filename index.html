@@ -49,8 +49,8 @@
   --transition-interactive: 0.2s ease-out;
   --container-padding: 32px;
 
-  --sidebar-width: 300px;
-  --sidebar-transition: transform 0.3s ease-in-out;
+  --sidebar-width: 21%;
+  --sidebar-transition: transform 0.5s ease-in-out;
 }
 
 body.dark-mode {
@@ -494,7 +494,6 @@ body.dark-mode .app-header {
     right: 1%;
     top: 1.5%;
     height: 97%;
-    
     overflow-y: scroll;
     width: var(--sidebar-width);
     background-color: rgba(var(--bg-surface-rgb), 0.8);
@@ -503,7 +502,8 @@ body.dark-mode .app-header {
     transform: translateX(100%);
     transition: var(--sidebar-transition), opacity 0.3s ease, background-color 0.3s ease;
     z-index: 1000;
-    padding: 20px;
+    padding: 25px;
+    margin-right: 5px;
     box-shadow: -5px 0 15px var(--shadow-color);
     opacity: 0.6;
     border-radius: 3%;
@@ -511,7 +511,7 @@ body.dark-mode .app-header {
 
 .sidebar:hover {
     opacity: 1;
-    transform: translateX(50%);
+    transform: translateX(-0.01%);
 
 }
 
