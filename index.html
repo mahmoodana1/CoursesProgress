@@ -387,29 +387,77 @@ body.dark-mode .app-header {
 
 .item-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
 .item-entry {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px;
-  border-radius: var(--border-radius-md);
-  background-color: var(--bg-input);
-  border: 1px solid var(--border-input);
-  transition: all var(--transition-interactive);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px;
+    border-radius: var(--border-radius-md);
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-input);
+    transition: all var(--transition-interactive);
+    box-shadow: 0 2px 8px var(--shadow-color);
+    position: relative;
+    overflow: hidden;
 }
+
+.item-entry::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--accent-primary), var(--accent-secondary));
+    opacity: 0;
+    transition: opacity var(--transition-interactive);
+}
+
 .item-entry:hover {
-    transform: scale(1.02);
+    transform: translateY(-2px);
     border-color: var(--accent-primary);
+    box-shadow: 0 4px 12px var(--shadow-strong-color);
+}
+
+.item-entry:hover::before {
+    opacity: 1;
 }
 
 .item-entry.completed {
-    background-color: transparent;
-    border-color: color-mix(in srgb, var(--accent-secondary) 30%, transparent);
+    background-color: color-mix(in srgb, var(--bg-surface) 97%, var(--accent-secondary));
+    border-color: color-mix(in srgb, var(--accent-secondary) 20%, transparent);
 }
-.item-entry.completed .item-title { text-decoration: line-through; color: var(--text-secondary); opacity: 0.7; }
 
-.item-title { font-size: 1rem; font-weight: 500; word-break: break-word; flex-grow: 1; }
-.item-actions { display: flex; gap: 10px; }
+.item-entry.completed::before {
+    background: var(--accent-secondary);
+    opacity: 1;
+}
+
+.item-entry.completed .item-title { 
+    text-decoration: line-through;
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.item-title { 
+    font-size: 1rem;
+    font-weight: 500;
+    word-break: break-word;
+    flex-grow: 1;
+    transition: color var(--transition-interactive);
+    padding-left: 12px;
+}
+
+.item-actions { 
+    display: flex;
+    gap: 12px;
+    opacity: 0.7;
+    transition: opacity var(--transition-interactive);
+}
+
+.item-entry:hover .item-actions {
+    opacity: 1;
+}
 
 .add-item-form {
     display: grid;
@@ -443,9 +491,10 @@ body.dark-mode .app-header {
 /* Sidebar Styles */
 .sidebar {
     position: fixed;
-    right: 0%;
-    top: 0;
-    height: 100%;
+    right: 1%;
+    top: 1.5%;
+    height: 97%;
+    
     overflow-y: scroll;
     width: var(--sidebar-width);
     background-color: rgba(var(--bg-surface-rgb), 0.8);
@@ -462,7 +511,6 @@ body.dark-mode .app-header {
 
 .sidebar:hover {
     opacity: 1;
-    background-color: var(--bg-surface);
     transform: translateX(50%);
 
 }
