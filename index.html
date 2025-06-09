@@ -716,6 +716,18 @@ body.dark-mode .app-header {
     h1 {
         font-size: 1.8rem;
     }
+    
+    /* Pomodoro mobile styles */
+    .pomodoro-card { margin-bottom: 32px; }
+    .pomodoro-header { padding: 20px; }
+    .pomodoro-header h2 { font-size: 1.5rem; }
+    .timer-display { font-size: 3.5rem; }
+    .timer-controls { flex-direction: column; gap: 12px; }
+    .settings-group { grid-template-columns: 1fr; gap: 16px; }
+    .timer-phase { font-size: 0.85rem; padding: 6px 12px; }
+    .timer-display-compact { font-size: 1rem; }
+    .pomodoro-content-inner { padding: 20px; gap: 20px; }
+
     .add-course-form {
         padding: 24px;
         gap: 20px;
@@ -1064,6 +1076,66 @@ body.dark-mode .app-header {
     background-color: var(--accent-primary);
     color: var(--text-on-accent);
 }
+
+.item-entry, .todo-item, .course-card {
+    cursor: grab;
+}
+
+.item-entry:active, .todo-item:active, .course-card:active {
+    cursor: grabbing;
+}
+
+.dragging {
+    opacity: 0.5;
+    cursor: grabbing !important;
+    box-shadow: 0 8px 24px var(--shadow-strong-color) !important;
+    transform: scale(1.02) !important;
+    position: relative;
+    z-index: 100;
+}
+
+.drag-over {
+    border: 2px dashed var(--accent-primary) !important;
+    transform: translateY(2px);
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.drag-over::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -20px;
+    height: 20px;
+    background: transparent;
+}
+
+.drag-over::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -20px;
+    height: 20px;
+    background: transparent;
+}
+
+/* Touch support styles */
+@media (hover: none) and (pointer: coarse) {
+    .item-entry, .todo-item, .course-card {
+        touch-action: none;
+    }
+    
+    .item-entry:active, .todo-item:active, .course-card:active {
+        transform: scale(0.98);
+        transition: transform 0.2s ease;
+    }
+
+    .dragging {
+        opacity: 0.7;
+    }
+}
   </style>
 </head>
 <body>
@@ -1161,6 +1233,7 @@ body.dark-mode .app-header {
         const themeIcon = themeToggleButton.querySelector('.theme-icon');
 
         const APP_DATA_KEY = 'vibrantStudyTrackerData_V9';
+        const POMODORO_STATE_KEY = 'studyTracker_pomodoro_V1';
 
         // Timer functionality
         let timerInterval;
@@ -1196,7 +1269,9 @@ body.dark-mode .app-header {
 
         function togglePomodoro() {
             const card = document.getElementById('pomodoroCard');
-            card.classList.toggle('expanded');
+            const isExpanded = !card.classList.contains('expanded');
+            card.classList.toggle('expanded', isExpanded);
+            localStorage.setItem(POMODORO_STATE_KEY, JSON.stringify({ expanded: isExpanded }));
         }
 
         function formatTime(seconds) {
@@ -1655,7 +1730,7 @@ body.dark-mode .app-header {
                                 <ul class="item-list">
                                     ${course.lectures.map(lec => {
                                         const animClass = lec.justCompletedAnimation ? 'animate-completion' : '';
-                                        return `<li class="item-entry ${lec.watched ? 'completed' : ''} ${animClass}">
+                                        return `<li id="lecture-${lec.id}" class="item-entry ${lec.watched ? 'completed' : ''} ${animClass}" draggable="true">
                                             <span class="item-title">${lec.name}</span>
                                             <div class="item-actions">
                                                 <button class="button button-small ${lec.watched ? 'button-primary' : 'button-success'}" onclick="toggleLectureWatched('${course.id}', '${lec.id}')">${lec.watched ? 'Unwatch' : 'Watched'}</button>
@@ -1836,6 +1911,156 @@ body.dark-mode .app-header {
             }
         });
 
+        // --- DRAG AND DROP FUNCTIONALITY ---
+function initDragAndDrop() {
+    // Make items draggable
+    document.querySelectorAll('.course-card, .item-entry, .todo-item').forEach(item => {
+        item.setAttribute('draggable', 'true');
+        
+        // Drag events
+        item.addEventListener('dragstart', handleDragStart);
+        item.addEventListener('dragend', handleDragEnd);
+        item.addEventListener('dragover', handleDragOver);
+        item.addEventListener('dragleave', handleDragLeave);
+        item.addEventListener('drop', handleDrop);
+
+        // Touch events
+        item.addEventListener('touchstart', handleTouchStart, { passive: false });
+        item.addEventListener('touchmove', handleTouchMove, { passive: false });
+        item.addEventListener('touchend', handleTouchEnd);
+    });
+}
+
+function handleDragStart(e) {
+    e.stopPropagation();
+    this.classList.add('dragging');
+    e.dataTransfer.setData('text/plain', this.id);
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function handleDragEnd(e) {
+    this.classList.remove('dragging');
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!this.classList.contains('dragging')) {
+        const draggingElement = document.querySelector('.dragging');
+        if (!draggingElement) return;
+
+        // Only show drag-over if the types match
+        const isSameType = (
+            (draggingElement.classList.contains('course-card') && this.classList.contains('course-card')) ||
+            (draggingElement.classList.contains('item-entry') && this.classList.contains('item-entry') && 
+             draggingElement.closest('.item-list') === this.closest('.item-list')) ||
+            (draggingElement.classList.contains('todo-item') && this.classList.contains('todo-item'))
+        );
+
+        if (isSameType) {
+            this.classList.add('drag-over');
+        }
+    }
+}
+
+function handleDragLeave(e) {
+    this.classList.remove('drag-over');
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.classList.remove('drag-over');
+    const draggedId = e.dataTransfer.getData('text/plain');
+    const draggedElement = document.getElementById(draggedId);
+    
+    if (!draggedElement || draggedElement === this) return;
+
+    // Handle different types of items
+    if (draggedElement.classList.contains('course-card')) {
+        handleCourseDrop(draggedElement, this);
+    } else if (draggedElement.classList.contains('item-entry')) {
+        handleItemDrop(draggedElement, this);
+    } else if (draggedElement.classList.contains('todo-item')) {
+        handleTodoDrop(draggedElement, this);
+    }
+}
+
+// Touch event handlers
+let touchStartY;
+let draggedElement;
+
+function handleTouchStart(e) {
+    if (e.touches.length !== 1) return;
+    e.preventDefault();
+    touchStartY = e.touches[0].clientY;
+    this.classList.add('dragging');
+    draggedElement = this;
+}
+
+function handleTouchMove(e) {
+    if (!draggedElement || e.touches.length !== 1) return;
+    e.preventDefault();
+
+    const touch = e.touches[0];
+    const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+    
+    // Find valid drop target
+    const dropTarget = elements.find(el => {
+        if (el === draggedElement) return false;
+        
+        const isSameType = (
+            (draggedElement.classList.contains('course-card') && el.classList.contains('course-card')) ||
+            (draggedElement.classList.contains('item-entry') && el.classList.contains('item-entry') && 
+             draggedElement.closest('.item-list') === el.closest('.item-list')) ||
+            (draggedElement.classList.contains('todo-item') && el.classList.contains('todo-item'))
+        );
+        
+        return isSameType;
+    });
+
+    // Remove drag-over from all elements
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+    
+    // Add drag-over to current target
+    if (dropTarget) {
+        dropTarget.classList.add('drag-over');
+    }
+}
+
+function handleTouchEnd(e) {
+    if (!draggedElement) return;
+
+    const dropTarget = document.querySelector('.drag-over');
+    if (dropTarget) {
+        if (draggedElement.classList.contains('course-card')) {
+            handleCourseDrop(draggedElement, dropTarget);
+        } else if (draggedElement.classList.contains('item-entry')) {
+            handleItemDrop(draggedElement, dropTarget);
+        } else if (draggedElement.classList.contains('todo-item')) {
+            handleTodoDrop(draggedElement, dropTarget);
+        }
+    }
+
+    draggedElement.classList.remove('dragging');
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+    draggedElement = null;
+}
+
+// Update render functions to initialize drag and drop
+const originalRenderCourses = renderCourses;
+renderCourses = function(focusedCourseId = null) {
+    originalRenderCourses(focusedCourseId);
+    initDragAndDrop();
+};
+
+const originalRenderTodos = renderTodos;
+renderTodos = function() {
+    originalRenderTodos();
+    initDragAndDrop();
+};
+
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             setPreferredTheme();
@@ -1846,7 +2071,40 @@ body.dark-mode .app-header {
 
             // Allow playing audio after first user interaction
             document.body.addEventListener('click', getAudioContext, { once: true });
+
+            const pomodoroState = localStorage.getItem(POMODORO_STATE_KEY);
+            if (pomodoroState) {
+                const { expanded } = JSON.parse(pomodoroState);
+                document.getElementById('pomodoroCard').classList.toggle('expanded', expanded);
+            }
         });
+
+        function handleItemDrop(draggedItem, targetItem) {
+    const draggedParentList = draggedItem.closest('.item-list');
+    const targetParentList = targetItem.closest('.item-list');
+    
+    if (!draggedParentList || !targetParentList || draggedParentList !== targetParentList) return;
+
+    const courseId = draggedParentList.closest('.course-card').id.replace('course-', '');
+    const course = courses.find(c => c.id === courseId);
+    if (!course) return;
+
+    // Determine if this is a lecture list or homework list
+    const isLecturesList = draggedParentList.closest('.detail-group').querySelector('h4').textContent.includes('Lectures');
+    const items = isLecturesList ? course.lectures : course.homeworks;
+    
+    const draggedIndex = Array.from(draggedParentList.children).indexOf(draggedItem);
+    const targetIndex = Array.from(targetParentList.children).indexOf(targetItem);
+    
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    // Move the item in the array
+    const [movedItem] = items.splice(draggedIndex, 1);
+    items.splice(targetIndex, 0, movedItem);
+    
+    saveData();
+    renderCourses(courseId);
+}
     </script>
 
 </body>
