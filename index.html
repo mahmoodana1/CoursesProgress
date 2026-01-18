@@ -3,25 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vibrant Study Tracker</title>
+  <title>Study Spark - Enhanced</title>
   <style>
-   /*
- * VIBRANT & SLEEK STYLESHEET V5
- * Enhanced with audio feedback and refined mobile responsiveness.
- * - Subtle "pop" sounds for adding/removing courses.
- * - Distinct "chime" sound for completing items.
- * - Improved layout, spacing, and typography for mobile devices.
- * - Sticky header on mobile for easy theme toggle access.
- */
-
-/* ==========================================================================
-   1. Global Styles & Theme Variables
-   ========================================================================== */
-
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Light Mode - Premium & Airy */
   --bg-main-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   --bg-surface-rgb: 255, 255, 255;
   --bg-surface: rgba(var(--bg-surface-rgb), 0.65);
@@ -41,20 +27,15 @@
   --shadow-color: rgba(108, 92, 231, 0.1);
   --shadow-strong-color: rgba(108, 92, 231, 0.18);
   --backdrop-blur: 15px;
-
   --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --border-radius-md: 12px;
   --border-radius-lg: 20px;
   --transition-theme: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-interactive: 0.2s ease-out;
   --container-padding: 32px;
-
-  --sidebar-width: 21%;
-  --sidebar-transition: transform 0.5s ease-in-out;
 }
 
 body.dark-mode {
-  /* Dark Mode - Elegant & Techy */
   --bg-main-gradient: linear-gradient(135deg, #10151D 0%, #1D2A3A 100%);
   --bg-surface-rgb: 35, 38, 52;
   --bg-surface: rgba(var(--bg-surface-rgb), 0.6);
@@ -65,7 +46,7 @@ body.dark-mode {
   --text-placeholder: #718096;
   --border-primary: rgba(226, 232, 240, 0.1);
   --border-input: rgba(226, 232, 240, 0.15);
-  --accent-primary: #a78bfa; /* Softer purple for dark mode */
+  --accent-primary: #a78bfa;
   --accent-primary-hover: #8b5cf6;
   --accent-secondary: #00b894;
   --accent-danger: #ff5555;
@@ -94,10 +75,6 @@ body {
   justify-content: center;
   min-height: 100vh;
 }
-
-/* ==========================================================================
-   2. Core Layout & App Container
-   ========================================================================== */
 
 .app-container {
   position: relative;
@@ -150,10 +127,96 @@ h1 {
   transform: translateY(-3px) rotate(25deg) scale(1.1);
 }
 
+/* Current Task Display */
+.current-task-card {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  padding: 28px 32px;
+  border-radius: var(--border-radius-lg);
+  margin-bottom: 32px;
+  box-shadow: 0 8px 30px var(--shadow-strong-color);
+  color: white;
+  animation: fadeInScaleUp 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
 
-/* ==========================================================================
-   3. Forms & Interactive Elements (Inputs, Buttons)
-   ========================================================================== */
+.current-task-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.1));
+  pointer-events: none;
+}
+
+.current-task-header {
+  font-size: 0.9rem;
+  opacity: 0.95;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.current-task-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.current-task-info {
+  flex: 1;
+}
+
+.current-task-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: #ffffff;
+}
+
+.current-task-meta {
+  font-size: 0.95rem;
+  opacity: 0.95;
+  color: #ffffff;
+}
+
+.current-task-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.no-current-task {
+  text-align: center;
+  padding: 30px;
+  opacity: 0.9;
+  color: #ffffff;
+}
+
+.no-current-task-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.no-current-task-text {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+/* Task Color Classes - Less Vibrant */
+.task-color-red { background: linear-gradient(135deg, #e57373, #ef5350) !important; }
+.task-color-orange { background: linear-gradient(135deg, #ffb74d, #ff9800) !important; }
+.task-color-yellow { background: linear-gradient(135deg, #ffd54f, #fbc02d) !important; }
+.task-color-green { background: linear-gradient(135deg, #4db6ac, #26a69a) !important; }
+.task-color-blue { background: linear-gradient(135deg, #64b5f6, #42a5f5) !important; }
+.task-color-purple { background: linear-gradient(135deg, #9575cd, #7e57c2) !important; }
+.task-color-pink { background: linear-gradient(135deg, #f06292, #ec407a) !important; }
+.task-color-gray { background: linear-gradient(135deg, #78909c, #607d8b) !important; }
 
 .form-group {
     display: flex;
@@ -242,12 +305,8 @@ h1 {
 .button-success:hover { background-color: color-mix(in srgb, var(--accent-secondary) 85%, black); }
 
 .button-small { padding: 8px 16px; font-size: 0.8rem; letter-spacing: 0.6px; }
+.button-white { background-color: white; color: var(--accent-primary); }
 
-/* ==========================================================================
-   4. Component Styles
-   ========================================================================== */
-
-/* Add Course Form */
 .add-course-form {
   background-color: var(--bg-surface);
   backdrop-filter: blur(var(--backdrop-blur));
@@ -268,8 +327,6 @@ body.dark-mode .app-header {
     border: 1px solid var(--border-input);
 }
 
-
-/* Course Card */
 .course-card {
   background-color: var(--bg-surface);
   backdrop-filter: blur(var(--backdrop-blur));
@@ -309,14 +366,12 @@ body.dark-mode .app-header {
 .course-summary-text { font-size: 0.9rem; color: var(--text-secondary); font-weight: 400;}
 .course-date-added { font-size: 0.8rem; color: var(--text-secondary); opacity: 0.7; margin-top: 4px; }
 
-
 .course-header-controls { display: flex; align-items: center; gap: 16px; }
 .expand-toggle {
     background: none; border: none; font-size: 1.2rem; color: var(--text-secondary);
     padding: 8px; cursor: pointer; transition: transform 0.3s ease, color 0.2s ease;
 }
 .course-card.expanded .expand-toggle { transform: rotate(90deg); }
-
 
 .progress-bar-wrapper {
   width: 100px;
@@ -337,7 +392,6 @@ body.dark-mode .app-header {
   overflow: hidden;
 }
 
-/* Shimmer animation for progress bar */
 .progress-bar-fill::after {
     content: '';
     position: absolute;
@@ -491,84 +545,60 @@ body.dark-mode .app-header {
 /* Sidebar Styles */
 .sidebar {
     position: fixed;
-    right: 1%;
-    top: 1.5%;
-    height: 97%;
-    overflow-y: scroll;
-    width: var(--sidebar-width);
-    background-color: rgba(var(--bg-surface-rgb), 0.8);
+    right: -450px;
+    top: 0;
+    height: 100vh;
+    width: 450px;
+    background-color: rgba(var(--bg-surface-rgb), 0.95);
     backdrop-filter: blur(var(--backdrop-blur));
     -webkit-backdrop-filter: blur(var(--backdrop-blur));
-    transform: translateX(100%);
-    transition: var(--sidebar-transition), opacity 0.3s ease, background-color 0.3s ease;
+    transition: right 0.3s ease;
     z-index: 1000;
-    padding: 25px;
-    margin-right: 5px;
+    padding: 32px 24px;
     box-shadow: -5px 0 15px var(--shadow-color);
-    opacity: 0.6;
-    border-radius: 3%;
-}
-
-.sidebar:hover {
-    opacity: 1;
-    transform: translateX(-0.01%);
-
+    overflow-y: auto;
 }
 
 .sidebar.open {
-    transform: translateX(0);
+    right: 0;
 }
 
 .sidebar-toggle {
-    position: fixed !important;
-    right: 20px;
-    bottom: 20px;
-    width: 60px;
-    height: 60px;
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
-    background-color: var(--accent-primary);
-    color: var(--text-on-accent);
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    color: white;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 10px var(--shadow-strong-color);
-    z-index: 9999;
+    box-shadow: 0 6px 20px var(--shadow-strong-color);
+    z-index: 999;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    transition: all var(--transition-interactive);
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    will-change: transform;
-    backface-visibility: hidden;
-    pointer-events: auto;
-    opacity: 0.9;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    mix-blend-mode: normal;
-    isolation: isolate;
-    position: sticky;
+    font-size: 1.8rem;
+    transition: all 0.3s;
 }
 
 .sidebar-toggle:hover {
     transform: scale(1.1);
-    background-color: var(--accent-primary-hover);
-    opacity: 1;
-    box-shadow: 0 6px 15px var(--shadow-strong-color);
 }
 
 .sidebar-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-primary);
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border-primary);
 }
 
 .sidebar-title {
-    font-size: 1.3rem;
-    font-weight: 600;
+    font-size: 1.5rem;
+    font-weight: 700;
     color: var(--text-primary);
 }
 
@@ -577,8 +607,9 @@ body.dark-mode .app-header {
     border: none;
     color: var(--text-secondary);
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: 2rem;
     padding: 5px;
+    line-height: 1;
 }
 
 .todo-list {
@@ -591,12 +622,39 @@ body.dark-mode .app-header {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding: 12px;
+    padding: 16px;
     background-color: var(--bg-input);
-    border: 1px solid var(--border-input);
+    border: 2px solid var(--border-input);
     border-radius: var(--border-radius-md);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     transition: all var(--transition-interactive);
+    position: relative;
+    overflow: hidden;
+}
+
+.todo-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    opacity: 1;
+}
+
+.todo-item.task-color-red::before { background: linear-gradient(to bottom, #e57373, #ef5350); }
+.todo-item.task-color-orange::before { background: linear-gradient(to bottom, #ffb74d, #ff9800); }
+.todo-item.task-color-yellow::before { background: linear-gradient(to bottom, #ffd54f, #fbc02d); }
+.todo-item.task-color-green::before { background: linear-gradient(to bottom, #4db6ac, #26a69a); }
+.todo-item.task-color-blue::before { background: linear-gradient(to bottom, #64b5f6, #42a5f5); }
+.todo-item.task-color-purple::before { background: linear-gradient(to bottom, #9575cd, #7e57c2); }
+.todo-item.task-color-pink::before { background: linear-gradient(to bottom, #f06292, #ec407a); }
+.todo-item.task-color-gray::before { background: linear-gradient(to bottom, #78909c, #607d8b); }
+
+.todo-item.is-current {
+    border-color: var(--accent-primary);
+    background: linear-gradient(to right, rgba(108, 92, 231, 0.08), transparent);
+    transform: translateX(-4px);
 }
 
 .todo-content {
@@ -604,24 +662,24 @@ body.dark-mode .app-header {
     align-items: center;
     gap: 10px;
     width: 100%;
+    padding-left: 8px;
 }
 
 .todo-date {
     font-size: 0.75rem;
-    color: var(--text-secondary);
-    margin-left: 30px;
-    opacity: 0.8;
+    color: #ffffff;
+    margin-left: 38px;
+    opacity: 0.9;
 }
 
 .todo-item:hover {
     transform: translateX(-5px);
     border-color: var(--accent-primary);
+    box-shadow: 0 4px 12px var(--shadow-strong-color);
 }
 
 .todo-item.completed {
-    background-color: transparent;
-    border-color: var(--border-primary);
-    opacity: 0.7;
+    opacity: 0.6;
 }
 
 .todo-item.completed .todo-text {
@@ -630,17 +688,18 @@ body.dark-mode .app-header {
 }
 
 .todo-checkbox {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
     border: 2px solid var(--accent-primary);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-on-accent);
+    color: white;
     background-color: transparent;
     transition: all var(--transition-interactive);
+    flex-shrink: 0;
 }
 
 .todo-item.completed .todo-checkbox {
@@ -652,34 +711,100 @@ body.dark-mode .app-header {
     flex-grow: 1;
     color: var(--text-primary);
     font-size: 0.95rem;
+    font-weight: 500;
 }
 
-.todo-delete {
-    background: none;
-    border: none;
-    color: var(--accent-danger);
-    cursor: pointer;
+.todo-actions {
+    display: flex;
+    gap: 8px;
     opacity: 0;
     transition: opacity 0.2s ease;
 }
 
-.todo-item:hover .todo-delete {
+.todo-item:hover .todo-actions {
+    opacity: 1;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 4px;
+    transition: transform 0.2s;
+    opacity: 0.7;
+}
+
+.icon-button:hover {
+    transform: scale(1.2);
     opacity: 1;
 }
 
 .add-todo-form {
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
 }
 
 .add-todo-input {
     flex-grow: 1;
 }
 
-/* ==========================================================================
-   5. Animations & Utility Classes
-   ========================================================================== */
+.color-picker-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 8px 0;
+}
+
+.color-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.color-option {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.color-option:hover {
+    transform: scale(1.15);
+}
+
+.color-option.selected {
+    border-color: var(--text-primary);
+    box-shadow: 0 0 0 2px var(--bg-surface);
+}
+
+.color-option.selected::after {
+    content: '\2713';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    text-shadow: 0 0 3px rgba(0,0,0,0.8), 0 0 5px rgba(0,0,0,0.6);
+}
+
+.color-option.task-color-red { background: linear-gradient(135deg, #e57373, #ef5350); }
+.color-option.task-color-orange { background: linear-gradient(135deg, #ffb74d, #ff9800); }
+.color-option.task-color-yellow { background: linear-gradient(135deg, #ffd54f, #fbc02d); }
+.color-option.task-color-green { background: linear-gradient(135deg, #4db6ac, #26a69a); }
+.color-option.task-color-blue { background: linear-gradient(135deg, #64b5f6, #42a5f5); }
+.color-option.task-color-purple { background: linear-gradient(135deg, #9575cd, #7e57c2); }
+.color-option.task-color-pink { background: linear-gradient(135deg, #f06292, #ec407a); }
+.color-option.task-color-gray { background: linear-gradient(135deg, #78909c, #607d8b); }
 
 @keyframes fadeInScaleUp {
   from { opacity: 0; transform: translateY(20px) scale(0.97); }
@@ -700,64 +825,22 @@ body.dark-mode .app-header {
     100% { transform: scale(1); filter: brightness(1); }
 }
 
-
-/* ==========================================================================
-   6. Responsive Design
-   ========================================================================== */
-
 @media (max-width: 768px) {
-    body {
-        padding: 16px;
-    }
-    .app-header {
-        padding: 20px;
-        margin-bottom: 32px;
-    }
-    h1 {
-        font-size: 1.8rem;
-    }
-    
-    /* Pomodoro mobile styles */
-    .pomodoro-card { margin-bottom: 32px; }
-    .pomodoro-header { padding: 20px; }
-    .pomodoro-header h2 { font-size: 1.5rem; }
-    .timer-display { font-size: 3.5rem; }
-    .timer-controls { flex-direction: column; gap: 12px; }
-    .settings-group { grid-template-columns: 1fr; gap: 16px; }
-    .timer-phase { font-size: 0.85rem; padding: 6px 12px; }
-    .timer-display-compact { font-size: 1rem; }
-    .pomodoro-content-inner { padding: 20px; gap: 20px; }
-
-    .add-course-form {
-        padding: 24px;
-        gap: 20px;
-    }
-    .course-header {
-        padding: 20px;
-        flex-wrap: wrap;
-        gap: 16px;
-    }
-    .course-name {
-        font-size: 1.25rem;
-    }
-    .course-details-inner {
-        padding: 20px;
-    }
-    .item-entry {
-        padding: 12px;
-        gap: 12px;
-    }
-    .item-title {
-        font-size: 0.95rem;
-    }
-    .add-item-form {
-        grid-template-columns: 1fr;
-    }
-    .add-item-form .button-group {
-        flex-direction: column;
-    }
+    body { padding: 16px; }
+    .app-header { padding: 20px; margin-bottom: 32px; }
+    h1 { font-size: 1.8rem; }
+    .current-task-title { font-size: 1.4rem; }
+    .current-task-content { flex-direction: column; align-items: flex-start; }
+    .add-course-form { padding: 24px; gap: 20px; }
+    .course-header { padding: 20px; flex-wrap: wrap; gap: 16px; }
+    .course-name { font-size: 1.25rem; }
+    .course-details-inner { padding: 20px; }
+    .item-entry { padding: 12px; gap: 12px; }
+    .item-title { font-size: 0.95rem; }
+    .add-item-form { grid-template-columns: 1fr; }
+    .add-item-form .button-group { flex-direction: column; }
+    .sidebar { width: 100%; right: -100%; }
 }
-
 
 @media (max-width: 639px) {
   :root {
@@ -766,109 +849,24 @@ body.dark-mode .app-header {
     --container-padding: 16px;
   }
 
-  body {
-    padding: var(--container-padding);
-  }
-
-  .app-container {
-    margin-top: 0;
-    position: relative;
-    border-radius: 0;
-  }
-
+  body { padding: var(--container-padding); }
+  .app-container { margin-top: 0; }
   .app-header {
-    border-radius: 0;
     margin: calc(var(--container-padding) * -1) calc(var(--container-padding) * -1) 32px calc(var(--container-padding) * -1);
     padding: 16px var(--container-padding);
-    position: sticky;
-    top: 0;
-    z-index: 10;
   }
-
-  .add-course-form {
-    margin-bottom: 32px;
-    gap: 16px;
-    padding: 20px;
-  }
-
-  .course-card {
-      margin-bottom: 24px;
-  }
-
-  .empty-state-message {
-      padding: 40px 20px;
-      font-size: 1rem;
-  }
-  .empty-state-message span {
-      font-size: 2.5rem;
-      margin-bottom: 12px;
-  }
-
-
-  h1 {
-    font-size: 1.5rem;
-  }
-
-  .course-header {
-      padding: 16px;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 12px;
-  }
-  .course-header-controls {
-      width: 100%;
-      justify-content: space-between;
-  }
-  .course-name {
-      font-size: 1.2rem;
-      margin-bottom: 4px;
-  }
-  .course-summary-text {
-      font-size: 0.85rem;
-  }
-
-  .course-details-inner {
-      padding: 20px;
-      gap: 24px;
-  }
-
-  .detail-group h4 {
-      font-size: 1.1rem;
-      margin-bottom: 16px;
-  }
-
-  .item-entry {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 10px;
-  }
-
-  .item-actions {
-      width: 100%;
-      flex-direction: column;
-      gap: 8px;
-  }
-
-  .item-actions .button {
-      font-size: 0.85rem;
-      padding: 10px;
-  }
-
-  .add-item-form {
-      gap: 12px;
-  }
-
-  .edit-target-lectures-form {
-      margin-bottom: 16px;
-  }
-
-  .sidebar-container {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1000;
-  }
+  h1 { font-size: 1.5rem; }
+  .current-task-card { padding: 20px; margin-bottom: 24px; }
+  .current-task-title { font-size: 1.3rem; }
+  .pomodoro-card { margin-bottom: 32px; }
+  .pomodoro-header { padding: 20px; }
+  .pomodoro-header h2 { font-size: 1.5rem; }
+  .timer-display { font-size: 3.5rem; }
+  .timer-controls { flex-direction: column; gap: 12px; }
+  .settings-group { grid-template-columns: 1fr; gap: 16px; }
+  .timer-phase { font-size: 0.85rem; padding: 6px 12px; }
+  .timer-display-compact { font-size: 1rem; }
+  .pomodoro-content-inner { padding: 20px; gap: 20px; }
 }
 
 /* Pomodoro Card Styles */
@@ -879,7 +877,7 @@ body.dark-mode .app-header {
     border-radius: var(--border-radius-lg);
     border: 1px solid var(--border-primary);
     box-shadow: 0 8px 30px var(--shadow-strong-color);
-    margin-bottom: 48px;
+    margin-bottom: 32px;
     transition: all var(--transition-theme);
     animation: fadeInScaleUp 0.5s ease-out backwards;
     overflow: hidden;
@@ -941,6 +939,7 @@ body.dark-mode .app-header {
     align-items: center;
     gap: 24px;
     padding: 32px;
+    background-color: var(--bg-surface-inset);
 }
 
 .pomodoro-card.expanded .pomodoro-content {
@@ -1051,136 +1050,64 @@ body.dark-mode .app-header {
     width: 0%;
     transition: width 1s linear;
 }
-
-/* Sidebar tabs */
-.sidebar-tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-primary);
-}
-
-.sidebar-tab {
-    padding: 8px 16px;
-    border-radius: var(--border-radius-md);
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    cursor: pointer;
-    transition: all var(--transition-interactive);
-    font-size: 0.9rem;
-}
-
-.sidebar-tab.active {
-    background-color: var(--accent-primary);
-    color: var(--text-on-accent);
-}
-
-.item-entry, .todo-item, .course-card {
-    cursor: grab;
-}
-
-.item-entry:active, .todo-item:active, .course-card:active {
-    cursor: grabbing;
-}
-
-.dragging {
-    opacity: 0.5;
-    cursor: grabbing !important;
-    box-shadow: 0 8px 24px var(--shadow-strong-color) !important;
-    transform: scale(1.02) !important;
-    position: relative;
-    z-index: 100;
-}
-
-.drag-over {
-    border: 2px dashed var(--accent-primary) !important;
-    transform: translateY(2px);
-    position: relative;
-    transition: transform 0.2s ease;
-}
-
-.drag-over::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: -20px;
-    height: 20px;
-    background: transparent;
-}
-
-.drag-over::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -20px;
-    height: 20px;
-    background: transparent;
-}
-
-/* Touch support styles */
-@media (hover: none) and (pointer: coarse) {
-    .item-entry, .todo-item, .course-card {
-        touch-action: none;
-    }
-    
-    .item-entry:active, .todo-item:active, .course-card:active {
-        transform: scale(0.98);
-        transition: transform 0.2s ease;
-    }
-
-    .dragging {
-        opacity: 0.7;
-    }
-}
   </style>
 </head>
 <body>
+    <button id="sidebarToggle" class="sidebar-toggle">&#128221;</button>
+    
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Quick Tasks</h2>
+            <button class="sidebar-close" id="sidebarClose">&#215;</button>
+        </div>
 
-        <div class="sidebar-container">
-        <button id="sidebarToggle" class="sidebar-toggle" title="Toggle To-Do List">📝</button>
-        <!-- Sidebar -->
-        <div id="sidebar" class="sidebar">
-            <div class="sidebar-header">
-                <h2 class="sidebar-title">Quick Tasks</h2>
-                <button class="sidebar-close" id="sidebarClose">×</button>
-            </div>
-
-            <form id="addTodoForm" class="add-todo-form">
-                <input type="text" id="todoInput" class="input-field add-todo-input" placeholder="Add a new task...">
-                <button type="submit" class="button button-primary button-small">Add</button>
-            </form>
+        <form id="addTodoForm" class="add-todo-form">
+            <input type="text" id="todoInput" class="input-field add-todo-input" placeholder="Add a new task..." required>
             
-            <ul id="todoList" class="todo-list">
-                <!-- Todo items will be added here dynamically -->
-            </ul>
-        </div>
-        </div>
+            <div>
+                <div class="color-label">Task Priority Color</div>
+                <div class="color-picker-group" id="colorPicker">
+                    <div class="color-option task-color-red selected" data-color="red" title="High Priority"></div>
+                    <div class="color-option task-color-orange" data-color="orange" title="Important"></div>
+                    <div class="color-option task-color-yellow" data-color="yellow" title="Medium"></div>
+                    <div class="color-option task-color-green" data-color="green" title="Low Priority"></div>
+                    <div class="color-option task-color-blue" data-color="blue" title="Info"></div>
+                    <div class="color-option task-color-purple" data-color="purple" title="Creative"></div>
+                    <div class="color-option task-color-pink" data-color="pink" title="Personal"></div>
+                    <div class="color-option task-color-gray" data-color="gray" title="Neutral"></div>
+                </div>
+            </div>
+            
+            <button type="submit" class="button button-primary">Add Task</button>
+        </form>
+        
+        <ul id="todoList" class="todo-list"></ul>
+    </div>
 
     <div class="app-container">
         <header class="app-header">
-            <h1>Study Spark ✨</h1>
+            <h1>Study Spark &#10024;</h1>
             <button id="themeToggleButton" class="theme-toggle-button" title="Toggle theme">
-                <span class="theme-icon">☀️</span>
+                <span class="theme-icon">&#9728;&#65039;</span>
             </button>
         </header>
-        
-        <!-- Sidebar Toggle Button -->
-        
 
+        <!-- Current Task Display -->
+        <div id="currentTaskCard" class="current-task-card">
+            <!-- Populated by JavaScript -->
+        </div>
+
+        <!-- Pomodoro Timer -->
         <section class="pomodoro-card" id="pomodoroCard">
             <div class="pomodoro-header" onclick="togglePomodoro()">
                 <div class="pomodoro-header-content">
-                    <h2>Focus Timer ⏱️</h2>
+                    <h2>Focus Timer &#9202;&#65039;</h2>
                     <div class="pomodoro-summary">
                         <div class="timer-phase work">Work Time</div>
                         <div class="timer-display-compact" id="timerDisplayCompact">25:00</div>
                     </div>
                 </div>
-                <button class="expand-toggle">▶</button>
+                <button class="expand-toggle">&#9654;</button>
             </div>
             <div class="pomodoro-content">
                 <div class="pomodoro-content-inner">
@@ -1208,8 +1135,7 @@ body.dark-mode .app-header {
                 </div>
             </div>
         </section>
-    
-
+        
         <section class="add-course-form">
             <div class="form-group">
                 <label for="newCourseName">New Course Title</label>
@@ -1222,51 +1148,149 @@ body.dark-mode .app-header {
             <button id="newCourseButton" class="button button-primary" onclick="addCourse()">Add Course</button>
         </section>
 
-
-        <main id="coursesContainer">
-            </main>
+        <main id="coursesContainer"></main>
     </div>
 
     <script>
         let courses = [];
-        const themeToggleButton = document.getElementById('themeToggleButton');
-        const themeIcon = themeToggleButton.querySelector('.theme-icon');
-
-        const APP_DATA_KEY = 'vibrantStudyTrackerData_V9';
-        const POMODORO_STATE_KEY = 'studyTracker_pomodoro_V1';
-
-        // Timer functionality
+        let todos = [];
+        let currentTaskId = null;
+        let selectedColor = 'red';
+        
+        // Pomodoro Timer Variables
         let timerInterval;
         let timeLeft;
         let isTimerRunning = false;
         let isWorkPhase = true;
-        const timerDisplay = document.getElementById('timerDisplay');
-        const timerProgressBar = document.getElementById('timerProgressBar');
-        const timerStatus = document.getElementById('timerStatus');
-        const startTimerBtn = document.getElementById('startTimer');
-        const resetTimerBtn = document.getElementById('resetTimer');
-        const workDurationInput = document.getElementById('workDuration');
-        const breakDurationInput = document.getElementById('breakDuration');
+        
+        const themeToggleButton = document.getElementById('themeToggleButton');
+        const themeIcon = themeToggleButton.querySelector('.theme-icon');
+        const APP_DATA_KEY = 'vibrantStudyTrackerData_V9';
+        const TODO_DATA_KEY = 'vibrantStudyTrackerTodos_V1';
+        const POMODORO_STATE_KEY = 'studyTracker_pomodoro_V1';
 
-        // Sidebar tabs functionality
-        const sidebarTabs = document.querySelectorAll('.sidebar-tab');
-        const sidebarContents = document.querySelectorAll('.sidebar-content');
+        // Audio Context
+        let audioCtx;
+        function getAudioContext() {
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch(e) {
+                    console.error("Web Audio API is not supported");
+                    audioCtx = null;
+                }
+            }
+            return audioCtx;
+        }
 
-        sidebarTabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetTab = tab.dataset.tab;
-                sidebarTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                sidebarContents.forEach(content => {
-                    if (content.id === `${targetTab}Content`) {
-                        content.style.display = 'block';
-                    } else {
-                        content.style.display = 'none';
-                    }
-                });
-            });
+        function playSound(type = 'add') {
+            const context = getAudioContext();
+            if (!context || context.state === 'suspended') {
+                context?.resume();
+            }
+            if (!context) return;
+
+            try {
+                const oscillator = context.createOscillator();
+                const gainNode = context.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(context.destination);
+                gainNode.gain.setValueAtTime(0, context.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.4, context.currentTime + 0.01);
+
+                if (type === 'add') {
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(660, context.currentTime);
+                } else if (type === 'complete') {
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(880, context.currentTime);
+                } else {
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.setValueAtTime(330, context.currentTime);
+                }
+
+                oscillator.start(context.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.15);
+                oscillator.stop(context.currentTime + 0.15);
+            } catch (e) {
+                console.warn("Audio failed:", e);
+            }
+        }
+
+        // Theme Management
+        function setPreferredTheme() {
+            const savedTheme = localStorage.getItem('studyTrackerTheme');
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            let currentThemeIsDark;
+            if (savedTheme) {
+                currentThemeIsDark = (savedTheme === 'dark');
+            } else {
+                currentThemeIsDark = systemPrefersDark;
+            }
+            document.body.classList.toggle('dark-mode', currentThemeIsDark);
+            updateThemeIcon(currentThemeIsDark);
+        }
+        
+        function updateThemeIcon(isDarkMode) {
+            if (themeIcon) themeIcon.innerHTML = isDarkMode ? '&#127769;' : '&#9728;&#65039;';
+        }
+        
+        themeToggleButton.addEventListener('click', () => {
+            const isDarkMode = document.body.classList.toggle('dark-mode');
+            localStorage.setItem('studyTrackerTheme', isDarkMode ? 'dark' : 'light');
+            updateThemeIcon(isDarkMode);
         });
 
+        // Data Persistence
+        function saveData() {
+            localStorage.setItem(APP_DATA_KEY, JSON.stringify(courses));
+            localStorage.setItem(TODO_DATA_KEY, JSON.stringify({ todos, currentTaskId }));
+        }
+        
+        function loadData() {
+            const data = localStorage.getItem(APP_DATA_KEY);
+            if (data) {
+                courses = JSON.parse(data);
+                courses.forEach(course => {
+                    if (course.notes === undefined) course.notes = "";
+                    if (course.isEditingNotes === undefined) course.isEditingNotes = false;
+                    if (course.dateAdded === undefined) course.dateAdded = new Date().toISOString();
+                });
+            }
+            
+            const todoData = localStorage.getItem(TODO_DATA_KEY);
+            if (todoData) {
+                const parsed = JSON.parse(todoData);
+                todos = parsed.todos || [];
+                currentTaskId = parsed.currentTaskId || null;
+                
+                // Ensure all todos have a color
+                todos.forEach(todo => {
+                    if (!todo.color) todo.color = 'purple';
+                });
+            }
+        }
+        
+        function generateId() { return '_' + Math.random().toString(36).substr(2, 9); }
+
+        function formatDate(date) {
+            const now = new Date();
+            const inputDate = new Date(date);
+            const diffTime = Math.abs(now - inputDate);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            
+            return inputDate.toLocaleDateString('en-GB', { 
+                day: 'numeric',
+                month: 'short',
+                year: now.getFullYear() !== inputDate.getFullYear() ? '2-digit' : undefined
+            });
+        }
+
+        // Pomodoro Timer Functions
         function togglePomodoro() {
             const card = document.getElementById('pomodoroCard');
             const isExpanded = !card.classList.contains('expanded');
@@ -1281,183 +1305,111 @@ body.dark-mode .app-header {
         }
 
         function updateTimerDisplays(time) {
-            timerDisplay.textContent = time;
+            document.getElementById('timerDisplay').textContent = time;
             document.getElementById('timerDisplayCompact').textContent = time;
         }
 
         function updateTimer() {
             if (timeLeft > 0) {
                 timeLeft--;
-                const totalTime = isWorkPhase ? (workDurationInput.value * 60) : (breakDurationInput.value * 60);
+                const workDuration = document.getElementById('workDuration');
+                const breakDuration = document.getElementById('breakDuration');
+                const totalTime = isWorkPhase ? (workDuration.value * 60) : (breakDuration.value * 60);
                 const progress = ((totalTime - timeLeft) / totalTime) * 100;
-                timerProgressBar.style.width = `${progress}%`;
+                document.getElementById('timerProgressBar').style.width = `${progress}%`;
                 updateTimerDisplays(formatTime(timeLeft));
             } else {
-                const notification = new Notification('Pomodoro Timer', {
-                    body: isWorkPhase ? 'Work session complete! Take a break.' : 'Break time is over! Back to work.',
-                    icon: '/favicon.ico'
-                });
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('Pomodoro Timer', {
+                        body: isWorkPhase ? 'Work session complete! Take a break.' : 'Break time is over! Back to work.'
+                    });
+                }
                 
                 isWorkPhase = !isWorkPhase;
                 const phaseElement = document.querySelector('.timer-phase');
+                const workDuration = document.getElementById('workDuration');
+                const breakDuration = document.getElementById('breakDuration');
+                
                 if (isWorkPhase) {
                     phaseElement.textContent = 'Work Time';
                     phaseElement.classList.remove('break');
                     phaseElement.classList.add('work');
-                    timeLeft = workDurationInput.value * 60;
+                    timeLeft = workDuration.value * 60;
                     playSound('complete');
                 } else {
                     phaseElement.textContent = 'Break Time';
                     phaseElement.classList.remove('work');
                     phaseElement.classList.add('break');
-                    timeLeft = breakDurationInput.value * 60;
+                    timeLeft = breakDuration.value * 60;
                     playSound('add');
                 }
-                timerProgressBar.style.width = '0%';
+                document.getElementById('timerProgressBar').style.width = '0%';
             }
         }
 
-        startTimerBtn.addEventListener('click', () => {
-            if (!isTimerRunning) {
-                if (Notification.permission !== 'granted') {
-                    Notification.requestPermission();
-                }
+        // Initialize Pomodoro Timer
+        document.addEventListener('DOMContentLoaded', () => {
+            const startTimerBtn = document.getElementById('startTimer');
+            const resetTimerBtn = document.getElementById('resetTimer');
+            const workDurationInput = document.getElementById('workDuration');
+            const breakDurationInput = document.getElementById('breakDuration');
+            const timerStatus = document.getElementById('timerStatus');
 
-                isTimerRunning = true;
-                startTimerBtn.textContent = 'Pause';
-                timerStatus.textContent = 'Timer running...';
-                if (!timeLeft) {
-                    timeLeft = workDurationInput.value * 60;
-                }
-                timerInterval = setInterval(updateTimer, 1000);
-            } else {
-                isTimerRunning = false;
-                startTimerBtn.textContent = 'Resume';
-                timerStatus.textContent = 'Timer paused';
-                clearInterval(timerInterval);
-            }
-        });
-
-        resetTimerBtn.addEventListener('click', () => {
-            clearInterval(timerInterval);
-            isTimerRunning = false;
-            isWorkPhase = true;
-            timeLeft = workDurationInput.value * 60;
-            timerDisplay.textContent = formatTime(timeLeft);
-            startTimerBtn.textContent = 'Start';
-            timerStatus.textContent = 'Ready to start';
-            timerProgressBar.style.width = '0%';
-            
-            const phaseElement = document.querySelector('.timer-phase');
-            phaseElement.textContent = 'Work Time';
-            phaseElement.classList.remove('break');
-            phaseElement.classList.add('work');
-        });
-
-        [workDurationInput, breakDurationInput].forEach(input => {
-            input.addEventListener('change', () => {
+            startTimerBtn.addEventListener('click', () => {
                 if (!isTimerRunning) {
-                    timeLeft = workDurationInput.value * 60;
-                    timerDisplay.textContent = formatTime(timeLeft);
+                    if ('Notification' in window && Notification.permission === 'default') {
+                        Notification.requestPermission();
+                    }
+
+                    isTimerRunning = true;
+                    startTimerBtn.textContent = 'Pause';
+                    timerStatus.textContent = 'Timer running...';
+                    if (!timeLeft) {
+                        timeLeft = workDurationInput.value * 60;
+                    }
+                    timerInterval = setInterval(updateTimer, 1000);
+                } else {
+                    isTimerRunning = false;
+                    startTimerBtn.textContent = 'Resume';
+                    timerStatus.textContent = 'Timer paused';
+                    clearInterval(timerInterval);
                 }
             });
-        });
 
-        // Web Audio API for Sounds
-        let audioCtx;
-        function getAudioContext() {
-            if (!audioCtx) {
-                try {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                } catch(e) {
-                    console.error("Web Audio API is not supported in this browser.");
-                    audioCtx = null;
-                }
-            }
-            return audioCtx;
-        }
+            resetTimerBtn.addEventListener('click', () => {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                isWorkPhase = true;
+                timeLeft = workDurationInput.value * 60;
+                updateTimerDisplays(formatTime(timeLeft));
+                startTimerBtn.textContent = 'Start Focus Session';
+                timerStatus.textContent = 'Ready to start your focus session';
+                document.getElementById('timerProgressBar').style.width = '0%';
+                
+                const phaseElement = document.querySelector('.timer-phase');
+                phaseElement.textContent = 'Work Time';
+                phaseElement.classList.remove('break');
+                phaseElement.classList.add('work');
+            });
 
-        function playSound(type = 'add') {
-            const context = getAudioContext();
-            if (!context || context.state === 'suspended') {
-                context.resume();
-            }
-            if (!context) return;
-
-            try {
-                const oscillator = context.createOscillator();
-                const gainNode = context.createGain();
-
-                oscillator.connect(gainNode);
-                gainNode.connect(context.destination);
-
-                gainNode.gain.setValueAtTime(0, context.currentTime);
-                gainNode.gain.linearRampToValueAtTime(0.4, context.currentTime + 0.01);
-
-                if (type === 'add') {
-                    oscillator.type = 'sine';
-                    oscillator.frequency.setValueAtTime(660, context.currentTime);
-                } else if (type === 'complete') {
-                    oscillator.type = 'sine';
-                    oscillator.frequency.setValueAtTime(880, context.currentTime);
-                    gainNode.gain.linearRampToValueAtTime(0.5, context.currentTime + 0.02);
-                } else { // remove
-                    oscillator.type = 'triangle';
-                    oscillator.frequency.setValueAtTime(330, context.currentTime);
-                }
-
-                oscillator.start(context.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.15);
-                oscillator.stop(context.currentTime + 0.15);
-            } catch (e) {
-                console.warn("Web Audio API sound failed:", e);
-            }
-        }
-
-
-        // --- THEME MANAGEMENT ---
-        function setPreferredTheme() {
-            const savedTheme = localStorage.getItem('studyTrackerTheme');
-            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            let currentThemeIsDark;
-            if (savedTheme) {
-                currentThemeIsDark = (savedTheme === 'dark');
-            } else {
-                currentThemeIsDark = systemPrefersDark;
-            }
-            document.body.classList.toggle('dark-mode', currentThemeIsDark);
-            updateThemeIcon(currentThemeIsDark);
-        }
-        function updateThemeIcon(isDarkMode) {
-            if (themeIcon) themeIcon.textContent = isDarkMode ? '🌙' : '☀️';
-        }
-        themeToggleButton.addEventListener('click', () => {
-            const isDarkMode = document.body.classList.toggle('dark-mode');
-            localStorage.setItem('studyTrackerTheme', isDarkMode ? 'dark' : 'light');
-            updateThemeIcon(isDarkMode);
-        });
-
-        // --- DATA PERSISTENCE ---
-        function saveData() {
-            localStorage.setItem(APP_DATA_KEY, JSON.stringify(courses));
-        }
-        function loadData() {
-            const data = localStorage.getItem(APP_DATA_KEY);
-            if (data) {
-                courses = JSON.parse(data);
-                // Data migration/cleanup for older versions
-                courses.forEach(course => {
-                    if (course.notes === undefined) course.notes = "";
-                    if (course.isEditingNotes === undefined) course.isEditingNotes = false;
-                    if (course.dateAdded === undefined) course.dateAdded = new Date().toISOString();
+            [workDurationInput, breakDurationInput].forEach(input => {
+                input.addEventListener('change', () => {
+                    if (!isTimerRunning) {
+                        timeLeft = workDurationInput.value * 60;
+                        updateTimerDisplays(formatTime(timeLeft));
+                    }
                 });
-            } else {
-                courses = [];
-            }
-        }
-        function generateId() { return '_' + Math.random().toString(36).substr(2, 9); }
+            });
 
-        // --- COURSE MANAGEMENT & RENDERING ---
+            // Load Pomodoro state
+            const pomodoroState = localStorage.getItem(POMODORO_STATE_KEY);
+            if (pomodoroState) {
+                const { expanded } = JSON.parse(pomodoroState);
+                document.getElementById('pomodoroCard').classList.toggle('expanded', expanded);
+            }
+        });
+
+        // Course Management
         function addCourse() {
             const nameInput = document.getElementById('newCourseName');
             const lecturesInput = document.getElementById('newCourseLectures');
@@ -1470,12 +1422,17 @@ body.dark-mode .app-header {
             }
 
             courses.unshift({
-                id: generateId(), name: name, targetLectures: targetLectures,
-                lectures: [], homeworks: [],
-                notes: "", isEditingNotes: false,
+                id: generateId(), 
+                name: name, 
+                targetLectures: targetLectures,
+                lectures: [], 
+                homeworks: [],
+                notes: "", 
+                isEditingNotes: false,
                 dateAdded: new Date().toISOString(),
                 isEditingName: false
             });
+            
             nameInput.value = '';
             lecturesInput.value = '';
             playSound('add');
@@ -1484,7 +1441,7 @@ body.dark-mode .app-header {
         }
 
         function deleteCourse(courseId) {
-            if (confirm('Are you sure you want to delete this entire course? This action cannot be undone.')) {
+            if (confirm('Are you sure you want to delete this entire course?')) {
                 courses = courses.filter(c => c.id !== courseId);
                 playSound('remove');
                 saveData();
@@ -1513,6 +1470,7 @@ body.dark-mode .app-header {
                 }, 0);
             }
         }
+        
         function saveCourseName(courseId, newName) {
             const course = courses.find(c => c.id === courseId);
             if (course && newName.trim() !== '') {
@@ -1523,7 +1481,6 @@ body.dark-mode .app-header {
             renderCourses();
         }
 
-        // --- LECTURE & HOMEWORK ---
         function addLecture(courseId, markAsWatched = false) {
             const course = courses.find(c => c.id === courseId);
             const input = document.getElementById(`lectureName-${courseId}`);
@@ -1537,10 +1494,14 @@ body.dark-mode .app-header {
                 input.value = '';
                 saveData();
                 renderCourses(courseId);
-            } else if (!name) {
-                alert("Please enter a lecture name.");
+                // Refocus the input after rendering
+                setTimeout(() => {
+                    const refocusInput = document.getElementById(`lectureName-${courseId}`);
+                    if (refocusInput) refocusInput.focus();
+                }, 0);
             }
         }
+        
         function toggleLectureWatched(courseId, lectureId) {
             const course = courses.find(c => c.id === courseId);
             const lecture = course?.lectures.find(l => l.id === lectureId);
@@ -1554,6 +1515,7 @@ body.dark-mode .app-header {
                 renderCourses(courseId);
             }
         }
+        
         function deleteLecture(courseId, lectureId) {
             const course = courses.find(c => c.id === courseId);
             if (course) {
@@ -1562,6 +1524,7 @@ body.dark-mode .app-header {
                 renderCourses(courseId);
             }
         }
+        
         function updateTargetLectures(courseId) {
             const course = courses.find(c => c.id === courseId);
             const input = document.getElementById(`targetLecturesInput-${courseId}`);
@@ -1571,12 +1534,10 @@ body.dark-mode .app-header {
                     course.targetLectures = newTarget;
                     saveData();
                     renderCourses(courseId);
-                } else {
-                    alert("Please enter a valid target number.");
-                    input.value = course.targetLectures;
                 }
             }
         }
+        
         function addHomework(courseId, markAsCompleted = false) {
             const course = courses.find(c => c.id === courseId);
             const input = document.getElementById(`homeworkDesc-${courseId}`);
@@ -1590,10 +1551,14 @@ body.dark-mode .app-header {
                 input.value = '';
                 saveData();
                 renderCourses(courseId);
-            } else if (!desc) {
-                alert("Please enter a homework description.");
+                // Refocus the input after rendering
+                setTimeout(() => {
+                    const refocusInput = document.getElementById(`homeworkDesc-${courseId}`);
+                    if (refocusInput) refocusInput.focus();
+                }, 0);
             }
         }
+        
         function toggleHomeworkCompleted(courseId, homeworkId) {
             const course = courses.find(c => c.id === courseId);
             const hw = course?.homeworks.find(h => h.id === homeworkId);
@@ -1607,6 +1572,7 @@ body.dark-mode .app-header {
                 renderCourses(courseId);
             }
         }
+        
         function deleteHomework(courseId, homeworkId) {
             const course = courses.find(c => c.id === courseId);
             if (course) {
@@ -1616,7 +1582,6 @@ body.dark-mode .app-header {
             }
         }
 
-        // --- NOTES MANAGEMENT ---
         function toggleEditSaveNotes(courseId) {
             const course = courses.find(c => c.id === courseId);
             if (!course) return;
@@ -1631,13 +1596,13 @@ body.dark-mode .app-header {
             }
             renderCourses(courseId);
             if(course.isEditingNotes){
-                 setTimeout(() => {
+                setTimeout(() => {
                     const textarea = document.getElementById(`notes-textarea-${courseId}`);
                     if (textarea) {
                         textarea.focus();
                         textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
                     }
-                 },0);
+                },0);
             }
         }
 
@@ -1654,13 +1619,10 @@ body.dark-mode .app-header {
 
         function renderCourses(focusedCourseId = null) {
             const container = document.getElementById('coursesContainer');
-            const currentlyFocusedElement = document.activeElement;
-            const focusedId = currentlyFocusedElement ? currentlyFocusedElement.id : null;
-
             container.innerHTML = '';
 
             if (courses.length === 0) {
-                container.innerHTML = '<div class="empty-state-message"><span>🚀</span>Ready to launch a new course? Add one above!</div>';
+                container.innerHTML = '<div class="empty-state-message"><span>&#128640;</span>Ready to launch a new course? Add one above!</div>';
                 return;
             }
 
@@ -1685,16 +1647,16 @@ body.dark-mode .app-header {
                 if (course.isEditingName) {
                     courseNameHTML = `
                         <div class="course-header-content" style="display:flex; gap:8px; align-items:center;">
-                            <input type="text" id="edit-name-${course.id}" class="input-field course-name-input" value="${course.name}"
+                            <input type="text" id="edit-name-${course.id}" class="input-field" value="${course.name}"
                                    onblur="saveCourseName('${course.id}', this.value)"
                                    onkeypress="if(event.key==='Enter') { this.blur(); event.preventDefault(); }"
                                    onclick="event.stopPropagation();">
                             <button class="button button-small button-success" onclick="event.stopPropagation(); saveCourseName('${course.id}', document.getElementById('edit-name-${course.id}').value)">Save</button>
                         </div>`;
                 } else {
-                     courseNameHTML = `
+                    courseNameHTML = `
                         <div class="course-header-content">
-                            <h3 class="course-name" ondblclick="event.stopPropagation(); toggleEditCourseName('${course.id}')" title="Double-click to edit name">${course.name}</h3>
+                            <h3 class="course-name" ondblclick="event.stopPropagation(); toggleEditCourseName('${course.id}')" title="Double-click to edit">${course.name}</h3>
                             <p class="course-summary-text">Lectures: ${watchedLecturesCount}/${course.targetLectures} | Homework: ${completedHomeworkCount}</p>
                             ${course.dateAdded ? `<p class="course-date-added">Added: ${new Date(course.dateAdded).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: '2-digit' })}</p>` : ''}
                         </div>`;
@@ -1705,7 +1667,7 @@ body.dark-mode .app-header {
                         ${courseNameHTML}
                         <div class="course-header-controls">
                             <div class="progress-bar-wrapper"><div class="progress-bar-fill" style="width: ${lectureProgress.toFixed(0)}%;"></div></div>
-                            <button class="expand-toggle" title="Expand/Collapse">▶</button>
+                            <button class="expand-toggle">&#9654;</button>
                         </div>
                     </header>
                     <section class="course-details-content">
@@ -1730,7 +1692,7 @@ body.dark-mode .app-header {
                                 <ul class="item-list">
                                     ${course.lectures.map(lec => {
                                         const animClass = lec.justCompletedAnimation ? 'animate-completion' : '';
-                                        return `<li id="lecture-${lec.id}" class="item-entry ${lec.watched ? 'completed' : ''} ${animClass}" draggable="true">
+                                        return `<li class="item-entry ${lec.watched ? 'completed' : ''} ${animClass}">
                                             <span class="item-title">${lec.name}</span>
                                             <div class="item-actions">
                                                 <button class="button button-small ${lec.watched ? 'button-primary' : 'button-success'}" onclick="toggleLectureWatched('${course.id}', '${lec.id}')">${lec.watched ? 'Unwatch' : 'Watched'}</button>
@@ -1769,7 +1731,7 @@ body.dark-mode .app-header {
 
                             <div class="detail-group">
                                 <h4>Course Notes</h4>
-                                <textarea id="notes-textarea-${course.id}" class="textarea-field" placeholder="Jot down your thoughts, key points, or reminders here..." ${course.isEditingNotes ? '' : 'readonly'}>${course.notes || ''}</textarea>
+                                <textarea id="notes-textarea-${course.id}" class="textarea-field" placeholder="Jot down your thoughts..." ${course.isEditingNotes ? '' : 'readonly'}>${course.notes || ''}</textarea>
                                 <div class="notes-actions">
                                     <button class="button ${course.isEditingNotes ? 'button-success' : 'button-primary'}" onclick="toggleEditSaveNotes('${course.id}')">
                                         ${course.isEditingNotes ? 'Save Notes' : 'Edit Notes'}
@@ -1786,95 +1748,133 @@ body.dark-mode .app-header {
                 container.appendChild(courseCard);
             });
 
-            // Clean up animation flags after rendering
             courses.forEach(course => {
                 course.lectures.forEach(l => delete l.justCompletedAnimation);
                 course.homeworks.forEach(h => delete h.justCompletedAnimation);
             });
-
-            // Restore focus after re-render
-            const elementToRestoreFocus = document.getElementById(focusedId);
-            if (elementToRestoreFocus) {
-                elementToRestoreFocus.focus();
-            }
         }
 
-        // --- TODO LIST MANAGEMENT ---
-        let todos = [];
-        const TODO_DATA_KEY = 'vibrantStudyTrackerTodos_V1';
-
-        function saveTodos() {
-            localStorage.setItem(TODO_DATA_KEY, JSON.stringify(todos));
-        }
-
-        function loadTodos() {
-            const data = localStorage.getItem(TODO_DATA_KEY);
-            todos = data ? JSON.parse(data) : [];
-        }
-
-        function formatDate(date) {
-            const now = new Date();
-            const inputDate = new Date(date);
-            const diffTime = Math.abs(now - inputDate);
-            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-            
-            if (diffDays === 0) {
-                return 'Today';
-            } else if (diffDays === 1) {
-                return 'Yesterday';
-            } else if (diffDays < 7) {
-                return `${diffDays} days ago`;
-            } else {
-                return inputDate.toLocaleDateString('en-GB', { 
-                    day: 'numeric',
-                    month: 'short',
-                    year: now.getFullYear() !== inputDate.getFullYear() ? '2-digit' : undefined
-                });
-            }
-        }
-
-        function addTodo(text) {
-            if (!text.trim()) return;
-            todos.unshift({
+        // Todo Management
+        function addTodo(text, color) {
+            const task = {
                 id: generateId(),
                 text: text.trim(),
+                color: color,
                 completed: false,
                 dateAdded: new Date().toISOString()
-            });
-            saveTodos();
-            renderTodos();
+            };
+            todos.unshift(task);
+            
+            if (!currentTaskId && !task.completed) {
+                currentTaskId = task.id;
+            }
+            
             playSound('add');
+            saveData();
+            renderTodos();
+            renderCurrentTask();
         }
 
         function toggleTodo(id) {
             const todo = todos.find(t => t.id === id);
             if (todo) {
                 todo.completed = !todo.completed;
-                if (todo.completed) playSound('complete');
-                saveTodos();
+                if (todo.completed) {
+                    playSound('complete');
+                    if (currentTaskId === id) {
+                        currentTaskId = null;
+                        const nextTask = todos.find(t => !t.completed && t.id !== id);
+                        if (nextTask) currentTaskId = nextTask.id;
+                    }
+                }
+                saveData();
                 renderTodos();
+                renderCurrentTask();
             }
         }
 
         function deleteTodo(id) {
             todos = todos.filter(t => t.id !== id);
+            if (currentTaskId === id) {
+                currentTaskId = todos.find(t => !t.completed)?.id || null;
+            }
             playSound('remove');
-            saveTodos();
+            saveData();
             renderTodos();
+            renderCurrentTask();
+        }
+
+        function setCurrentTask(id) {
+            const task = todos.find(t => t.id === id);
+            if (task && !task.completed) {
+                currentTaskId = id;
+                saveData();
+                renderTodos();
+                renderCurrentTask();
+            }
+        }
+
+        function renderCurrentTask() {
+            const card = document.getElementById('currentTaskCard');
+            const currentTask = todos.find(t => t.id === currentTaskId);
+            
+            if (!currentTask || currentTask.completed) {
+                card.className = 'current-task-card';
+                card.innerHTML = `
+                    <div class="no-current-task">
+                        <div class="no-current-task-icon">&#127919;</div>
+                        <div class="no-current-task-text" style="color: #ffffff;">No active task selected</div>
+                        <p style="font-size: 0.9rem; margin-top: 8px; opacity: 0.9; color: #ffffff;">Click "&#127919; Set as Current" on any task to focus on it</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            card.className = `current-task-card task-color-${currentTask.color}`;
+            card.innerHTML = `
+                <div class="current-task-header">&#127919; Currently Working On</div>
+                <div class="current-task-content">
+                    <div class="current-task-info">
+                        <div class="current-task-title">${currentTask.text}</div>
+                        <div class="current-task-meta" style="color: #ffffff;">Added ${formatDate(currentTask.dateAdded)}</div>
+                    </div>
+                    <div class="current-task-actions">
+                        <button class="button button-white" onclick="toggleTodo('${currentTask.id}')">&#10003; Complete</button>
+                    </div>
+                </div>
+            `;
         }
 
         function renderTodos() {
             const todoList = document.getElementById('todoList');
             todoList.innerHTML = '';
 
+            if (todos.length === 0) {
+                todoList.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
+                        <div style="font-size: 3rem; margin-bottom: 12px; opacity: 0.5;">&#128221;</div>
+                        <p>No tasks yet. Add your first task above!</p>
+                    </div>
+                `;
+                return;
+            }
+            
             todos.forEach(todo => {
+                const colorClass = `task-color-${todo.color}`;
+                const isCurrentClass = todo.id === currentTaskId ? 'is-current' : '';
+                const completedClass = todo.completed ? 'completed' : '';
+                
                 const li = document.createElement('li');
-                li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+                li.className = `todo-item ${colorClass} ${isCurrentClass} ${completedClass}`;
                 li.innerHTML = `
                     <div class="todo-content">
-                        <div class="todo-checkbox" onclick="toggleTodo('${todo.id}')">${todo.completed ? '✓' : ''}</div>
+                        <div class="todo-checkbox" onclick="toggleTodo('${todo.id}')">${todo.completed ? '&#10003;' : ''}</div>
                         <span class="todo-text">${todo.text}</span>
-                        <button class="todo-delete" onclick="event.stopPropagation(); deleteTodo('${todo.id}')" title="Delete task">🗑</button>
+                        <div class="todo-actions">
+                            ${!todo.completed && todo.id !== currentTaskId ? 
+                                `<button class="icon-button" onclick="setCurrentTask('${todo.id}')" title="Set as current">&#127919;</button>` : ''}
+                            <button class="icon-button" onclick="deleteTodo('${todo.id}')" title="Delete">&#128465;&#65039;</button>
+                        </div>
                     </div>
                     <div class="todo-date">${formatDate(todo.dateAdded)}</div>
                 `;
@@ -1882,230 +1882,53 @@ body.dark-mode .app-header {
             });
         }
 
-        // --- SIDEBAR MANAGEMENT ---
+        // Sidebar Management
         const sidebar = document.getElementById('sidebar');
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebarClose = document.getElementById('sidebarClose');
-        const addTodoForm = document.getElementById('addTodoForm');
 
-        function toggleSidebar() {
-            sidebar.classList.toggle('open');
-        }
-
-        sidebarToggle.addEventListener('click', toggleSidebar);
-        sidebarClose.addEventListener('click', toggleSidebar);
-
-        addTodoForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const input = document.getElementById('todoInput');
-            addTodo(input.value);
-            input.value = '';
-        });
-
-        // Click outside to close
+        sidebarToggle.addEventListener('click', () => sidebar.classList.add('open'));
+        sidebarClose.addEventListener('click', () => sidebar.classList.remove('open'));
+        
         document.addEventListener('click', (e) => {
-            if (sidebar.classList.contains('open') &&
-                !sidebar.contains(e.target) &&
+            if (sidebar.classList.contains('open') && 
+                !sidebar.contains(e.target) && 
                 !sidebarToggle.contains(e.target)) {
                 sidebar.classList.remove('open');
             }
         });
 
-        // --- DRAG AND DROP FUNCTIONALITY ---
-function initDragAndDrop() {
-    // Make items draggable
-    document.querySelectorAll('.course-card, .item-entry, .todo-item').forEach(item => {
-        item.setAttribute('draggable', 'true');
-        
-        // Drag events
-        item.addEventListener('dragstart', handleDragStart);
-        item.addEventListener('dragend', handleDragEnd);
-        item.addEventListener('dragover', handleDragOver);
-        item.addEventListener('dragleave', handleDragLeave);
-        item.addEventListener('drop', handleDrop);
+        // Color Picker
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+                selectedColor = option.dataset.color;
+            });
+        });
 
-        // Touch events
-        item.addEventListener('touchstart', handleTouchStart, { passive: false });
-        item.addEventListener('touchmove', handleTouchMove, { passive: false });
-        item.addEventListener('touchend', handleTouchEnd);
-    });
-}
-
-function handleDragStart(e) {
-    e.stopPropagation();
-    this.classList.add('dragging');
-    e.dataTransfer.setData('text/plain', this.id);
-    e.dataTransfer.effectAllowed = 'move';
-}
-
-function handleDragEnd(e) {
-    this.classList.remove('dragging');
-    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
-}
-
-function handleDragOver(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!this.classList.contains('dragging')) {
-        const draggingElement = document.querySelector('.dragging');
-        if (!draggingElement) return;
-
-        // Only show drag-over if the types match
-        const isSameType = (
-            (draggingElement.classList.contains('course-card') && this.classList.contains('course-card')) ||
-            (draggingElement.classList.contains('item-entry') && this.classList.contains('item-entry') && 
-             draggingElement.closest('.item-list') === this.closest('.item-list')) ||
-            (draggingElement.classList.contains('todo-item') && this.classList.contains('todo-item'))
-        );
-
-        if (isSameType) {
-            this.classList.add('drag-over');
-        }
-    }
-}
-
-function handleDragLeave(e) {
-    this.classList.remove('drag-over');
-}
-
-function handleDrop(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    this.classList.remove('drag-over');
-    const draggedId = e.dataTransfer.getData('text/plain');
-    const draggedElement = document.getElementById(draggedId);
-    
-    if (!draggedElement || draggedElement === this) return;
-
-    // Handle different types of items
-    if (draggedElement.classList.contains('course-card')) {
-        handleCourseDrop(draggedElement, this);
-    } else if (draggedElement.classList.contains('item-entry')) {
-        handleItemDrop(draggedElement, this);
-    } else if (draggedElement.classList.contains('todo-item')) {
-        handleTodoDrop(draggedElement, this);
-    }
-}
-
-// Touch event handlers
-let touchStartY;
-let draggedElement;
-
-function handleTouchStart(e) {
-    if (e.touches.length !== 1) return;
-    e.preventDefault();
-    touchStartY = e.touches[0].clientY;
-    this.classList.add('dragging');
-    draggedElement = this;
-}
-
-function handleTouchMove(e) {
-    if (!draggedElement || e.touches.length !== 1) return;
-    e.preventDefault();
-
-    const touch = e.touches[0];
-    const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
-    
-    // Find valid drop target
-    const dropTarget = elements.find(el => {
-        if (el === draggedElement) return false;
-        
-        const isSameType = (
-            (draggedElement.classList.contains('course-card') && el.classList.contains('course-card')) ||
-            (draggedElement.classList.contains('item-entry') && el.classList.contains('item-entry') && 
-             draggedElement.closest('.item-list') === el.closest('.item-list')) ||
-            (draggedElement.classList.contains('todo-item') && el.classList.contains('todo-item'))
-        );
-        
-        return isSameType;
-    });
-
-    // Remove drag-over from all elements
-    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
-    
-    // Add drag-over to current target
-    if (dropTarget) {
-        dropTarget.classList.add('drag-over');
-    }
-}
-
-function handleTouchEnd(e) {
-    if (!draggedElement) return;
-
-    const dropTarget = document.querySelector('.drag-over');
-    if (dropTarget) {
-        if (draggedElement.classList.contains('course-card')) {
-            handleCourseDrop(draggedElement, dropTarget);
-        } else if (draggedElement.classList.contains('item-entry')) {
-            handleItemDrop(draggedElement, dropTarget);
-        } else if (draggedElement.classList.contains('todo-item')) {
-            handleTodoDrop(draggedElement, dropTarget);
-        }
-    }
-
-    draggedElement.classList.remove('dragging');
-    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
-    draggedElement = null;
-}
-
-// Update render functions to initialize drag and drop
-const originalRenderCourses = renderCourses;
-renderCourses = function(focusedCourseId = null) {
-    originalRenderCourses(focusedCourseId);
-    initDragAndDrop();
-};
-
-const originalRenderTodos = renderTodos;
-renderTodos = function() {
-    originalRenderTodos();
-    initDragAndDrop();
-};
-
-        // --- INITIALIZATION ---
-        document.addEventListener('DOMContentLoaded', () => {
-            setPreferredTheme();
-            loadData();
-            loadTodos();
-            renderCourses();
-            renderTodos();
-
-            // Allow playing audio after first user interaction
-            document.body.addEventListener('click', getAudioContext, { once: true });
-
-            const pomodoroState = localStorage.getItem(POMODORO_STATE_KEY);
-            if (pomodoroState) {
-                const { expanded } = JSON.parse(pomodoroState);
-                document.getElementById('pomodoroCard').classList.toggle('expanded', expanded);
+        // Form Submission
+        document.getElementById('addTodoForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const input = document.getElementById('todoInput');
+            if (input.value.trim()) {
+                addTodo(input.value, selectedColor);
+                input.value = '';
+                document.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
+                document.querySelector('.color-option').classList.add('selected');
+                selectedColor = 'red';
             }
         });
 
-        function handleItemDrop(draggedItem, targetItem) {
-    const draggedParentList = draggedItem.closest('.item-list');
-    const targetParentList = targetItem.closest('.item-list');
-    
-    if (!draggedParentList || !targetParentList || draggedParentList !== targetParentList) return;
-
-    const courseId = draggedParentList.closest('.course-card').id.replace('course-', '');
-    const course = courses.find(c => c.id === courseId);
-    if (!course) return;
-
-    // Determine if this is a lecture list or homework list
-    const isLecturesList = draggedParentList.closest('.detail-group').querySelector('h4').textContent.includes('Lectures');
-    const items = isLecturesList ? course.lectures : course.homeworks;
-    
-    const draggedIndex = Array.from(draggedParentList.children).indexOf(draggedItem);
-    const targetIndex = Array.from(targetParentList.children).indexOf(targetItem);
-    
-    if (draggedIndex === -1 || targetIndex === -1) return;
-
-    // Move the item in the array
-    const [movedItem] = items.splice(draggedIndex, 1);
-    items.splice(targetIndex, 0, movedItem);
-    
-    saveData();
-    renderCourses(courseId);
-}
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            setPreferredTheme();
+            loadData();
+            renderCourses();
+            renderTodos();
+            renderCurrentTask();
+            document.body.addEventListener('click', getAudioContext, { once: true });
+        });
     </script>
-
 </body>
 </html>
