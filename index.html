@@ -208,6 +208,13 @@ h1 {
   color: #ffffff;
 }
 
+/* Dashboard Actions */
+.dashboard-actions {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
 /* Task Color Classes - Less Vibrant */
 .task-color-red { background: linear-gradient(135deg, #e57373, #ef5350) !important; }
 .task-color-orange { background: linear-gradient(135deg, #ffb74d, #ff9800) !important; }
@@ -624,7 +631,7 @@ body.dark-mode .app-header {
     gap: 8px;
     padding: 16px;
     background-color: var(--bg-input);
-    border: 2px solid var(--border-input);
+    border: 2px solid transparent; /* Changed: Transparent by default */
     border-radius: var(--border-radius-md);
     margin-bottom: 12px;
     transition: all var(--transition-interactive);
@@ -652,9 +659,10 @@ body.dark-mode .app-header {
 .todo-item.task-color-gray::before { background: linear-gradient(to bottom, #78909c, #607d8b); }
 
 .todo-item.is-current {
-    border-color: #ffffff;
-    background: linear-gradient(to right, rgba(255, 255, 255, 0.08), transparent);
+    border-color: #ffffff; /* Sticky border for selected task */
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.15), transparent);
     transform: translateX(-4px);
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
 }
 
 .todo-content {
@@ -674,24 +682,23 @@ body.dark-mode .app-header {
 
 .todo-item:hover {
     transform: translateX(-5px);
-    border-color: var(--accent-primary);
+    border-color: #ffffff; /* White border on hover only */
     box-shadow: 0 4px 12px var(--shadow-strong-color);
 }
 
 .todo-item.completed {
-    opacity: 0.6;
+    opacity: 0.4;
 }
 
 .todo-item.completed .todo-text {
     text-decoration: line-through;
-    color: var(--text-secondary);
 }
 
 .todo-checkbox {
     width: 22px;
     height: 22px;
     border-radius: 5px;
-    border: 2px solid var(--accent-primary);
+    border: 2px solid #ffffff; 
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -703,8 +710,8 @@ body.dark-mode .app-header {
 }
 
 .todo-item.completed .todo-checkbox {
-    background-color: var(--accent-secondary);
-    border-color: var(--accent-secondary);
+    background-color: rgba(255, 255, 255, 0.3);
+    border-color: #ffffff;
 }
 
 .todo-text {
@@ -740,11 +747,19 @@ body.dark-mode .app-header {
     opacity: 1;
 }
 
+/* Updated: Sticky Color Picker & Add Form */
 .add-todo-form {
     display: flex;
     flex-direction: column;
     gap: 12px;
     margin-bottom: 24px;
+    position: sticky; /* Make it sticky */
+    top: -32px; /* Offset sidebar padding to stick to very top */
+    z-index: 10;
+    background-color: var(--bg-surface); /* Background to hide tasks scrolling behind */
+    backdrop-filter: blur(var(--backdrop-blur));
+    padding: 12px 0 20px 0;
+    border-bottom: 1px solid var(--border-primary);
 }
 
 .add-todo-input {
@@ -1086,28 +1101,31 @@ body.dark-mode .app-header {
 
     <div class="app-container">
         <header class="app-header">
-            <h1>Study Spark &#10024;</h1>
+            <h1>Study Spark ✨</h1>
             <button id="themeToggleButton" class="theme-toggle-button" title="Toggle theme">
-                <span class="theme-icon">&#9728;&#65039;</span>
+                <span class="theme-icon">☀️</span>
             </button>
         </header>
 
-        <!-- Current Task Display -->
         <div id="currentTaskCard" class="current-task-card">
-            <!-- Populated by JavaScript -->
+            </div>
+
+        <div class="dashboard-actions">
+            <button class="button button-primary" onclick="selectRandomTask()">
+                Pick a Random Task 🎲
+            </button>
         </div>
 
-        <!-- Pomodoro Timer -->
         <section class="pomodoro-card" id="pomodoroCard">
             <div class="pomodoro-header" onclick="togglePomodoro()">
                 <div class="pomodoro-header-content">
-                    <h2>Focus Timer &#9202;&#65039;</h2>
+                    <h2>Focus Timer ⏱️</h2>
                     <div class="pomodoro-summary">
                         <div class="timer-phase work">Work Time</div>
                         <div class="timer-display-compact" id="timerDisplayCompact">25:00</div>
                     </div>
                 </div>
-                <button class="expand-toggle">&#9654;</button>
+                <button class="expand-toggle">▶</button>
             </div>
             <div class="pomodoro-content">
                 <div class="pomodoro-content-inner">
@@ -1232,7 +1250,7 @@ body.dark-mode .app-header {
         }
         
         function updateThemeIcon(isDarkMode) {
-            if (themeIcon) themeIcon.innerHTML = isDarkMode ? '&#127769;' : '&#9728;&#65039;';
+            if (themeIcon) themeIcon.innerHTML = isDarkMode ? '🌙' : '☀️';
         }
         
         themeToggleButton.addEventListener('click', () => {
@@ -1264,7 +1282,6 @@ body.dark-mode .app-header {
                 todos = parsed.todos || [];
                 currentTaskId = parsed.currentTaskId || null;
                 
-                // Ensure all todos have a color
                 todos.forEach(todo => {
                     if (!todo.color) todo.color = 'purple';
                 });
@@ -1401,7 +1418,6 @@ body.dark-mode .app-header {
                 });
             });
 
-            // Load Pomodoro state
             const pomodoroState = localStorage.getItem(POMODORO_STATE_KEY);
             if (pomodoroState) {
                 const { expanded } = JSON.parse(pomodoroState);
@@ -1494,7 +1510,6 @@ body.dark-mode .app-header {
                 input.value = '';
                 saveData();
                 renderCourses(courseId);
-                // Refocus the input after rendering
                 setTimeout(() => {
                     const refocusInput = document.getElementById(`lectureName-${courseId}`);
                     if (refocusInput) refocusInput.focus();
@@ -1551,7 +1566,6 @@ body.dark-mode .app-header {
                 input.value = '';
                 saveData();
                 renderCourses(courseId);
-                // Refocus the input after rendering
                 setTimeout(() => {
                     const refocusInput = document.getElementById(`homeworkDesc-${courseId}`);
                     if (refocusInput) refocusInput.focus();
@@ -1622,7 +1636,7 @@ body.dark-mode .app-header {
             container.innerHTML = '';
 
             if (courses.length === 0) {
-                container.innerHTML = '<div class="empty-state-message"><span>&#128640;</span>Ready to launch a new course? Add one above!</div>';
+                container.innerHTML = '<div class="empty-state-message"><span>🚀</span>Ready to launch a new course? Add one above!</div>';
                 return;
             }
 
@@ -1667,7 +1681,7 @@ body.dark-mode .app-header {
                         ${courseNameHTML}
                         <div class="course-header-controls">
                             <div class="progress-bar-wrapper"><div class="progress-bar-fill" style="width: ${lectureProgress.toFixed(0)}%;"></div></div>
-                            <button class="expand-toggle">&#9654;</button>
+                            <button class="expand-toggle">▶</button>
                         </div>
                     </header>
                     <section class="course-details-content">
@@ -1814,6 +1828,27 @@ body.dark-mode .app-header {
             }
         }
 
+        // Random Task Selector Logic
+        function selectRandomTask() {
+            const incompleteTasks = todos.filter(t => !t.completed);
+            if (incompleteTasks.length === 0) {
+                alert("You don't have any pending tasks in your sidebar!");
+                return;
+            }
+            
+            const randomIndex = Math.floor(Math.random() * incompleteTasks.length);
+            const selectedTask = incompleteTasks[randomIndex];
+            
+            currentTaskId = selectedTask.id;
+            playSound('add');
+            saveData();
+            renderTodos();
+            renderCurrentTask();
+            
+            // Visual feedback - scroll to the current task card
+            document.getElementById('currentTaskCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
         function renderCurrentTask() {
             const card = document.getElementById('currentTaskCard');
             const currentTask = todos.find(t => t.id === currentTaskId);
@@ -1822,9 +1857,9 @@ body.dark-mode .app-header {
                 card.className = 'current-task-card';
                 card.innerHTML = `
                     <div class="no-current-task">
-                        <div class="no-current-task-icon">&#127919;</div>
+                        <div class="no-current-task-icon">🎯</div>
                         <div class="no-current-task-text" style="color: #ffffff;">No active task selected</div>
-                        <p style="font-size: 0.9rem; margin-top: 8px; opacity: 0.9; color: #ffffff;">Click "&#127919; Set as Current" on any task to focus on it</p>
+                        <p style="font-size: 0.9rem; margin-top: 8px; opacity: 0.9; color: #ffffff;">Use the sidebar to add tasks or pick a random one!</p>
                     </div>
                 `;
                 return;
@@ -1832,14 +1867,14 @@ body.dark-mode .app-header {
             
             card.className = `current-task-card task-color-${currentTask.color}`;
             card.innerHTML = `
-                <div class="current-task-header">&#127919; Currently Working On</div>
+                <div class="current-task-header">🎯 Currently Working On</div>
                 <div class="current-task-content">
                     <div class="current-task-info">
                         <div class="current-task-title">${currentTask.text}</div>
                         <div class="current-task-meta" style="color: #ffffff;">Added ${formatDate(currentTask.dateAdded)}</div>
                     </div>
                     <div class="current-task-actions">
-                        <button class="button button-white" onclick="toggleTodo('${currentTask.id}')">&#10003; Complete</button>
+                        <button class="button button-white" onclick="toggleTodo('${currentTask.id}')">✓ Complete</button>
                     </div>
                 </div>
             `;
@@ -1852,7 +1887,7 @@ body.dark-mode .app-header {
             if (todos.length === 0) {
                 todoList.innerHTML = `
                     <div style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
-                        <div style="font-size: 3rem; margin-bottom: 12px; opacity: 0.5;">&#128221;</div>
+                        <div style="font-size: 3rem; margin-bottom: 12px; opacity: 0.5;">📝</div>
                         <p>No tasks yet. Add your first task above!</p>
                     </div>
                 `;
@@ -1868,12 +1903,12 @@ body.dark-mode .app-header {
                 li.className = `todo-item ${colorClass} ${isCurrentClass} ${completedClass}`;
                 li.innerHTML = `
                     <div class="todo-content">
-                        <div class="todo-checkbox" onclick="toggleTodo('${todo.id}')">${todo.completed ? '&#10003;' : ''}</div>
+                        <div class="todo-checkbox" onclick="toggleTodo('${todo.id}')">${todo.completed ? '✓' : ''}</div>
                         <span class="todo-text">${todo.text}</span>
                         <div class="todo-actions">
                             ${!todo.completed && todo.id !== currentTaskId ? 
-                                `<button class="icon-button" onclick="setCurrentTask('${todo.id}')" title="Set as current">&#127919;</button>` : ''}
-                            <button class="icon-button" onclick="deleteTodo('${todo.id}')" title="Delete">&#128465;&#65039;</button>
+                                `<button class="icon-button" onclick="setCurrentTask('${todo.id}')" title="Set as current">🎯</button>` : ''}
+                            <button class="icon-button" onclick="deleteTodo('${todo.id}')" title="Delete">🗑️</button>
                         </div>
                     </div>
                     <div class="todo-date">${formatDate(todo.dateAdded)}</div>
