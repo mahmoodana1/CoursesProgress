@@ -346,6 +346,24 @@ body.dark-mode .app-header {
   transition: all var(--transition-interactive);
   animation: fadeInScaleUp 0.5s ease-out backwards;
   animation-delay: calc(var(--card-index, 0) * 0.1s);
+  cursor: grab; /* Enable grab cursor for dragging */
+}
+
+.course-card:active {
+    cursor: grabbing;
+}
+
+/* Drag and Drop Styles for Courses */
+.course-card.dragging {
+    opacity: 0.5;
+    transform: scale(0.98);
+    border: 2px dashed var(--accent-primary);
+    box-shadow: none;
+}
+
+.course-card.drag-over {
+    border: 2px dashed var(--accent-secondary);
+    transform: translateY(4px);
 }
 
 .course-card:hover {
@@ -637,6 +655,23 @@ body.dark-mode .app-header {
     transition: all var(--transition-interactive);
     position: relative;
     overflow: hidden;
+    cursor: grab; /* Enable grab cursor for dragging */
+}
+
+.todo-item:active {
+    cursor: grabbing;
+}
+
+/* Drag and Drop Styles for Todos */
+.todo-item.dragging {
+    opacity: 0.5;
+    border: 2px dashed #ffffff;
+    background: transparent;
+}
+
+.todo-item.drag-over-todo {
+    border: 2px solid #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .todo-item::before {
@@ -1175,6 +1210,10 @@ body.dark-mode .app-header {
         let currentTaskId = null;
         let selectedColor = 'red';
         
+        // Drag and Drop State
+        let draggedType = null; // 'course' or 'todo'
+        let draggedId = null;
+
         // Pomodoro Timer Variables
         let timerInterval;
         let timeLeft;
@@ -1305,6 +1344,85 @@ body.dark-mode .app-header {
                 month: 'short',
                 year: now.getFullYear() !== inputDate.getFullYear() ? '2-digit' : undefined
             });
+        }
+
+        // --- Drag and Drop Logic ---
+
+        function handleDragStart(e, type, id) {
+            e.stopPropagation(); // Prevent bubbling
+            draggedType = type;
+            draggedId = id;
+            e.dataTransfer.effectAllowed = 'move';
+            // Add a slight delay to allow the ghost image to form before adding the dragging class
+            setTimeout(() => e.target.classList.add('dragging'), 0);
+        }
+
+        function handleDragEnd(e) {
+            e.stopPropagation();
+            e.target.classList.remove('dragging');
+            
+            // Clean up drag-over classes
+            if (draggedType === 'course') {
+                document.querySelectorAll('.course-card').forEach(el => el.classList.remove('drag-over'));
+            } else if (draggedType === 'todo') {
+                document.querySelectorAll('.todo-item').forEach(el => el.classList.remove('drag-over-todo'));
+            }
+            
+            draggedType = null;
+            draggedId = null;
+        }
+
+        function handleDragOver(e, type) {
+            if (draggedType !== type) return; // Prevent mixing types
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            
+            const targetClass = type === 'course' ? '.course-card' : '.todo-item';
+            const hoverClass = type === 'course' ? 'drag-over' : 'drag-over-todo';
+            const target = e.target.closest(targetClass);
+            
+            if (target && !target.classList.contains('dragging')) {
+                target.classList.add(hoverClass);
+            }
+        }
+
+        function handleDragLeave(e, type) {
+            const targetClass = type === 'course' ? '.course-card' : '.todo-item';
+            const hoverClass = type === 'course' ? 'drag-over' : 'drag-over-todo';
+            const target = e.target.closest(targetClass);
+            if (target) target.classList.remove(hoverClass);
+        }
+
+        function handleDrop(e, type, targetId) {
+            if (draggedType !== type || draggedId === targetId) return;
+            e.preventDefault();
+            
+            const targetClass = type === 'course' ? '.course-card' : '.todo-item';
+            const hoverClass = type === 'course' ? 'drag-over' : 'drag-over-todo';
+            const targetEl = e.target.closest(targetClass);
+            if (targetEl) targetEl.classList.remove(hoverClass);
+
+            if (type === 'course') {
+                const fromIndex = courses.findIndex(c => c.id === draggedId);
+                const toIndex = courses.findIndex(c => c.id === targetId);
+                
+                if (fromIndex > -1 && toIndex > -1) {
+                    const [moved] = courses.splice(fromIndex, 1);
+                    courses.splice(toIndex, 0, moved);
+                    saveData();
+                    renderCourses();
+                }
+            } else if (type === 'todo') {
+                const fromIndex = todos.findIndex(t => t.id === draggedId);
+                const toIndex = todos.findIndex(t => t.id === targetId);
+                
+                if (fromIndex > -1 && toIndex > -1) {
+                    const [moved] = todos.splice(fromIndex, 1);
+                    todos.splice(toIndex, 0, moved);
+                    saveData();
+                    renderTodos();
+                }
+            }
         }
 
         // Pomodoro Timer Functions
@@ -1649,6 +1767,14 @@ body.dark-mode .app-header {
                 courseCard.className = 'course-card';
                 courseCard.id = `course-${course.id}`;
                 courseCard.style.setProperty('--card-index', index);
+                
+                // Add Draggable Attributes
+                courseCard.setAttribute('draggable', 'true');
+                courseCard.addEventListener('dragstart', (e) => handleDragStart(e, 'course', course.id));
+                courseCard.addEventListener('dragend', handleDragEnd);
+                courseCard.addEventListener('dragover', (e) => handleDragOver(e, 'course'));
+                courseCard.addEventListener('dragleave', (e) => handleDragLeave(e, 'course'));
+                courseCard.addEventListener('drop', (e) => handleDrop(e, 'course', course.id));
 
                 if (globallyExpandedState[course.id] || (focusedCourseId === course.id && !globallyExpandedState.hasOwnProperty(course.id))) {
                     courseCard.classList.add('expanded');
@@ -1901,6 +2027,15 @@ body.dark-mode .app-header {
                 
                 const li = document.createElement('li');
                 li.className = `todo-item ${colorClass} ${isCurrentClass} ${completedClass}`;
+                
+                // Add Draggable Attributes
+                li.setAttribute('draggable', 'true');
+                li.addEventListener('dragstart', (e) => handleDragStart(e, 'todo', todo.id));
+                li.addEventListener('dragend', handleDragEnd);
+                li.addEventListener('dragover', (e) => handleDragOver(e, 'todo'));
+                li.addEventListener('dragleave', (e) => handleDragLeave(e, 'todo'));
+                li.addEventListener('drop', (e) => handleDrop(e, 'todo', todo.id));
+
                 li.innerHTML = `
                     <div class="todo-content">
                         <div class="todo-checkbox" onclick="toggleTodo('${todo.id}')">${todo.completed ? '✓' : ''}</div>
