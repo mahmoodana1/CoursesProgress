@@ -8,25 +8,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 
 :root {
+  /* Light Mode Variables */
   --bg-main-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   --bg-surface-rgb: 255, 255, 255;
-  --bg-surface: rgba(var(--bg-surface-rgb), 0.65);
-  --bg-surface-inset: rgba(255, 255, 255, 0.8);
-  --bg-input: rgba(255, 255, 255, 0.5);
+  --bg-surface: rgba(var(--bg-surface-rgb), 0.75);
+  --bg-surface-inset: rgba(255, 255, 255, 0.9);
+  --bg-input: rgba(255, 255, 255, 0.8);
   --text-primary: #1a1f36;
   --text-secondary: #4a5568;
   --text-placeholder: #a0aec0;
-  --border-primary: rgba(26, 31, 54, 0.1);
-  --border-input: rgba(26, 31, 54, 0.15);
+  --border-primary: rgba(255, 255, 255, 0.6);
+  --border-input: rgba(26, 31, 54, 0.1);
   --accent-primary: #6c5ce7;
   --accent-primary-hover: #5b4cdb;
   --accent-secondary: #00b894;
   --accent-danger: #ff7675;
   --accent-danger-hover: #d63031;
   --text-on-accent: #ffffff;
+  
   --shadow-color: rgba(108, 92, 231, 0.1);
-  --shadow-strong-color: rgba(108, 92, 231, 0.18);
-  --backdrop-blur: 15px;
+  --shadow-strong-color: rgba(108, 92, 231, 0.15);
+  --shadow-highlight: rgba(255, 255, 255, 0.8);
+  
+  --backdrop-blur: 20px;
   --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   --border-radius-md: 12px;
   --border-radius-lg: 20px;
@@ -54,6 +58,7 @@ body.dark-mode {
   --text-on-accent: #111827;
   --shadow-color: rgba(0, 0, 0, 0.2);
   --shadow-strong-color: rgba(0, 0, 0, 0.35);
+  --shadow-highlight: rgba(255, 255, 255, 0.05);
 }
 
 *, *::before, *::after {
@@ -94,8 +99,9 @@ body {
   backdrop-filter: blur(var(--backdrop-blur));
   -webkit-backdrop-filter: blur(var(--backdrop-blur));
   border: 1px solid var(--border-primary);
+  border-top: 1px solid var(--shadow-highlight);
   border-radius: var(--border-radius-lg);
-  box-shadow: 0 6px 20px var(--shadow-color);
+  box-shadow: 0 6px 20px var(--shadow-color), inset 0 1px 0 var(--shadow-highlight);
   transition: all var(--transition-theme);
 }
 
@@ -118,6 +124,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 2px 5px var(--shadow-color);
 }
 
 .theme-toggle-button:hover,
@@ -129,34 +136,36 @@ h1 {
 
 /* Current Task Display */
 .current-task-card {
+  /* Default background if no color selected */
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
   padding: 28px 32px;
   border-radius: var(--border-radius-lg);
   margin-bottom: 32px;
-  box-shadow: 0 8px 30px var(--shadow-strong-color);
-  color: white;
+  box-shadow: 
+    0 10px 30px var(--shadow-strong-color), 
+    inset 0 0 20px rgba(255, 255, 255, 0.3); 
+  color: #ffffff !important; /* Force white text */
   animation: fadeInScaleUp 0.5s ease;
   position: relative;
   overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.2);
 }
 
 .current-task-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.1));
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.15));
   pointer-events: none;
 }
 
 .current-task-header {
   font-size: 0.9rem;
-  opacity: 0.95;
   margin-bottom: 8px;
   font-weight: 500;
-  color: #ffffff;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .current-task-content {
@@ -176,13 +185,17 @@ h1 {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 4px;
-  color: #ffffff;
+  color: #ffffff !important;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.15); 
 }
 
 .current-task-meta {
   font-size: 0.95rem;
-  opacity: 0.95;
-  color: #ffffff;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
 .current-task-actions {
@@ -193,20 +206,11 @@ h1 {
 .no-current-task {
   text-align: center;
   padding: 30px;
-  opacity: 0.9;
-  color: #ffffff;
+  color: #ffffff !important;
 }
 
-.no-current-task-icon {
-  font-size: 3rem;
-  margin-bottom: 12px;
-}
-
-.no-current-task-text {
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: #ffffff;
-}
+.no-current-task-icon { font-size: 3rem; margin-bottom: 12px; }
+.no-current-task-text { font-size: 1.2rem; font-weight: 500; color: #ffffff !important; }
 
 /* Dashboard Actions */
 .dashboard-actions {
@@ -215,15 +219,16 @@ h1 {
     margin-bottom: 32px;
 }
 
-/* Task Color Classes - Less Vibrant */
-.task-color-red { background: linear-gradient(135deg, #e57373, #ef5350) !important; }
-.task-color-orange { background: linear-gradient(135deg, #ffb74d, #ff9800) !important; }
-.task-color-yellow { background: linear-gradient(135deg, #ffd54f, #fbc02d) !important; }
-.task-color-green { background: linear-gradient(135deg, #4db6ac, #26a69a) !important; }
-.task-color-blue { background: linear-gradient(135deg, #64b5f6, #42a5f5) !important; }
-.task-color-purple { background: linear-gradient(135deg, #9575cd, #7e57c2) !important; }
-.task-color-pink { background: linear-gradient(135deg, #f06292, #ec407a) !important; }
-.task-color-gray { background: linear-gradient(135deg, #78909c, #607d8b) !important; }
+/* Task Background Gradients */
+/* We apply these to both sidebar items and the main card */
+.task-bg-red { background: linear-gradient(135deg, #e57373, #ef5350) !important; }
+.task-bg-orange { background: linear-gradient(135deg, #ffb74d, #ff9800) !important; }
+.task-bg-yellow { background: linear-gradient(135deg, #ffd54f, #fbc02d) !important; }
+.task-bg-green { background: linear-gradient(135deg, #4db6ac, #26a69a) !important; }
+.task-bg-blue { background: linear-gradient(135deg, #64b5f6, #42a5f5) !important; }
+.task-bg-purple { background: linear-gradient(135deg, #9575cd, #7e57c2) !important; }
+.task-bg-pink { background: linear-gradient(135deg, #f06292, #ec407a) !important; }
+.task-bg-gray { background: linear-gradient(135deg, #78909c, #607d8b) !important; }
 
 .form-group {
     display: flex;
@@ -321,6 +326,7 @@ h1 {
   padding: 32px;
   border-radius: var(--border-radius-lg);
   border: 1px solid var(--border-primary);
+  border-top: 1px solid var(--shadow-highlight);
   box-shadow: 0 8px 30px var(--shadow-strong-color);
   margin-bottom: 48px;
   display: grid;
@@ -341,19 +347,20 @@ body.dark-mode .app-header {
   margin-bottom: 32px;
   border-radius: var(--border-radius-lg);
   border: 1px solid var(--border-primary);
+  border-top: 1px solid var(--shadow-highlight);
   box-shadow: 0 6px 20px var(--shadow-color);
   overflow: hidden;
   transition: all var(--transition-interactive);
   animation: fadeInScaleUp 0.5s ease-out backwards;
   animation-delay: calc(var(--card-index, 0) * 0.1s);
-  cursor: grab; /* Enable grab cursor for dragging */
+  cursor: grab;
 }
 
 .course-card:active {
     cursor: grabbing;
 }
 
-/* Drag and Drop Styles for Courses */
+/* Drag and Drop Styles */
 .course-card.dragging {
     opacity: 0.5;
     transform: scale(0.98);
@@ -580,8 +587,9 @@ body.dark-mode .app-header {
     transition: right 0.3s ease;
     z-index: 1000;
     padding: 32px 24px;
-    box-shadow: -5px 0 15px var(--shadow-color);
+    box-shadow: -5px 0 25px var(--shadow-color);
     overflow-y: auto;
+    border-left: 1px solid var(--border-primary);
 }
 
 .sidebar.open {
@@ -643,19 +651,22 @@ body.dark-mode .app-header {
     margin: 0;
 }
 
+/* Updated Todo Item: FULL GRADIENT BACKGROUND for Pure White Text support */
 .todo-item {
     display: flex;
     flex-direction: column;
     gap: 8px;
     padding: 16px;
-    background-color: var(--bg-input);
-    border: 2px solid transparent; /* Changed: Transparent by default */
+    /* Default darkish background if no color class, to support white text */
+    background: linear-gradient(135deg, #78909c, #607d8b); 
     border-radius: var(--border-radius-md);
     margin-bottom: 12px;
     transition: all var(--transition-interactive);
     position: relative;
     overflow: hidden;
-    cursor: grab; /* Enable grab cursor for dragging */
+    cursor: grab;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    color: #ffffff !important; /* Force white text */
 }
 
 .todo-item:active {
@@ -671,33 +682,13 @@ body.dark-mode .app-header {
 
 .todo-item.drag-over-todo {
     border: 2px solid #ffffff;
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.2);
 }
-
-.todo-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 5px;
-    opacity: 1;
-}
-
-.todo-item.task-color-red::before { background: linear-gradient(to bottom, #e57373, #ef5350); }
-.todo-item.task-color-orange::before { background: linear-gradient(to bottom, #ffb74d, #ff9800); }
-.todo-item.task-color-yellow::before { background: linear-gradient(to bottom, #ffd54f, #fbc02d); }
-.todo-item.task-color-green::before { background: linear-gradient(to bottom, #4db6ac, #26a69a); }
-.todo-item.task-color-blue::before { background: linear-gradient(to bottom, #64b5f6, #42a5f5); }
-.todo-item.task-color-purple::before { background: linear-gradient(to bottom, #9575cd, #7e57c2); }
-.todo-item.task-color-pink::before { background: linear-gradient(to bottom, #f06292, #ec407a); }
-.todo-item.task-color-gray::before { background: linear-gradient(to bottom, #78909c, #607d8b); }
 
 .todo-item.is-current {
-    border-color: #ffffff; /* Sticky border for selected task */
-    background: linear-gradient(to right, rgba(255, 255, 255, 0.15), transparent);
+    border: 2px solid #ffffff;
     transform: translateX(-4px);
-    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+    box-shadow: 0 4px 15px var(--shadow-strong-color);
 }
 
 .todo-content {
@@ -708,25 +699,56 @@ body.dark-mode .app-header {
     padding-left: 8px;
 }
 
+.todo-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 38px;
+    margin-top: 4px;
+}
+
+/* All task text elements forced to white */
 .todo-date {
     font-size: 0.75rem;
-    color: #ffffff;
-    margin-left: 38px;
-    opacity: 0.9;
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+.due-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    backdrop-filter: blur(4px);
+}
+
+.due-badge.urgent {
+    background-color: rgba(255, 255, 255, 0.3);
+    font-weight: 700;
+    border-color: #ffffff;
 }
 
 .todo-item:hover {
     transform: translateX(-5px);
-    border-color: #ffffff; /* White border on hover only */
-    box-shadow: 0 4px 12px var(--shadow-strong-color);
+    box-shadow: 0 8px 15px var(--shadow-strong-color);
 }
 
 .todo-item.completed {
-    opacity: 0.4;
+    opacity: 0.5;
+    background: var(--bg-input); /* Revert to plain if completed? Or keep colored but dim */
+    background-color: rgba(0,0,0,0.2); /* Dim overlay */
+    box-shadow: none;
 }
 
 .todo-item.completed .todo-text {
     text-decoration: line-through;
+    color: rgba(255,255,255,0.7) !important;
 }
 
 .todo-checkbox {
@@ -744,14 +766,18 @@ body.dark-mode .app-header {
     flex-shrink: 0;
 }
 
+.todo-checkbox:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
 .todo-item.completed .todo-checkbox {
-    background-color: rgba(255, 255, 255, 0.3);
-    border-color: #ffffff;
+    background-color: #ffffff;
+    color: var(--accent-primary);
 }
 
 .todo-text {
     flex-grow: 1;
-    color: var(--text-primary);
+    color: #ffffff !important;
     font-size: 0.95rem;
     font-weight: 500;
 }
@@ -774,7 +800,8 @@ body.dark-mode .app-header {
     font-size: 1.1rem;
     padding: 4px;
     transition: transform 0.2s;
-    opacity: 0.7;
+    opacity: 0.9;
+    color: #ffffff !important;
 }
 
 .icon-button:hover {
@@ -782,23 +809,33 @@ body.dark-mode .app-header {
     opacity: 1;
 }
 
-/* Updated: Sticky Color Picker & Add Form */
+/* Sticky Color Picker & Add Form */
 .add-todo-form {
     display: flex;
     flex-direction: column;
     gap: 12px;
     margin-bottom: 24px;
-    position: sticky; /* Make it sticky */
-    top: -32px; /* Offset sidebar padding to stick to very top */
+    position: sticky;
+    top: -32px;
     z-index: 10;
-    background-color: var(--bg-surface); /* Background to hide tasks scrolling behind */
+    background-color: rgba(var(--bg-surface-rgb), 0.98); /* Less transparent for sticky */
     backdrop-filter: blur(var(--backdrop-blur));
     padding: 12px 0 20px 0;
     border-bottom: 1px solid var(--border-primary);
 }
 
+.todo-input-row {
+    display: flex;
+    gap: 8px;
+}
+
 .add-todo-input {
     flex-grow: 1;
+}
+
+.due-date-input {
+    width: 100px;
+    text-align: center;
 }
 
 .color-picker-group {
@@ -824,6 +861,7 @@ body.dark-mode .app-header {
     cursor: pointer;
     transition: all 0.2s;
     position: relative;
+    box-shadow: 0 2px 4px var(--shadow-color);
 }
 
 .color-option:hover {
@@ -847,6 +885,7 @@ body.dark-mode .app-header {
     text-shadow: 0 0 3px rgba(0,0,0,0.8), 0 0 5px rgba(0,0,0,0.6);
 }
 
+/* Color definitions used for picker (gradients) */
 .color-option.task-color-red { background: linear-gradient(135deg, #e57373, #ef5350); }
 .color-option.task-color-orange { background: linear-gradient(135deg, #ffb74d, #ff9800); }
 .color-option.task-color-yellow { background: linear-gradient(135deg, #ffd54f, #fbc02d); }
@@ -926,6 +965,7 @@ body.dark-mode .app-header {
     -webkit-backdrop-filter: blur(var(--backdrop-blur));
     border-radius: var(--border-radius-lg);
     border: 1px solid var(--border-primary);
+    border-top: 1px solid var(--shadow-highlight);
     box-shadow: 0 8px 30px var(--shadow-strong-color);
     margin-bottom: 32px;
     transition: all var(--transition-theme);
@@ -1112,7 +1152,10 @@ body.dark-mode .app-header {
         </div>
 
         <form id="addTodoForm" class="add-todo-form">
-            <input type="text" id="todoInput" class="input-field add-todo-input" placeholder="Add a new task..." required>
+            <div class="todo-input-row">
+                <input type="text" id="todoInput" class="input-field add-todo-input" placeholder="Add a new task..." required>
+                <input type="number" id="todoDueInput" class="input-field due-date-input" placeholder="Days (opt)" min="1" title="Due in how many days?">
+            </div>
             
             <div>
                 <div class="color-label">Task Priority Color</div>
@@ -1222,8 +1265,8 @@ body.dark-mode .app-header {
         
         const themeToggleButton = document.getElementById('themeToggleButton');
         const themeIcon = themeToggleButton.querySelector('.theme-icon');
-        const APP_DATA_KEY = 'vibrantStudyTrackerData_V9';
-        const TODO_DATA_KEY = 'vibrantStudyTrackerTodos_V1';
+        const APP_DATA_KEY = 'vibrantStudyTrackerData_V10'; 
+        const TODO_DATA_KEY = 'vibrantStudyTrackerTodos_V2'; 
         const POMODORO_STATE_KEY = 'studyTracker_pomodoro_V1';
 
         // Audio Context
@@ -1344,6 +1387,41 @@ body.dark-mode .app-header {
                 month: 'short',
                 year: now.getFullYear() !== inputDate.getFullYear() ? '2-digit' : undefined
             });
+        }
+        
+        function getDueDateBadge(dueDate) {
+            if (!dueDate) return '';
+            
+            const now = new Date();
+            now.setHours(0,0,0,0); // normalize today
+            const due = new Date(dueDate);
+            due.setHours(0,0,0,0);
+            
+            const diffTime = due - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            let text = '';
+            let isUrgent = false;
+            
+            if (diffDays < 0) {
+                text = 'Overdue';
+                isUrgent = true;
+            } else if (diffDays === 0) {
+                text = 'Due Today';
+                isUrgent = true;
+            } else if (diffDays === 1) {
+                text = '1 day remaining';
+                isUrgent = true;
+            } else {
+                text = `${diffDays} days remaining`;
+            }
+            
+            return `<span class="due-badge ${isUrgent ? 'urgent' : ''}">⏰ ${text}</span>`;
+        }
+
+        function getFullDueDateString(dueDate) {
+            if (!dueDate) return 'No Due Date';
+            return getDueDateBadge(dueDate).replace(/<[^>]*>/g, '').replace('⏰ ', '');
         }
 
         // --- Drag and Drop Logic ---
@@ -1787,8 +1865,8 @@ body.dark-mode .app-header {
                 if (course.isEditingName) {
                     courseNameHTML = `
                         <div class="course-header-content" style="display:flex; gap:8px; align-items:center;">
-                            <input type="text" id="edit-name-${course.id}" class="input-field" value="${course.name}"
-                                   onblur="saveCourseName('${course.id}', this.value)"
+                            <input type="text" id="edit-name-${course.id}" class="input-field" value="${course.name}" 
+                                   onblur="saveCourseName('${course.id}', this.value)" 
                                    onkeypress="if(event.key==='Enter') { this.blur(); event.preventDefault(); }"
                                    onclick="event.stopPropagation();">
                             <button class="button button-small button-success" onclick="event.stopPropagation(); saveCourseName('${course.id}', document.getElementById('edit-name-${course.id}').value)">Save</button>
@@ -1895,13 +1973,21 @@ body.dark-mode .app-header {
         }
 
         // Todo Management
-        function addTodo(text, color) {
+        function addTodo(text, color, dueDays) {
+            let dueDate = null;
+            if (dueDays && dueDays > 0) {
+                const date = new Date();
+                date.setDate(date.getDate() + parseInt(dueDays));
+                dueDate = date.toISOString();
+            }
+
             const task = {
                 id: generateId(),
                 text: text.trim(),
                 color: color,
                 completed: false,
-                dateAdded: new Date().toISOString()
+                dateAdded: new Date().toISOString(),
+                dueDate: dueDate
             };
             todos.unshift(task);
             
@@ -1984,20 +2070,25 @@ body.dark-mode .app-header {
                 card.innerHTML = `
                     <div class="no-current-task">
                         <div class="no-current-task-icon">🎯</div>
-                        <div class="no-current-task-text" style="color: #ffffff;">No active task selected</div>
-                        <p style="font-size: 0.9rem; margin-top: 8px; opacity: 0.9; color: #ffffff;">Use the sidebar to add tasks or pick a random one!</p>
+                        <div class="no-current-task-text">No active task selected</div>
+                        <p style="font-size: 0.9rem; margin-top: 8px; opacity: 0.9; color: #ffffff !important;">Use the sidebar to add tasks or pick a random one!</p>
                     </div>
                 `;
                 return;
             }
             
-            card.className = `current-task-card task-color-${currentTask.color}`;
+            const dueDateString = currentTask.dueDate ? ` • ${getFullDueDateString(currentTask.dueDate)}` : '';
+
+            card.className = `current-task-card task-bg-${currentTask.color}`;
             card.innerHTML = `
                 <div class="current-task-header">🎯 Currently Working On</div>
                 <div class="current-task-content">
                     <div class="current-task-info">
                         <div class="current-task-title">${currentTask.text}</div>
-                        <div class="current-task-meta" style="color: #ffffff;">Added ${formatDate(currentTask.dateAdded)}</div>
+                        <div class="current-task-meta">
+                            <span>Added ${formatDate(currentTask.dateAdded)}</span>
+                            <span>${dueDateString}</span>
+                        </div>
                     </div>
                     <div class="current-task-actions">
                         <button class="button button-white" onclick="toggleTodo('${currentTask.id}')">✓ Complete</button>
@@ -2021,7 +2112,7 @@ body.dark-mode .app-header {
             }
             
             todos.forEach(todo => {
-                const colorClass = `task-color-${todo.color}`;
+                const colorClass = `task-bg-${todo.color}`;
                 const isCurrentClass = todo.id === currentTaskId ? 'is-current' : '';
                 const completedClass = todo.completed ? 'completed' : '';
                 
@@ -2046,7 +2137,10 @@ body.dark-mode .app-header {
                             <button class="icon-button" onclick="deleteTodo('${todo.id}')" title="Delete">🗑️</button>
                         </div>
                     </div>
-                    <div class="todo-date">${formatDate(todo.dateAdded)}</div>
+                    <div class="todo-footer">
+                        <div class="todo-date">${formatDate(todo.dateAdded)}</div>
+                        ${!todo.completed ? getDueDateBadge(todo.dueDate) : ''}
+                    </div>
                 `;
                 todoList.appendChild(li);
             });
@@ -2081,9 +2175,11 @@ body.dark-mode .app-header {
         document.getElementById('addTodoForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const input = document.getElementById('todoInput');
+            const dueInput = document.getElementById('todoDueInput');
             if (input.value.trim()) {
-                addTodo(input.value, selectedColor);
+                addTodo(input.value, selectedColor, dueInput.value);
                 input.value = '';
+                dueInput.value = '';
                 document.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
                 document.querySelector('.color-option').classList.add('selected');
                 selectedColor = 'red';
