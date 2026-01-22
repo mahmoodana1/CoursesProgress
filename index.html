@@ -11,7 +11,7 @@
   /* Light Mode Variables */
   --bg-main-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   --bg-surface-rgb: 255, 255, 255;
-  --bg-surface: rgba(var(--bg-surface-rgb), 0.75); /* Increased opacity for better contrast */
+  --bg-surface: rgba(var(--bg-surface-rgb), 0.75);
   --bg-surface-inset: rgba(255, 255, 255, 0.9);
   --bg-input: rgba(255, 255, 255, 0.8);
   --text-primary: #1a1f36;
@@ -26,10 +26,9 @@
   --accent-danger-hover: #d63031;
   --text-on-accent: #ffffff;
   
-  /* Shadows - Adjusted for "White Shadow" Highlight effect in Light Mode */
   --shadow-color: rgba(108, 92, 231, 0.1);
   --shadow-strong-color: rgba(108, 92, 231, 0.15);
-  --shadow-highlight: rgba(255, 255, 255, 0.8); /* White shadow/glow */
+  --shadow-highlight: rgba(255, 255, 255, 0.8);
   
   --backdrop-blur: 20px;
   --font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
@@ -100,7 +99,7 @@ body {
   backdrop-filter: blur(var(--backdrop-blur));
   -webkit-backdrop-filter: blur(var(--backdrop-blur));
   border: 1px solid var(--border-primary);
-  border-top: 1px solid var(--shadow-highlight); /* Highlight top */
+  border-top: 1px solid var(--shadow-highlight);
   border-radius: var(--border-radius-lg);
   box-shadow: 0 6px 20px var(--shadow-color), inset 0 1px 0 var(--shadow-highlight);
   transition: all var(--transition-theme);
@@ -137,15 +136,15 @@ h1 {
 
 /* Current Task Display */
 .current-task-card {
+  /* Default background if no color selected */
   background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
   padding: 28px 32px;
   border-radius: var(--border-radius-lg);
   margin-bottom: 32px;
-  /* Enhanced Shadow for "Glow" */
   box-shadow: 
     0 10px 30px var(--shadow-strong-color), 
     inset 0 0 20px rgba(255, 255, 255, 0.3); 
-  color: white;
+  color: #ffffff !important; /* Force white text */
   animation: fadeInScaleUp 0.5s ease;
   position: relative;
   overflow: hidden;
@@ -162,10 +161,10 @@ h1 {
 
 .current-task-header {
   font-size: 0.9rem;
-  opacity: 0.95;
   margin-bottom: 8px;
   font-weight: 500;
-  color: #ffffff;
+  color: #ffffff !important;
+  opacity: 1 !important;
   text-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
@@ -186,15 +185,14 @@ h1 {
   font-size: 1.8rem;
   font-weight: 700;
   margin-bottom: 4px;
-  color: #ffffff;
-  /* White text with subtle shadow for readability in all modes */
+  color: #ffffff !important;
   text-shadow: 0 2px 4px rgba(0,0,0,0.15); 
 }
 
 .current-task-meta {
   font-size: 0.95rem;
-  opacity: 0.95;
-  color: #ffffff;
+  color: #ffffff !important;
+  opacity: 1 !important;
   display: flex;
   gap: 12px;
   align-items: center;
@@ -208,12 +206,11 @@ h1 {
 .no-current-task {
   text-align: center;
   padding: 30px;
-  opacity: 0.9;
-  color: #ffffff;
+  color: #ffffff !important;
 }
 
 .no-current-task-icon { font-size: 3rem; margin-bottom: 12px; }
-.no-current-task-text { font-size: 1.2rem; font-weight: 500; color: #ffffff; }
+.no-current-task-text { font-size: 1.2rem; font-weight: 500; color: #ffffff !important; }
 
 /* Dashboard Actions */
 .dashboard-actions {
@@ -222,15 +219,16 @@ h1 {
     margin-bottom: 32px;
 }
 
-/* Task Color Classes - Less Vibrant */
-.task-color-red { background: linear-gradient(135deg, #e57373, #ef5350) !important; }
-.task-color-orange { background: linear-gradient(135deg, #ffb74d, #ff9800) !important; }
-.task-color-yellow { background: linear-gradient(135deg, #ffd54f, #fbc02d) !important; }
-.task-color-green { background: linear-gradient(135deg, #4db6ac, #26a69a) !important; }
-.task-color-blue { background: linear-gradient(135deg, #64b5f6, #42a5f5) !important; }
-.task-color-purple { background: linear-gradient(135deg, #9575cd, #7e57c2) !important; }
-.task-color-pink { background: linear-gradient(135deg, #f06292, #ec407a) !important; }
-.task-color-gray { background: linear-gradient(135deg, #78909c, #607d8b) !important; }
+/* Task Background Gradients */
+/* We apply these to both sidebar items and the main card */
+.task-bg-red { background: linear-gradient(135deg, #e57373, #ef5350) !important; }
+.task-bg-orange { background: linear-gradient(135deg, #ffb74d, #ff9800) !important; }
+.task-bg-yellow { background: linear-gradient(135deg, #ffd54f, #fbc02d) !important; }
+.task-bg-green { background: linear-gradient(135deg, #4db6ac, #26a69a) !important; }
+.task-bg-blue { background: linear-gradient(135deg, #64b5f6, #42a5f5) !important; }
+.task-bg-purple { background: linear-gradient(135deg, #9575cd, #7e57c2) !important; }
+.task-bg-pink { background: linear-gradient(135deg, #f06292, #ec407a) !important; }
+.task-bg-gray { background: linear-gradient(135deg, #78909c, #607d8b) !important; }
 
 .form-group {
     display: flex;
@@ -653,24 +651,22 @@ body.dark-mode .app-header {
     margin: 0;
 }
 
-/* Updated Todo Item for Light Mode Clarity */
+/* Updated Todo Item: FULL GRADIENT BACKGROUND for Pure White Text support */
 .todo-item {
     display: flex;
     flex-direction: column;
     gap: 8px;
     padding: 16px;
-    /* Use background surface instead of input for better contrast in light mode */
-    background-color: var(--bg-surface); 
-    border: 1px solid var(--border-primary);
-    border-top: 1px solid var(--shadow-highlight); /* Highlight for glass effect */
+    /* Default darkish background if no color class, to support white text */
+    background: linear-gradient(135deg, #78909c, #607d8b); 
     border-radius: var(--border-radius-md);
     margin-bottom: 12px;
     transition: all var(--transition-interactive);
     position: relative;
     overflow: hidden;
     cursor: grab;
-    /* White Shadow/Glow effect in Light Mode */
-    box-shadow: 0 4px 6px var(--shadow-color), inset 0 1px 0 var(--shadow-highlight);
+    box-shadow: 0 4px 6px var(--shadow-color);
+    color: #ffffff !important; /* Force white text */
 }
 
 .todo-item:active {
@@ -680,38 +676,17 @@ body.dark-mode .app-header {
 /* Drag and Drop Styles for Todos */
 .todo-item.dragging {
     opacity: 0.5;
-    border: 2px dashed var(--accent-primary);
+    border: 2px dashed #ffffff;
     background: transparent;
 }
 
 .todo-item.drag-over-todo {
-    border: 2px solid var(--accent-primary);
-    background-color: rgba(108, 92, 231, 0.05);
+    border: 2px solid #ffffff;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
-.todo-item::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 5px;
-    opacity: 1;
-}
-
-.todo-item.task-color-red::before { background: linear-gradient(to bottom, #e57373, #ef5350); }
-.todo-item.task-color-orange::before { background: linear-gradient(to bottom, #ffb74d, #ff9800); }
-.todo-item.task-color-yellow::before { background: linear-gradient(to bottom, #ffd54f, #fbc02d); }
-.todo-item.task-color-green::before { background: linear-gradient(to bottom, #4db6ac, #26a69a); }
-.todo-item.task-color-blue::before { background: linear-gradient(to bottom, #64b5f6, #42a5f5); }
-.todo-item.task-color-purple::before { background: linear-gradient(to bottom, #9575cd, #7e57c2); }
-.todo-item.task-color-pink::before { background: linear-gradient(to bottom, #f06292, #ec407a); }
-.todo-item.task-color-gray::before { background: linear-gradient(to bottom, #78909c, #607d8b); }
-
-/* Selected state - maintains white text look in dark mode, but needs care in light mode */
 .todo-item.is-current {
-    border-color: var(--accent-primary);
-    background: linear-gradient(to right, color-mix(in srgb, var(--accent-primary) 10%, transparent), transparent);
+    border: 2px solid #ffffff;
     transform: translateX(-4px);
     box-shadow: 0 4px 15px var(--shadow-strong-color);
 }
@@ -732,10 +707,11 @@ body.dark-mode .app-header {
     margin-top: 4px;
 }
 
+/* All task text elements forced to white */
 .todo-date {
     font-size: 0.75rem;
-    color: var(--text-secondary);
-    opacity: 0.9;
+    color: #ffffff !important;
+    opacity: 1 !important;
 }
 
 .due-badge {
@@ -743,42 +719,43 @@ body.dark-mode .app-header {
     font-weight: 600;
     padding: 2px 8px;
     border-radius: 10px;
-    background-color: var(--bg-input);
-    color: var(--text-secondary);
-    border: 1px solid var(--border-input);
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.4);
     display: flex;
     align-items: center;
     gap: 4px;
+    backdrop-filter: blur(4px);
 }
 
 .due-badge.urgent {
-    background-color: color-mix(in srgb, var(--accent-danger) 15%, transparent);
-    color: var(--accent-danger);
-    border-color: color-mix(in srgb, var(--accent-danger) 30%, transparent);
+    background-color: rgba(255, 255, 255, 0.3);
+    font-weight: 700;
+    border-color: #ffffff;
 }
 
 .todo-item:hover {
     transform: translateX(-5px);
-    border-color: var(--accent-primary);
     box-shadow: 0 8px 15px var(--shadow-strong-color);
 }
 
 .todo-item.completed {
-    opacity: 0.6;
-    background-color: var(--bg-input);
+    opacity: 0.5;
+    background: var(--bg-input); /* Revert to plain if completed? Or keep colored but dim */
+    background-color: rgba(0,0,0,0.2); /* Dim overlay */
     box-shadow: none;
 }
 
 .todo-item.completed .todo-text {
     text-decoration: line-through;
-    color: var(--text-placeholder);
+    color: rgba(255,255,255,0.7) !important;
 }
 
 .todo-checkbox {
     width: 22px;
     height: 22px;
     border-radius: 5px;
-    border: 2px solid var(--text-secondary); 
+    border: 2px solid #ffffff; 
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -790,17 +767,17 @@ body.dark-mode .app-header {
 }
 
 .todo-checkbox:hover {
-    border-color: var(--accent-primary);
+    background-color: rgba(255,255,255,0.2);
 }
 
 .todo-item.completed .todo-checkbox {
-    background-color: var(--accent-secondary);
-    border-color: var(--accent-secondary);
+    background-color: #ffffff;
+    color: var(--accent-primary);
 }
 
 .todo-text {
     flex-grow: 1;
-    color: var(--text-primary);
+    color: #ffffff !important;
     font-size: 0.95rem;
     font-weight: 500;
 }
@@ -823,14 +800,13 @@ body.dark-mode .app-header {
     font-size: 1.1rem;
     padding: 4px;
     transition: transform 0.2s;
-    opacity: 0.7;
-    color: var(--text-secondary);
+    opacity: 0.9;
+    color: #ffffff !important;
 }
 
 .icon-button:hover {
     transform: scale(1.2);
     opacity: 1;
-    color: var(--accent-primary);
 }
 
 /* Sticky Color Picker & Add Form */
@@ -909,6 +885,7 @@ body.dark-mode .app-header {
     text-shadow: 0 0 3px rgba(0,0,0,0.8), 0 0 5px rgba(0,0,0,0.6);
 }
 
+/* Color definitions used for picker (gradients) */
 .color-option.task-color-red { background: linear-gradient(135deg, #e57373, #ef5350); }
 .color-option.task-color-orange { background: linear-gradient(135deg, #ffb74d, #ff9800); }
 .color-option.task-color-yellow { background: linear-gradient(135deg, #ffd54f, #fbc02d); }
@@ -1288,8 +1265,9 @@ body.dark-mode .app-header {
         
         const themeToggleButton = document.getElementById('themeToggleButton');
         const themeIcon = themeToggleButton.querySelector('.theme-icon');
-        const APP_DATA_KEY = 'vibrantStudyTrackerData_V10'; // Incremented version
-        const TODO_DATA_KEY = 'vibrantStudyTrackerTodos_V2'; // Incremented version for due dates
+        // REVERTED KEYS TO RESTORE DATA
+        const APP_DATA_KEY = 'vibrantStudyTrackerData_V9'; 
+        const TODO_DATA_KEY = 'vibrantStudyTrackerTodos_V1'; 
         const POMODORO_STATE_KEY = 'studyTracker_pomodoro_V1';
 
         // Audio Context
@@ -1433,10 +1411,10 @@ body.dark-mode .app-header {
                 text = 'Due Today';
                 isUrgent = true;
             } else if (diffDays === 1) {
-                text = 'Due Tomorrow';
+                text = '1 day remaining';
                 isUrgent = true;
             } else {
-                text = `${diffDays}d left`;
+                text = `${diffDays} days remaining`;
             }
             
             return `<span class="due-badge ${isUrgent ? 'urgent' : ''}">⏰ ${text}</span>`;
@@ -1444,7 +1422,7 @@ body.dark-mode .app-header {
 
         function getFullDueDateString(dueDate) {
             if (!dueDate) return 'No Due Date';
-            return new Date(dueDate).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+            return getDueDateBadge(dueDate).replace(/<[^>]*>/g, '').replace('⏰ ', '');
         }
 
         // --- Drag and Drop Logic ---
@@ -2094,15 +2072,15 @@ body.dark-mode .app-header {
                     <div class="no-current-task">
                         <div class="no-current-task-icon">🎯</div>
                         <div class="no-current-task-text">No active task selected</div>
-                        <p style="font-size: 0.9rem; margin-top: 8px; opacity: 0.9; color: #ffffff;">Use the sidebar to add tasks or pick a random one!</p>
+                        <p style="font-size: 0.9rem; margin-top: 8px; opacity: 0.9; color: #ffffff !important;">Use the sidebar to add tasks or pick a random one!</p>
                     </div>
                 `;
                 return;
             }
             
-            const dueDateString = currentTask.dueDate ? ` • Due: ${getFullDueDateString(currentTask.dueDate)}` : '';
+            const dueDateString = currentTask.dueDate ? ` • ${getFullDueDateString(currentTask.dueDate)}` : '';
 
-            card.className = `current-task-card task-color-${currentTask.color}`;
+            card.className = `current-task-card task-bg-${currentTask.color}`;
             card.innerHTML = `
                 <div class="current-task-header">🎯 Currently Working On</div>
                 <div class="current-task-content">
@@ -2135,7 +2113,7 @@ body.dark-mode .app-header {
             }
             
             todos.forEach(todo => {
-                const colorClass = `task-color-${todo.color}`;
+                const colorClass = `task-bg-${todo.color}`;
                 const isCurrentClass = todo.id === currentTaskId ? 'is-current' : '';
                 const completedClass = todo.completed ? 'completed' : '';
                 
